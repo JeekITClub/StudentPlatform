@@ -1,0 +1,2 @@
+# StudentPlatform
+A student platform
