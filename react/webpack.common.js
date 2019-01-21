@@ -4,9 +4,7 @@ const chalk = require('chalk');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
 module.exports = {
-    entry:{
-        student_entry: './src/student/index.js',
-    },
+    entry: './src/index.js',
     output: {
         path: path.resolve(__dirname, '../static/react/'),
         publicPath: '/static/react/'
