@@ -1,6 +1,11 @@
-import FormContainer from "./FormContainer";
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { AppContainer } from 'react-hot-loader';
 
-const wrapper = document.getElementById("root");
-ReactDOM.render(<h1>hello</h1>, wrapper);
+import AppRouter from './router';
+
+ReactDOM.render(
+  <AppContainer>
+    <AppRouter />
+  </AppContainer>,
+  document.getElementById('root'));
