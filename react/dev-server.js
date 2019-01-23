@@ -1,26 +1,15 @@
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
-const path = require('path');
 const chalk = require('chalk');
+const path = require('path');
 const devConfig = require('./webpack.dev');
 
-const PORT = 3000;
 const HOST = '127.0.0.1';
+const PORT = 3000;
 
 const options = {
-  stats: "errors-only",
-  publicPath: devConfig.output.publicPath,
-  hot: true,
-  historyApiFallback: {
-    rewrites: [
-      { from: /^\/$/, to: 'dist/index.html' },
-    ],
-  },
-  contentBase: [__dirname, path.resolve(__dirname, '../')],
-  // proxy: proxyArray,
-  // add port and host to prevent 'The URL 'http:/sockjs-node' is invalid' error
-  port: PORT,
-  host: HOST,
+    host: HOST,
+    port: PORT
 };
 
 WebpackDevServer.addDevServerEntrypoints(devConfig, options);
