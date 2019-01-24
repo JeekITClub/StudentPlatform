@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 
+
 class Society(models.Model):
     society_id = models.PositiveIntegerField()
     name = models.CharField(max_length=64)
