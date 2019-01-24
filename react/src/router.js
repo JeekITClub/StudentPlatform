@@ -1,18 +1,21 @@
 import React from 'react';
-import {BrowserRouter, Route, HashRouter} from 'react-router-dom';
+import {BrowserRouter, Route, HashRouter, Switch} from 'react-router-dom';
 import FormContainer from "./FormContainer";
-
-const MyRouter = (DEV && !DEBUG) ? HashRouter : BrowserRouter;
+import Society from './app/society/index.js';
 
 const DEV = process.env.NODE_ENV !== 'production';
 const DEBUG = process.env.DEBUG === 'true';
+const MyRouter = (DEV && !DEBUG) ? HashRouter : BrowserRouter;
 
 class AppRouter extends React.Component {
     render() {
         return (
             <MyRouter>
                 <div style={{height: '100%'}}>
-                    <Route path="/" component={FormContainer}/>
+                    <Switch>
+                        <Route path="/society" component={Society}/>
+                        <Route path="/" component={FormContainer}/>
+                    </Switch>
                 </div>
             </MyRouter>
         );

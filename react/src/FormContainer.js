@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
+
 class FormContainer extends Component {
   constructor(props) {
     super(props);
@@ -8,8 +8,7 @@ class FormContainer extends Component {
   }
   render() {
     return (
-      <form id="article-form">
-      </form>
+      <div>233</div>
     );
   }
 }
