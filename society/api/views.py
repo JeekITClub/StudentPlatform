@@ -4,7 +4,7 @@ from society.models import Society
 from society.api.serializers import SocietySerializer, SocietyMiniSerializer
 
 
-class SocietyViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin):
+class SocietyViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
     queryset = Society.objects.filter(confirmed=True)
     serializer_class = SocietySerializer
 
