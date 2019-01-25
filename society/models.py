@@ -1,21 +1,31 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 # Create your models here.
 
+class Student(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=64)
+    class_num = models.PositiveSmallIntegerField()
+    grade = models.PositiveSmallIntegerField()
+    qq = models.CharField(max_length=32, blank=True)
+
 
 class Society(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    members = models.ManyToManyField(Student)
     society_id = models.PositiveIntegerField()
     name = models.CharField(max_length=64)
     introduction = models.TextField(blank=True)
-    # TODO: Should use OneToOneField to represent President
-    president_name = models.CharField(max_length=16)
+    president_name = models.CharField(max_length=64)
     president_class = models.PositiveSmallIntegerField()
     president_grade = models.PositiveSmallIntegerField()
-    president_qq = models.CharField(max_length=16, blank=True)
+    president_qq = models.CharField(max_length=32, blank=True)
     achievements = models.TextField(blank=True)
     recruit = models.BooleanField(default=False)
     email = models.EmailField(blank=True)
     type = models.PositiveSmallIntegerField()
     confirmed = models.BooleanField(default=False)
-    recruit_qq_group = models.CharField(max_length=64, blank=True)
+    recruit_qq_group = models.CharField(max_length=32, blank=True)
     established_time = models.DateTimeField(blank=True, null=True)
