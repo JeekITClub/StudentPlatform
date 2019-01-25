@@ -10,8 +10,10 @@ class SocietyAdmin(admin.ModelAdmin):
     def member_count(self, obj):
         return obj.user.is_active
 
+
 class SocietyMemberRelationShipAdmin(admin.ModelAdmin):
     list_display = ('society', 'member', 'status')
+
 
 admin.site.register(Society, SocietyAdmin)
 admin.site.register(SocietyMemberRelationShip, SocietyMemberRelationShipAdmin)
