@@ -1,15 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
+from student.models import Student
 
 
 # Create your models here.
-
-class Student(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=64)
-    class_num = models.PositiveSmallIntegerField()
-    grade = models.PositiveSmallIntegerField()
-    qq = models.CharField(max_length=32, blank=True)
 
 
 class Society(models.Model):
