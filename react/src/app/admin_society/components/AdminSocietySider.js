@@ -1,20 +1,15 @@
 import React from 'react';
-import {Switch, Route} from 'react-router-dom';
 import {Layout, Menu, Icon} from 'antd';
-import Member from './members/index.js'
-import "antd/dist/antd.css";
+import '../styles/sider.scss'
 
-const {
-    Header, Content, Footer, Sider,
-} = Layout;
+const { Sider } = Layout;
 
-export default function AdminClub({match}) {
-    return (
-        <Layout>
-            <Sider style={{
-                overflow: 'auto', height: '100vh', position: 'fixed', left: 0,
-            }}>
-                <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
+class AdminSocietySider extends React.Component {
+    render () {
+        return (
+            <Sider className="admin-society-sider" theme="light">
+                <div>Logo</div>
+                <Menu theme="light" mode="inline" defaultSelectedKeys={['4']}>
                     <Menu.Item key="1">
                         <Icon type="user"/>
                         <span className="nav-text">nav 1</span>
@@ -49,15 +44,8 @@ export default function AdminClub({match}) {
                     </Menu.Item>
                 </Menu>
             </Sider>
-            <Layout style={{marginLeft: 200}}>
-                <Header style={{background: '#fff', padding: 0}}/>
-                <Content style={{margin: '24px 16px 0', overflow: 'initial'}}>
-                    <Switch>
-                        <Route path={`${match.url}/member`} component={Member}/>
-                    </Switch>
-                </Content>
-            </Layout>
-        </Layout>
-
-    );
+        )
+    }
 }
+
+export default AdminSocietySider;
