@@ -15,8 +15,7 @@ class Client(DjangoClient):
         decode = kwargs.get('decode', False)
         if decode:
             return json.loads(response.content)
-        else:
-            return response
+        return response
 
     def get(self, url, data={}, *args, **kwargs):
         return self._do_req(url, data, 'GET', *args, **kwargs)
