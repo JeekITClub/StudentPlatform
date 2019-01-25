@@ -26,8 +26,17 @@ class Society(models.Model):
     recruit_qq_group = models.CharField(max_length=32, blank=True)
     established_time = models.DateTimeField(blank=True, null=True)
 
+    class Meta:
+        ordering = ['-established_time']
+
+    def __str__(self):
+        return str(self.society_id) + ' ' + self.name
+
 
 class SocietyMemberRelationShip(models.Model):
     society = models.ForeignKey(Society, on_delete=models.DO_NOTHING)
     member = models.ForeignKey(Student, on_delete=models.DO_NOTHING)
     status = models.SmallIntegerField(choices=member_confirm_status, default=MemberConfirmStatus.WAITING)
+
+    def __str__(self):
+        return str(self.society) + ' ' + str(self.member)
