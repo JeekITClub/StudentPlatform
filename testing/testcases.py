@@ -6,5 +6,5 @@ from testing.client import Client
 class TestCase(DjangoTestCase):
     client_class = Client
 
-    def createUser(self, username, password='chickendinner'):
+    def createUser(self, username, password='chicken'):
         return User.objects.create_user(username=username, password=password)
