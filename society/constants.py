@@ -4,6 +4,14 @@ member_confirm_status = (
     (2, '未通过')
 )
 
+society_type = (
+    (1, '自立精神'),
+    (2, '共生意识'),
+    (3, '科学态度'),
+    (4, '人文情怀'),
+    (5, '领袖气质'),
+)
+
 
 class MemberConfirmStatus:
     WAITING = 0

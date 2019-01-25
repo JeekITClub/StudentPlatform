@@ -1,12 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
 from student.models import Student
-from society.constants import member_confirm_status
+from society.constants import (
+    member_confirm_status,
+    society_type
+)
 from society.constants import MemberConfirmStatus
 from student.constants import (
     grade_choices,
-    class_choices
+    class_choices,
 )
+
 
 # Create your models here.
 
@@ -24,7 +28,7 @@ class Society(models.Model):
     achievements = models.TextField(blank=True)
     recruit = models.BooleanField(default=False)
     email = models.EmailField(blank=True)
-    type = models.PositiveSmallIntegerField()
+    type = models.PositiveSmallIntegerField(choices=society_type)
     confirmed = models.BooleanField(default=False)
     recruit_qq_group = models.CharField(max_length=32, blank=True)
     established_time = models.DateTimeField(blank=True, null=True)
@@ -39,7 +43,7 @@ class Society(models.Model):
 class SocietyMemberRelationShip(models.Model):
     society = models.ForeignKey(Society, on_delete=models.DO_NOTHING)
     member = models.ForeignKey(Student, on_delete=models.DO_NOTHING)
-    status = models.SmallIntegerField(choices=member_confirm_status, default=MemberConfirmStatus.WAITING)
+    status = models.PositiveSmallIntegerField(choices=member_confirm_status, default=MemberConfirmStatus.WAITING)
 
     def __str__(self):
         return str(self.society) + ' ' + str(self.member)
