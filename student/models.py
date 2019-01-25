@@ -1,5 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
+from student.constants import (
+    grade_choices,
+    class_choices
+)
 
 
 # Create your models here.
@@ -7,8 +11,8 @@ from django.contrib.auth.models import User
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=64)
-    class_num = models.PositiveSmallIntegerField()
-    grade = models.PositiveSmallIntegerField()
+    grade = models.PositiveSmallIntegerField(choices=grade_choices)
+    class_num = models.PositiveSmallIntegerField(choices=class_choices)
     qq = models.CharField(max_length=32, blank=True)
 
     def __str__(self):
