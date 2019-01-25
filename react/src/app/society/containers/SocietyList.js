@@ -1,4 +1,5 @@
 import React from 'react';
+import { Empty } from "antd";
 import SocietyCard from "../components/SocietyCard";
 
 class SocietyList extends React.Component {
@@ -10,7 +11,7 @@ class SocietyList extends React.Component {
         return (
             this.state.societies.map((society) => {
                 return (
-                    <SocietyCard/>
+                    <SocietyCard name={society.name} society_id={society.society_id}/>
                 )
             })
         )
@@ -18,7 +19,7 @@ class SocietyList extends React.Component {
 
     renderNull = () => {
         return (
-            <div>No Society</div>
+            <Empty />
         )
     };
 
