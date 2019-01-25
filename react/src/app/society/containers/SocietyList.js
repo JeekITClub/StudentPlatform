@@ -1,10 +1,29 @@
 import React from 'react';
+import SocietyCard from "../components/SocietyCard";
 
 class SocietyList extends React.Component {
-    render() {
+    state = {
+        societies: []
+    };
+
+    renderSocietyList = () => {
         return (
-            <div>SocietyList</div>
+            this.state.societies.map((society) => {
+                return (
+                    <SocietyCard/>
+                )
+            })
         )
+    };
+
+    renderNull = () => {
+        return (
+            <div>No Society</div>
+        )
+    };
+
+    render() {
+        return this.state.societies.length === 0 ? this.renderNull() : this.renderSocietyList()
     }
 }
 

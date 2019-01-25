@@ -76,6 +76,16 @@
     "@babel/traverse" "^7.1.0"
     "@babel/types" "^7.0.0"
 
+"@babel/helper-create-class-features-plugin@^7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@babel/helper-create-class-features-plugin/-/helper-create-class-features-plugin-7.3.0.tgz#2b01a81b3adc2b1287f9ee193688ef8dc71e718f"
+  dependencies:
+    "@babel/helper-function-name" "^7.1.0"
+    "@babel/helper-member-expression-to-functions" "^7.0.0"
+    "@babel/helper-optimise-call-expression" "^7.0.0"
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/helper-replace-supers" "^7.2.3"
+
 "@babel/helper-define-map@^7.1.0":
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/@babel/helper-define-map/-/helper-define-map-7.1.0.tgz#3b74caec329b3c80c116290887c0dd9ae468c20c"
@@ -160,7 +170,7 @@
     "@babel/traverse" "^7.1.0"
     "@babel/types" "^7.0.0"
 
-"@babel/helper-replace-supers@^7.1.0":
+"@babel/helper-replace-supers@^7.1.0", "@babel/helper-replace-supers@^7.2.3":
   version "7.2.3"
   resolved "https://registry.yarnpkg.com/@babel/helper-replace-supers/-/helper-replace-supers-7.2.3.tgz#19970020cf22677d62b3a689561dbd9644d8c5e5"
   dependencies:
@@ -218,6 +228,13 @@
     "@babel/helper-plugin-utils" "^7.0.0"
     "@babel/helper-remap-async-to-generator" "^7.1.0"
     "@babel/plugin-syntax-async-generators" "^7.2.0"
+
+"@babel/plugin-proposal-class-properties@^7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-class-properties/-/plugin-proposal-class-properties-7.3.0.tgz#272636bc0fa19a0bc46e601ec78136a173ea36cd"
+  dependencies:
+    "@babel/helper-create-class-features-plugin" "^7.3.0"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
 "@babel/plugin-proposal-json-strings@^7.2.0":
   version "7.2.0"
@@ -1513,6 +1530,10 @@ combined-stream@^1.0.6, combined-stream@~1.0.6:
   resolved "https://registry.yarnpkg.com/combined-stream/-/combined-stream-1.0.7.tgz#2d1d24317afb8abe95d6d2c0b07b57813539d828"
   dependencies:
     delayed-stream "~1.0.0"
+
+commander@*:
+  version "2.19.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.19.0.tgz#f6198aa84e5b83c46054b94ddedbfed5ee9ff12a"
 
 commander@2.17.x, commander@~2.17.1:
   version "2.17.1"
@@ -4032,6 +4053,12 @@ mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0, mkd
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.1.tgz#30057438eac6cf7f8c4767f38648d6697d75c903"
   dependencies:
     minimist "0.0.8"
+
+mockjs@^1.0.1-beta3:
+  version "1.0.1-beta3"
+  resolved "https://registry.yarnpkg.com/mockjs/-/mockjs-1.0.1-beta3.tgz#d234f3c27256397564f2c955142e891909537209"
+  dependencies:
+    commander "*"
 
 moment@2.x, moment@^2.22.2:
   version "2.24.0"
