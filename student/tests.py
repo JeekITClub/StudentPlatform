@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 
 class StudentTestCase(TestCase):
     def setUp(self):
-        User.objects.create_user(username='test_user', password='test')
+        User.objects.create_user(username='test_user')
 
     def test_create_student(self):
         user = User.objects.get(username='test_user')

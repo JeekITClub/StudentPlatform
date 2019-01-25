@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 
 class SocietyTestCase(TestCase):
     def setUp(self):
-        user = User.objects.create_user(username='20151333', password='student')
+        user = User.objects.create_user(username='20151333')
         Student.objects.create(
             user=user,
             name='sms',
@@ -17,7 +17,7 @@ class SocietyTestCase(TestCase):
             class_num=1,
             qq='123456789'
         )
-        user = User.objects.create_user(username='101', password='society')
+        user = User.objects.create_user(username='101')
         Society.objects.create(
             society_id=101,
             user=user,
