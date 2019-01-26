@@ -33,7 +33,6 @@
     "postcss-loader": "^3.0.0",
     "progress-bar-webpack-plugin": "^1.11.0",
     "prop-types": "^15.6.2",
-    "quill-delta": "^4.1.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-hot-loader": "^4.6.3",
