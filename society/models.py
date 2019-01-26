@@ -32,6 +32,7 @@ class Society(models.Model):
     confirmed = models.BooleanField(default=False)
     recruit_qq_group = models.CharField(max_length=32, blank=True)
     established_time = models.DateTimeField(blank=True, null=True)
+    password_changed = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-established_time']
