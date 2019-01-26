@@ -3,10 +3,11 @@ import {Switch, Route} from 'react-router-dom';
 import {Layout} from 'antd';
 import Member from './members/index.js';
 import AdminSocietySider from './components/AdminSocietySider.js';
+import AdminSocietyHeader from './components/AdminSocietyHeader.js';
 import "antd/dist/antd.css";
 
 const {
-    Header, Content
+    Content
 } = Layout;
 
 export default function AdminClub({match}) {
@@ -14,7 +15,7 @@ export default function AdminClub({match}) {
         <Layout>
             <AdminSocietySider/>
             <Layout>
-                <Header style={{background: '#fff', padding: 0}}/>
+                <AdminSocietyHeader/>
                 <Content style={{margin: '24px 16px 0', overflow: 'initial'}}>
                     <Switch>
                         <Route path={`${match.url}/member`} component={Member}/>
