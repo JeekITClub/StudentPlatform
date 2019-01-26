@@ -17,3 +17,11 @@ class MemberConfirmStatus:
     WAITING = 0
     ACCEPTED = 1
     DENIED = 2
+
+
+class SocietyType:
+    SELFRELIANCE = 1
+    SYMBIOSIS = 2
+    SCIENTIFIC = 3
+    HUMANISTIC = 4
+    LEADERSHIP = 5

@@ -27,15 +27,12 @@ module.exports = {
             },
             {
                 test: /\.css$/,
+                include: [
+                    /src/,
+                    '/node_modules/antd/dist/'   //增加此项
+                ],
                 use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                        // options: {
-                        //     // you can specify a publicPath here
-                        //     // by default it use publicPath in webpackOptions.output
-                        //     publicPath: '../'
-                        // }
-                    },
+                    MiniCssExtractPlugin.loader,
                     "css-loader"
                 ]
             },
