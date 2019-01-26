@@ -40,7 +40,7 @@ class SocietyTest(TestCase):
         # 写不动了
 
     def test_get_society(self):
-        url = '/api/society/{}/'.format(self.society1.pk)
+        url = '/api/society/{}/'.format(self.society1.id)
         response = self.client.get(url, decode=False)
         self.assertEqual(response.data['name'], self.society1.name)
         # 写不动了
