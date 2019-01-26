@@ -2,7 +2,7 @@ import React from 'react';
 import {BrowserRouter, Route, HashRouter, Switch} from 'react-router-dom';
 import FormContainer from "./FormContainer";
 import Society from './app/society/index.js';
-import AdminClub from './app/admin_society/index.js';
+import AdminSociety from './app/admin_society/index.js';
 import Header from './shared/header/index.js';
 
 const DEV = process.env.NODE_ENV !== 'production';
@@ -16,7 +16,7 @@ class AppRouter extends React.Component {
                 <div style={{height: '100%'}}>
                     <Switch>
                         <Route path="/society" component={Society}/>
-                        <Route path="/admin_club/" component={AdminClub}/>
+                        <Route path="/admin_society/" component={AdminSociety}/>
                         <Route path="/" component={Header}/>
                     </Switch>
                 </div>
