@@ -20,6 +20,7 @@
     "antd": "^3.12.4",
     "autoprefixer": "^9.4.6",
     "babel-loader": "^8.0.5",
+    "bootstrap": "^4.2.1",
     "cache-loader": "^2.0.1",
     "cross-env": "^5.2.0",
     "css-loader": "^2.1.0",
