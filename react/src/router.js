@@ -1,6 +1,7 @@
 import React from 'react';
 import {BrowserRouter, Route, HashRouter, Switch} from 'react-router-dom';
 import FormContainer from "./FormContainer";
+import Home from './app/home/index.js';
 import Society from './app/society/index.js';
 import AdminSociety from './app/admin_society/index.js';
 import Header from './shared/header/index.js';
@@ -17,7 +18,7 @@ class AppRouter extends React.Component {
                     <Switch>
                         <Route path="/society" component={Society}/>
                         <Route path="/admin_society/" component={AdminSociety}/>
-                        <Route path="/" component={FormContainer}/>
+                        <Route path="/" component={Home}/>
                     </Switch>
                 </div>
             </MyRouter>
