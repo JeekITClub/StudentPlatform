@@ -1,30 +1,37 @@
 import React from 'react';
-import { Empty } from "antd";
+import {Empty, Form, Input} from "antd";
 import SocietyCard from "../components/SocietyCard";
+import SocietySearch from "../components/SocietySearch";
 
 class SocietyList extends React.Component {
     state = {
         societies: []
     };
 
-    renderSocietyList = () => {
-        return (
-            this.state.societies.map((society) => {
-                return (
-                    <SocietyCard name={society.name} society_id={society.society_id}/>
-                )
-            })
-        )
+    renderList = () => {
+        if (this.state.societies.length !== 0) {
+            return (
+                this.state.societies.map((society) => {
+                    return (
+                        <SocietyCard name={society.name} society_id={society.society_id}/>
+                    )
+                })
+            )
+        }
+        return <Empty/>
     };
 
-    renderNull = () => {
-        return (
-            <Empty />
-        )
+    renderHeader = () => {
+        return <SocietySearch/>
     };
 
     render() {
-        return this.state.societies.length === 0 ? this.renderNull() : this.renderSocietyList()
+        return (
+            <div>
+                {this.renderHeader()}
+                {this.renderList()}
+            </div>
+        )
     }
 }
 
