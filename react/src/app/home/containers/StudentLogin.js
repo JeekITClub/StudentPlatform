@@ -1,7 +1,7 @@
 import React from 'react';
-import WrappedStudentLoginForm from '../components/StudentLoginForm';
 import {Row, Col} from 'antd';
-import 'bootstrap/scss/bootstrap.scss';
+
+import WrappedStudentLoginForm from '../components/StudentLoginForm';
 
 class StudentLogin extends React.Component {
     render() {
