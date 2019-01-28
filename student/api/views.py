@@ -3,11 +3,13 @@ from rest_framework.decorators import action
 
 from student.models import Student
 from student.api.serializers import StudentSerializer, StudentChangePasswordSerializer
+from utils.permissions import IsStudent
 
 
 class StudentViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+    permission_classes = (IsStudent, )
 
     @action(methods=['POST'], detail=False, serializer_class=StudentChangePasswordSerializer)
     def change_password(self, request):

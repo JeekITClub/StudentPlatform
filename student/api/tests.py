@@ -8,10 +8,24 @@ class StudentTests(TestCase):
         user = self.createUser(username='ncj')
         student = self.createStudent(user=user)
         url = '/api/student/{}/'.format(student.id)
-        response = self.client.get(url, decode=False)
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(user)
+        response = client.get(url, decode=False)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['name'], student.name)
         self.assertEqual(response.data['grade'], student.grade)
         self.assertEqual(response.data['class_num'], student.class_num)
+
+    def test_object_permission(self):
+        user1 = self.createUser(username='ncj')
+        student1 = self.createStudent(user=user1)
+        user2 = self.createUser(username='ncj2')
+        student2 = self.createStudent(user=user2)
+        url = '/api/student/{}/'.format(student1.id)
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(user2)
+        response = client.get(url, decode=False)
+        self.assertEqual(response.status_code, 403)
 
     def test_change_password(self):
         user = self.createUser(username='ncj')
