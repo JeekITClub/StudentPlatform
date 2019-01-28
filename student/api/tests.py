@@ -1,12 +1,68 @@
+from rest_framework.test import APIClient
+
 from testing.testcases import TestCase
 
 
 class StudentTests(TestCase):
-    def setUp(self):
-        pass
-
     def test_get_student(self):
-        pass
+        user = self.createUser(username='ncj')
+        student = self.createStudent(user=user)
+        url = '/api/student/{}/'.format(student.id)
+        response = self.client.get(url, decode=False)
+        self.assertEqual(response.data['name'], student.name)
+        self.assertEqual(response.data['grade'], student.grade)
+        self.assertEqual(response.data['class_num'], student.class_num)
 
     def test_change_password(self):
-        pass
+        user = self.createUser(username='ncj')
+        student = self.createStudent(user=user)
+        data = {
+            'old_password': 'ncjncjnb',
+            'new_password': 'ncj233'
+        }
+        url = '/api/student/change_password/'
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(user)
+        response = client.post(url, data=data, decode=False)
+        self.assertEqual(response.status_code, 202)
+
+    def test_change_password_with_incorrect_old_password(self):
+        user = self.createUser(username='ncj')
+        student = self.createStudent(user=user)
+        data = {
+            'old_password': 'ncjnb',
+            'new_password': 'ncj233'
+        }
+        url = '/api/student/change_password/'
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(user)
+        response = client.post(url, data=data, decode=False)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data['detail'], '原密码错误')
+
+    def test_change_password_with_invalid_form(self):
+        user = self.createUser(username='ncj')
+        student = self.createStudent(user=user)
+        data = {
+            'old_password23': 'ncjnb',
+            'new_password1': 'ncj233'
+        }
+        url = '/api/student/change_password/'
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(user)
+        response = client.post(url, data=data, decode=False)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data['detail'], '表单填写错误')
+
+    def test_change_password_with_wrong_method(self):
+        user = self.createUser(username='ncj')
+        student = self.createStudent(user=user)
+        data = {
+            'old_password23': 'ncjnb',
+            'new_password1': 'ncj233'
+        }
+        url = '/api/student/change_password/'
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(user)
+        response = client.get(url, data=data, decode=False)
+        self.assertEqual(response.status_code, 405)

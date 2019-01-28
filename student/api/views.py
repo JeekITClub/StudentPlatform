@@ -6,12 +6,12 @@ from student.api.serializers import StudentSerializer, StudentChangePasswordSeri
 
 
 class StudentViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
-    queryset = Student.objects.filter(user__active=True)
+    queryset = Student.objects.all()
     serializer_class = StudentSerializer
 
     @action(methods=['POST'], detail=False, serializer_class=StudentChangePasswordSerializer)
     def change_password(self, request):
-        serializer = self.get_serializer_class()(request.data)
+        serializer = self.get_serializer_class()(data=request.data)
         if not serializer.is_valid():
             error = '表单填写错误'
         elif not request.user.check_password(serializer.validated_data['old_password']):
