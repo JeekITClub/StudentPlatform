@@ -1,20 +1,23 @@
 import React from 'react';
 import {Form, Input} from 'antd';
+import {observer} from 'mobx-react';
+
+import SocietyStore from '../stores/SocietyStore'
 
 const Search = Input.Search;
 
+@observer
 class SocietySearch extends React.Component {
-    state = {
-        query: null
-    };
 
     handleQueryChange = (e) => {
         e.preventDefault();
-        this.setState({query: e.target.value})
+        SocietyStore.changeQuery(e.target.value)
     };
 
     handleSearch = () => {
-        console.log(this.state.query);
+        SocietyStore.changeLoading();
+        console.log(SocietyStore.query);
+        SocietyStore.changeLoading();
     };
 
     render() {
@@ -22,7 +25,7 @@ class SocietySearch extends React.Component {
             <Form>
                 <Form.Item>
                     <Search
-                        value={this.state.query}
+                        value={SocietyStore.query}
                         onChange={this.handleQueryChange}
                         onSearch={this.handleSearch}
                         allowClear
