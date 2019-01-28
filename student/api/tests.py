@@ -16,6 +16,16 @@ class StudentTests(TestCase):
         self.assertEqual(response.data['grade'], student.grade)
         self.assertEqual(response.data['class_num'], student.class_num)
 
+    def test_permission(self):
+        user1 = self.createUser(username='ncj')
+        student1 = self.createStudent(user=user1)
+        user2 = self.createUser(username='ncj2')
+        url = '/api/student/{}/'.format(student1.id)
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(user2)
+        response = client.get(url, decode=False)
+        self.assertEqual(response.status_code, 403)
+
     def test_object_permission(self):
         user1 = self.createUser(username='ncj')
         student1 = self.createStudent(user=user1)
