@@ -7,7 +7,6 @@ from society.api.serializers import SocietySerializer, SocietyMiniSerializer
 class SocietyViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
     queryset = Society.objects.filter(confirmed=True)
     serializer_class = SocietySerializer
-    filter_backends = []
 
     def filter_queryset(self, queryset):
         # there is a better and more elegant way to implement it
