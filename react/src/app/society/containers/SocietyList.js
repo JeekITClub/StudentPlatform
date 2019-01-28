@@ -1,30 +1,48 @@
 import React from 'react';
-import { Empty } from "antd";
+import {observer} from 'mobx-react';
+import {Empty, Row, Col} from "antd";
 import SocietyCard from "../components/SocietyCard";
+import SocietySearch from "../components/SocietySearch";
+import SocietyStore from "../stores/SocietyStore";
 
+import '../styles/SocietyList.scss'
+
+@observer
 class SocietyList extends React.Component {
-    state = {
-        societies: []
+    renderList = () => {
+        if (SocietyStore.societies.length !== 0) {
+            return (
+                SocietyStore.societies.map((society) => {
+                    return (
+                        <SocietyCard name={society.name} society_id={society.society_id}/>
+                    )
+                })
+            )
+        }
+        return <Empty/>
     };
 
-    renderSocietyList = () => {
-        return (
-            this.state.societies.map((society) => {
-                return (
-                    <SocietyCard name={society.name} society_id={society.society_id}/>
-                )
-            })
-        )
-    };
-
-    renderNull = () => {
-        return (
-            <Empty />
-        )
+    renderHeader = () => {
+        return <SocietySearch/>
     };
 
     render() {
-        return this.state.societies.length === 0 ? this.renderNull() : this.renderSocietyList()
+        return (
+            <div>
+                <Row className="society-list-header">
+                    <Col lg={8} sm={24}>
+                        {this.renderHeader()}
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <div className="society-list-body">
+                            {this.renderList()}
+                        </div>
+                    </Col>
+                </Row>
+            </div>
+        )
     }
 }
 
