@@ -34,9 +34,13 @@ class SocietyList extends React.Component {
                         {this.renderHeader()}
                     </Col>
                 </Row>
-                <div className="society-list-body">
-                    {this.renderList()}
-                </div>
+                <Row>
+                    <Col>
+                        <div className="society-list-body">
+                            {this.renderList()}
+                        </div>
+                    </Col>
+                </Row>
             </div>
         )
     }
