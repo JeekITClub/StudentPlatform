@@ -1,5 +1,3 @@
-import json
-
 from society.constants import SocietyType
 from testing.testcases import TestCase
 
