@@ -1,7 +1,7 @@
 from django.test import TestCase
 from student.models import Student
 from society.models import Society
-from society.constants import MemberConfirmStatus
+from society.constants import JoinSocietyRequestStatus
 from django.contrib.auth.models import User
 
 

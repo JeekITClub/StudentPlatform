@@ -1,6 +1,8 @@
 from rest_framework import permissions
 
-from student.models import
+from society.models import JoinSocietyRequest
+from society.constants import JoinSocietyRequestStatus
+
 
 class IsStudent(permissions.BasePermission):
     message = 'Student Only'
@@ -12,11 +14,28 @@ class IsStudent(permissions.BasePermission):
         return request.user == obj.user
 
 
-class JoinSociety(IsStudent):
-    message = '不能加入社团'
+class JoinSociety(permissions.BasePermission):
+    message = '你已加入该社团'
+
+    def has_permission(self, request, view):
+        return True
 
     def has_object_permission(self, request, view, obj):
-        return request.user.student not in obj.members and not JoinSocietyRequest
+        return request.user.student not in obj.members
+
+
+class SingleJoinSocietyRequestCheck(permissions.BasePermission):
+    message = '社长已正在审核你发出的加入请求，请勿重复提交'
+
+    def has_permission(self, request, view):
+        return True
+
+    def has_object_permission(self, request, view, obj):
+        return JoinSocietyRequest.objects.filter(
+            society=obj,
+            member=request.user.student,
+            status=JoinSocietyRequestStatus.WAITING
+        ).count() == 0
 
 
 class AccessSocietyAdmin(permissions.BasePermission):

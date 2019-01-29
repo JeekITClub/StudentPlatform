@@ -5,7 +5,7 @@ from society.constants import (
     member_confirm_status,
     society_type
 )
-from society.constants import MemberConfirmStatus
+from society.constants import JoinSocietyRequestStatus
 from student.constants import (
     grade_choices,
     class_choices,
@@ -44,7 +44,7 @@ class Society(models.Model):
 class JoinSocietyRequest(models.Model):
     society = models.ForeignKey(Society, on_delete=models.DO_NOTHING)
     member = models.ForeignKey(Student, on_delete=models.DO_NOTHING)
-    status = models.PositiveSmallIntegerField(choices=member_confirm_status, default=MemberConfirmStatus.WAITING)
+    status = models.PositiveSmallIntegerField(choices=member_confirm_status, default=JoinSocietyRequestStatus.WAITING)
 
     def __str__(self):
         return str(self.society) + ' ' + str(self.member)
