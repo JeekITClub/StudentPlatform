@@ -4,7 +4,7 @@ from rest_framework.response import Response
 
 from django.shortcuts import get_object_or_404
 
-from society.models import Society
+from society.models import Society, JoinSocietyRequest
 from society.api.serializers import (
     SocietySerializer,
     SocietyMiniSerializer,
@@ -38,15 +38,23 @@ class SocietyViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retr
             student = request.user.student
         else:
             return Response(data={'detail': '只有在校的学生账户可以加入社团！'},
-                            status=status.HTTP_400_BAD_REQUEST)
+                            status=status.HTTP_401_UNAUTHORIZED)
 
-        # Check if the user in already
-        if student in society.members:
+        # Check if the user is in the society already
+        if student in society.members.all():
             return Response(data={'detail': '申请失败！你已经加入了该社团！'},
-                            status=status.HTTP_400_BAD_REQUEST)
+                            status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        # Check if there is existing request
+        existing_request = JoinSocietyRequest.objects.filter(member=student, society=society,
+                                                             status=MemberConfirmStatus.WAITING).first()
+        if existing_request is not None:
+            return Response(data={'detail': '申请已发出！请勿重复申请！'},
+                            status=status.HTTP_406_NOT_ACCEPTABLE)
+
         serializer = JoinSocietyRequestSerializer(data={
-            "society": society,
-            "member": student,
+            "society": pk,
+            "member": student.pk,
             'status': MemberConfirmStatus.WAITING
         })
         if serializer.is_valid():
