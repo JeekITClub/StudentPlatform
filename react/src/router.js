@@ -4,6 +4,7 @@ import FormContainer from "./FormContainer";
 import Home from './app/home/index.js';
 import Society from './app/society/index.js';
 import AdminSociety from './app/admin_society/index.js';
+import SocietyBureau from './app/society_bureau/index.js';
 import Header from './shared/header/index.js';
 
 const DEV = process.env.NODE_ENV !== 'production';
@@ -16,6 +17,7 @@ class AppRouter extends React.Component {
             <MyRouter>
                 <div style={{height: '100%'}}>
                     <Switch>
+                        <Route path="/admin" component={SocietyBureau}/>
                         <Route path="/society" component={Society}/>
                         <Route path="/admin_society/" component={AdminSociety}/>
                         <Route path="/" component={Home}/>
