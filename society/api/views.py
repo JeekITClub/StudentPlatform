@@ -61,6 +61,5 @@ class SocietyViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retr
             serializer.save()
             return Response(data={'detail': '申请成功！请等待社团审核！'},
                             status=status.HTTP_201_CREATED)
-        else:
-            return Response(data={'detail': '申请失败！'},
-                            status=status.HTTP_400_BAD_REQUEST)
+        return Response(data={'detail': '申请失败！'},
+                        status=status.HTTP_400_BAD_REQUEST)
