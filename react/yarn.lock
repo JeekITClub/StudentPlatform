@@ -1172,7 +1172,6 @@ boolbase@^1.0.0, boolbase@~1.0.0:
 bootstrap@^4.2.1:
   version "4.2.1"
   resolved "http://registry.npm.taobao.org/bootstrap/download/bootstrap-4.2.1.tgz#8f8bdca024dbf0e8644da32e918c8a03a90a5757"
-  integrity sha1-j4vcoCTb8OhkTaMukYyKA6kKV1c=
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -6544,6 +6543,13 @@ strip-indent@^1.0.1:
 strip-json-comments@~2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
+
+style-loader@^0.23.1:
+  version "0.23.1"
+  resolved "https://registry.yarnpkg.com/style-loader/-/style-loader-0.23.1.tgz#cb9154606f3e771ab6c4ab637026a1049174d925"
+  dependencies:
+    loader-utils "^1.1.0"
+    schema-utils "^1.0.0"
 
 stylehacks@^4.0.0:
   version "4.0.1"
