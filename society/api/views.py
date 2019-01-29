@@ -1,7 +1,17 @@
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
+from django.shortcuts import get_object_or_404
 
 from society.models import Society
-from society.api.serializers import SocietySerializer, SocietyMiniSerializer
+from society.api.serializers import (
+    SocietySerializer,
+    SocietyMiniSerializer,
+    JoinSocietyRequestSerializer
+)
+from society.constants import MemberConfirmStatus
+from student.models import Student
 
 
 class SocietyViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
@@ -20,3 +30,29 @@ class SocietyViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retr
         elif self.action == 'list':
             return SocietyMiniSerializer
         return SocietySerializer
+
+    @action(detail=True, methods=['post'])
+    def join(self, request, pk=None):
+        society = get_object_or_404(Society, pk=pk)
+        if hasattr(request.user, 'student') and request.user.is_active:
+            student = request.user.student
+        else:
+            return Response(data={'detail': '只有在校的学生账户可以加入社团！'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the user in already
+        if student in society.members:
+            return Response(data={'detail': '申请失败！你已经加入了该社团！'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        serializer = JoinSocietyRequestSerializer(data={
+            "society": society,
+            "member": student,
+            'status': MemberConfirmStatus.WAITING
+        })
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data={'detail': '申请成功！请等待社团审核！'},
+                            status=status.HTTP_201_CREATED)
+        else:
+            return Response(data={'detail': '申请失败！'},
+                            status=status.HTTP_400_BAD_REQUEST)
