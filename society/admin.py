@@ -5,10 +5,7 @@ from society.models import Society, SocietyMemberRelationShip
 # Register your models here.
 
 class SocietyAdmin(admin.ModelAdmin):
-    list_display = ('society_id', 'name', 'member_count', 'confirmed', 'recruit')
-
-    def member_count(self, obj):
-        return obj.user.is_active
+    list_display = ('society_id', 'name', 'confirmed', 'recruit')
 
 
 class SocietyMemberRelationShipAdmin(admin.ModelAdmin):
