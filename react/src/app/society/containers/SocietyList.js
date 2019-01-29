@@ -12,11 +12,20 @@ class SocietyList extends React.Component {
     renderList = () => {
         if (SocietyStore.societies.length !== 0) {
             return (
-                SocietyStore.societies.map((society) => {
-                    return (
-                        <SocietyCard name={society.name} society_id={society.society_id}/>
-                    )
-                })
+                <Row gutter={16}>
+                    {
+                        SocietyStore.societies.map((society) => {
+                            return (
+                                <Col lg={6} key={society.society_id}>
+                                    <SocietyCard
+                                        name={society.name}
+                                        society_id={society.society_id}
+                                    />
+                                </Col>
+                            )
+                        })
+                    }
+                </Row>
             )
         }
         return <Empty/>
@@ -28,19 +37,15 @@ class SocietyList extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="society-list-container">
                 <Row className="society-list-header">
-                    <Col lg={8} sm={24}>
+                    <Col lg={6} md={8} sm={24}>
                         {this.renderHeader()}
                     </Col>
                 </Row>
-                <Row>
-                    <Col>
-                        <div className="society-list-body">
-                            {this.renderList()}
-                        </div>
-                    </Col>
-                </Row>
+                <div className="society-list-body">
+                    {this.renderList()}
+                </div>
             </div>
         )
     }

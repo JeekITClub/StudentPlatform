@@ -2,7 +2,14 @@ import { observable, action } from "mobx";
 
 class SocietyStore {
     @observable loading = false;
-    @observable societies = [];
+    @observable societies = [
+        {name: 'JEEK信息社', society_id: 233},
+        {name: '金苹果电视台', society_id: 233},
+        {name: '坚持不做马斯狗', society_id: 233},
+        {name: 'jeek', society_id: 233},
+        {name: 'jeek', society_id: 233},
+        {name: 'jeek', society_id: 233},
+    ];
 
     @observable filteredSocieties = [];
 
