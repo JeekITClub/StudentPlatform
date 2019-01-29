@@ -29,10 +29,11 @@ module.exports = {
                 test: /\.css$/,
                 include: [
                     /src/,
-                    '/node_modules/antd/dist/'   //增加此项
+                    '/node_modules/antd/dist/'
                 ],
                 use: [
                     MiniCssExtractPlugin.loader,
+                    "style-loader",
                     "css-loader"
                 ]
             },
