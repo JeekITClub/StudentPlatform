@@ -6,6 +6,8 @@ import SocietyStore from '../stores/SocietyStore'
 
 const Search = Input.Search;
 
+import '../styles/SocietySearch.scss'
+
 @observer
 class SocietySearch extends React.Component {
 
