@@ -18,7 +18,7 @@ from student.constants import (
 class Society(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     members = models.ManyToManyField(Student, through='SocietyMemberRelationShip')
-    society_id = models.PositiveIntegerField(null=True, blank=True)
+    society_id = models.PositiveIntegerField(null=True, blank=True, unique=True)
     name = models.CharField(max_length=64)
     introduction = models.TextField(blank=True)
     president_name = models.CharField(max_length=64)
