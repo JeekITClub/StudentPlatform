@@ -16,7 +16,7 @@ class SocietyList extends React.Component {
                     {
                         SocietyStore.societies.map((society) => {
                             return (
-                                <Col lg={6} key={society.society_id}>
+                                <Col lg={6} xs={12} key={society.society_id}>
                                     <SocietyCard
                                         name={society.name}
                                         society_id={society.society_id}
