@@ -17,7 +17,7 @@ from student.constants import (
 
 class Society(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    members = models.ManyToManyField(Student, through='SocietyMemberRelationShip')
+    members = models.ManyToManyField(Student)
     society_id = models.PositiveIntegerField(null=True, blank=True, unique=True)
     name = models.CharField(max_length=64)
     introduction = models.TextField(blank=True)
@@ -41,7 +41,7 @@ class Society(models.Model):
         return str(self.society_id) + ' ' + self.name
 
 
-class SocietyMemberRelationShip(models.Model):
+class JoinSocietyRequest(models.Model):
     society = models.ForeignKey(Society, on_delete=models.DO_NOTHING)
     member = models.ForeignKey(Student, on_delete=models.DO_NOTHING)
     status = models.PositiveSmallIntegerField(choices=member_confirm_status, default=MemberConfirmStatus.WAITING)
