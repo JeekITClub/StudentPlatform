@@ -1,6 +1,6 @@
 from django.test import TestCase
 from student.models import Student
-from society.models import Society, SocietyMemberRelationShip
+from society.models import Society
 from society.constants import MemberConfirmStatus
 from django.contrib.auth.models import User
 
@@ -68,14 +68,6 @@ class SocietyTestCase(TestCase):
         self.assertEqual(len(response.data), 2)
         self.assertEqual(response.data[0]['name'], self.society1.name)
         self.assertEqual(response.data[1]['society_id'], self.society2.society_id)
-
-    def test_can_make_application(self):
-        student = Student.objects.get(user__username='20151333')
-        society = Society.objects.get(name='Jeek')
-        relation = SocietyMemberRelationShip.objects.create(society=society, member=student)
-        self.assertEqual(relation.status, MemberConfirmStatus.WAITING)
-        self.assertIn(student, society.members.all())
-        self.assertIn(society, student.society_set.all())
 
     # def test_can_accept_member(self):
     #     pass
