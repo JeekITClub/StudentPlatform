@@ -1,5 +1,6 @@
 from rest_framework import permissions
 
+from student.models import
 
 class IsStudent(permissions.BasePermission):
     message = 'Student Only'
@@ -15,7 +16,7 @@ class JoinSociety(IsStudent):
     message = '不能加入社团'
 
     def has_object_permission(self, request, view, obj):
-        return request.user.student not in obj.members
+        return request.user.student not in obj.members and not JoinSocietyRequest
 
 
 class AccessSocietyAdmin(permissions.BasePermission):
