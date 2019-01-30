@@ -3,6 +3,7 @@ const config = require('./webpack.config');
 const merge = require('webpack-merge');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 
 module.exports = merge(config, {
     mode: "development",
@@ -22,7 +23,12 @@ module.exports = merge(config, {
         }),
         new HtmlWebPackPlugin({
             template: "./template.html",
-            filename: path.resolve(__dirname, 'dist')
-        })
+            filename: 'index.html',
+            alwaysWriteToDisk: true,
+        }),
+        new HtmlWebpackHarddiskPlugin({
+            outputPath: path.resolve(__dirname, 'dist'),
+        }),
     ],
-});
+})
+;
