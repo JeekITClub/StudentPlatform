@@ -1,9 +1,9 @@
-from django.test import TestCase
+from testing.testcases import TestCase
+from django.contrib.auth.models import User
 from student.models import Student
 from society.models import Society, JoinSocietyRequest
 from society.constants import JoinSocietyRequestStatus
-from django.contrib.auth.models import User
-
+from utils.permissions import IsStudent, SingleJoinSocietyRequestCheck, JoinSociety
 
 # Create your tests here.
 
@@ -95,9 +95,11 @@ class SocietyTestCase(TestCase):
         # send repeated request
         response = self.client.post(url, decode=True)
         self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.data['detail'], SingleJoinSocietyRequestCheck.message)
 
         # send request after joining the society
         join_request.status = JoinSocietyRequestStatus.ACCEPTED
         self.society1.members.add(self.student)
         response = self.client.post(url, decode=True)
         self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.data['detail'], JoinSociety.message)
