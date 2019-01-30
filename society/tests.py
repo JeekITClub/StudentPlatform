@@ -7,6 +7,7 @@ from society.models import Society, JoinSocietyRequest
 from society.constants import JoinSocietyRequestStatus
 from utils.permissions import IsStudent, SingleJoinSocietyRequestCheck, JoinSociety
 
+
 # Create your tests here.
 
 
@@ -106,3 +107,12 @@ class SocietyTestCase(TestCase):
         response = client.post(url, decode=True)
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.data['detail'], JoinSociety.message)
+
+    def test_quit_society(self):
+        url = '/api/society/{}/quit/'.format(self.society1.pk)
+        client = APIClient(enforce_csrf_checks=True)
+        self.society1.members.add(self.student)
+        client.force_authenticate(self.student.user)
+        response = client.post(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn(self.student, self.society1.members.all())
