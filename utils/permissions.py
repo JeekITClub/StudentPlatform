@@ -10,6 +10,8 @@ class IsStudent(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.is_authenticated and hasattr(request.user, 'student')
 
+
+class IsStudentSelf(IsStudent):
     def has_object_permission(self, request, view, obj):
         return request.user == obj.user
 
@@ -21,7 +23,7 @@ class JoinSociety(permissions.BasePermission):
         return True
 
     def has_object_permission(self, request, view, obj):
-        return request.user.student not in obj.members
+        return request.user.student not in obj.members.all()
 
 
 class SingleJoinSocietyRequestCheck(permissions.BasePermission):

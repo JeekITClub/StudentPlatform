@@ -1,6 +1,6 @@
 from django.test import TestCase
 from student.models import Student
-from society.models import Society
+from society.models import Society, JoinSocietyRequest
 from society.constants import JoinSocietyRequestStatus
 from django.contrib.auth.models import User
 
@@ -48,6 +48,12 @@ class SocietyTestCase(TestCase):
         self.assertEqual(response.data[1]['name'], self.society2.name)
         self.assertEqual(response.data[1]['society_id'], self.society2.society_id)
 
+    def test_get_society(self):
+        url = '/api/society/{}/'.format(self.society1.pk)
+        response = self.client.get(url, decode=False)
+        self.assertEqual(response.data['name'], self.society1.name)
+        self.assertEqual(response.data['type'], self.society1.type)
+
     def test_search_societies(self):
         Society.objects.create(
             society_id=103,
@@ -70,32 +76,28 @@ class SocietyTestCase(TestCase):
         self.assertEqual(response.data[1]['society_id'], self.society2.society_id)
 
     def test_join_society(self):
-        url = '/api/society/1/join/'
+        url = '/api/society/{}/join/'.format(self.society1.id)
         self.client.force_login(self.society1.user)
         response = self.client.post(url, decode=True)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.data['detail'], 'Student Only')
 
         # make first request
         self.client.force_login(self.student.user)
         response = self.client.post(url, decode=True)
+        self.assertEqual(response.status_code, 201)
         join_request = JoinSocietyRequest.objects.get(pk=1)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(join_request.member_id, self.student.id)
         self.assertEqual(join_request.society_id, self.society1.id)
-        self.assertEqual(join_request.status, MemberConfirmStatus.WAITING)
+        self.assertEqual(join_request.status, JoinSocietyRequestStatus.WAITING)
 
         # send repeated request
         response = self.client.post(url, decode=True)
-        self.assertEqual(response.status_code, 406)
+        self.assertEqual(response.status_code, 403)
 
         # send request after joining the society
-        join_request.status = MemberConfirmStatus.ACCEPTED
+        join_request.status = JoinSocietyRequestStatus.ACCEPTED
         self.society1.members.add(self.student)
         response = self.client.post(url, decode=True)
-        self.assertEqual(response.status_code, 406)
-
-    # def test_can_accept_member(self):
-    #     pass
-
-    # def test_can_deny_member(self):
-    #     pass
+        self.assertEqual(response.status_code, 403)
