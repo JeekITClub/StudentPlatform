@@ -1,3 +1,7 @@
-.society-bureau-sider {
+.sider-container {
+  height: 100%;
   overflow: auto;
+  background-color: #001529;
+  box-shadow: 2px 0 6px rgba(0,21,41,.35);
+  -webkit-box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
 }

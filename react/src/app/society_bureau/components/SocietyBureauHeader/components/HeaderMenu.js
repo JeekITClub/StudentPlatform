@@ -1,19 +1,18 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {Avatar, Dropdown, Menu, Icon, Row, Col} from 'antd';
+import {Avatar, Popover, Menu, Icon, Row, Col} from 'antd';
 
-const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
 
-const userMenu = (
-    <Menu>
-        <Menu.Item>
-            <Link to={'/manage/profile'}>设置</Link>
-        </Menu.Item>
-        <Menu.Item>
-            <Link to={'#'} >退出</Link>
-        </Menu.Item>
-    </Menu>
+const text = <span>设置</span>;
+const content = (
+    <div>
+        <p>
+            <Link to={'/manage/profile'}>个人信息</Link>
+        </p>
+        <p>
+            <Link to={'/manage/profile'}>退出</Link>
+        </p>
+    </div>
 );
 
 class HeaderMenu extends React.Component {
@@ -22,7 +21,7 @@ class HeaderMenu extends React.Component {
         // TODO: extract username from store
         this.state = {
             username: 'QSM',
-            current: 'mail',
+            current: '',
         };
     }
 
@@ -36,7 +35,7 @@ class HeaderMenu extends React.Component {
     render() {
         return (
             <Col>
-                <Row type="flex" gutter={32}>
+                <Row type="flex" align="middle" gutter={20}>
                     <Col>
                         <Menu
                             onClick={this.handleClick}
@@ -44,24 +43,24 @@ class HeaderMenu extends React.Component {
                             mode="horizontal"
                         >
                             <Menu.Item key="mail">
-                                <Icon type="mail"/>Navigation One
+                                <Icon type="mail"/>首页
                             </Menu.Item>
-                            <Menu.Item key="app" disabled>
-                                <Icon type="appstore"/>Navigation Two
+                            <Menu.Item key="app">
+                                <Icon type="appstore"/>帮助
                             </Menu.Item>
                         </Menu>
                     </Col>
                     <Col>
-                        <Dropdown overlay={userMenu}>
+                        <Popover placement="bottomRight" title={text} content={content} trigger="hover">
                             <div>
                                 <Link to={'/manage/profile'}>
-                                    <Avatar className="header-menu-avatar" size="large">
+                                    <Avatar className="header-menu-avatar">
                                         {this.state.username}
                                     </Avatar>
                                 </Link>
                                 <Icon type="down"/>
                             </div>
-                        </Dropdown>
+                        </Popover>
                     </Col>
                 </Row>
             </Col>

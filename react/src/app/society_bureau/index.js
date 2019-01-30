@@ -1,11 +1,13 @@
 import React from 'react';
 import {Switch, Route} from 'react-router-dom';
-import {Layout, Row} from "antd";
+import {Layout, Row, Col, Affix, Button, Drawer} from "antd";
 import "antd/dist/antd.css";
 
 import SocietyBureauHeader from './components/SocietyBureauHeader/index';
 import SocietyBureauSider from './components/SocietyBureauSider';
 import Dashboard from './pages/Dashboard';
+import DrawerMenu from './components/DrawerMenu';
+import './styles/index.scss';
 
 const {
     Sider,
@@ -16,24 +18,29 @@ const {
 
 export default function SocietyBureau({match}) {
     return (
-        <Layout>
-            <Layout style={{height: '100vh'}}>
+        <div>
+            <DrawerMenu/>
+            <Row className="society-bureau-container">
                 <SocietyBureauSider/>
-                <Layout>
-                    <SocietyBureauHeader/>
-                    <Content>
+                <Col xs={24} sm={24} md={21} lg={21} xl={21} className="main-wrapper">
+                    <Row>
+                        <SocietyBureauHeader/>
+                    </Row>
+                    <Row className="container mt-4">
                         <Switch>
                             <Route path={`${match.url}/profile`} component={Dashboard}/>
                             <Route path={`${match.url}`} exact component={Dashboard}/>
                         </Switch>
-                    </Content>
-                </Layout>
+                    </Row>
+                </Col>
+            </Row>
+            <Layout>
+                <Footer>
+                    <Row>
+                        <h2>Logo</h2>
+                    </Row>
+                </Footer>
             </Layout>
-            <Footer>
-                <Row>
-                    <h2>Logo</h2>
-                </Row>
-            </Footer>
-        </Layout>
+        </div>
     );
 }
