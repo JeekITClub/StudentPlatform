@@ -17,7 +17,7 @@ class AppRouter extends React.Component {
             <MyRouter>
                 <div style={{height: '100%'}}>
                     <Switch>
-                        <Route path="/admin" component={SocietyBureau}/>
+                        <Route path="/manage" component={SocietyBureau}/>
                         <Route path="/society" component={Society}/>
                         <Route path="/admin_society/" component={AdminSociety}/>
                         <Route path="/" component={Home}/>

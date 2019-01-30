@@ -3,8 +3,9 @@ import {Switch, Route} from 'react-router-dom';
 import {Layout, Row} from "antd";
 import "antd/dist/antd.css";
 
-import SocietyBureauHeader from './components/SocietyBureauHeader';
+import SocietyBureauHeader from './components/SocietyBureauHeader/index';
 import SocietyBureauSider from './components/SocietyBureauSider';
+import Dashboard from './pages/Dashboard';
 
 const {
     Sider,
@@ -22,9 +23,8 @@ export default function SocietyBureau({match}) {
                     <SocietyBureauHeader/>
                     <Content>
                         <Switch>
-                            <Route path={`${match.url}`} exact component={() => {
-                                return <h1>SocietyBureau</h1>
-                            }}/>
+                            <Route path={`${match.url}/profile`} component={Dashboard}/>
+                            <Route path={`${match.url}`} exact component={Dashboard}/>
                         </Switch>
                     </Content>
                 </Layout>
