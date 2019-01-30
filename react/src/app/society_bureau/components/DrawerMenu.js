@@ -1,5 +1,5 @@
 import React from 'react';
-import {Drawer, Affix, Button, Row, Col} from 'antd';
+import {Drawer, Affix, Icon, Row, Col} from 'antd';
 
 class DrawerMenu extends React.Component {
     state = {visible: false};
@@ -32,7 +32,8 @@ class DrawerMenu extends React.Component {
                 <Row>
                     <Col lg={0} xl={0} xxl={0}>
                         <Affix offsetTop={70} className="drawer-handle">
-                            <Button type="primary" onClick={this.showDrawer}>Affix top</Button>
+                            <div className="drawer-handle-container" onClick={this.showDrawer}><Icon
+                                type="menu-unfold"/></div>
                         </Affix>
                     </Col>
                 </Row>

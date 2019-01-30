@@ -10,7 +10,7 @@ class LocationBreadcrumb extends React.Component {
     render() {
         return (
             <Row>
-                <Col xs={0} sm={0} md={0} xl={24}>
+                <Col xs={0} sm={0} md={0} lg={24} xl={24}>
                     <Breadcrumb>
                         <Breadcrumb.Item>Home</Breadcrumb.Item>
                         <Breadcrumb.Item><a href="">Application Center</a></Breadcrumb.Item>

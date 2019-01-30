@@ -1,12 +1,12 @@
 import React from 'react';
-import {Layout, Menu, Icon, Row, Col, Drawer} from 'antd';
+import {Menu, Icon, Col} from 'antd';
 import '../styles/sider.scss'
 
 
 class SocietyBureauSider extends React.Component {
     render() {
         return (
-            <Col xs={0} sm={0} md={3} lg={3} xl={3} className="sider-container">
+            <Col xs={0} sm={0} md={4} lg={3} xl={3} className="sider-container">
                 <Menu theme="dark" mode="vertical" defaultSelectedKeys={['4']}>
                     <Menu.Item key="1">
                         <Icon type="user"/>

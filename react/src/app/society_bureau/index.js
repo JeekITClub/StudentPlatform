@@ -22,7 +22,7 @@ export default function SocietyBureau({match}) {
             <DrawerMenu/>
             <Row className="society-bureau-container">
                 <SocietyBureauSider/>
-                <Col xs={24} sm={24} md={21} lg={21} xl={21} className="main-wrapper">
+                <Col xs={24} sm={24} md={20} lg={21} xl={21} className="main-wrapper">
                     <Row>
                         <SocietyBureauHeader/>
                     </Row>
