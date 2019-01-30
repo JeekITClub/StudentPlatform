@@ -1,7 +1,6 @@
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const chalk = require('chalk');
-const path = require('path');
 const devConfig = require('./webpack.dev');
 
 const HOST = '127.0.0.1';
