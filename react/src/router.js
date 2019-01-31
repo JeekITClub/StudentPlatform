@@ -9,7 +9,8 @@ import Header from './shared/header/index.js';
 
 const DEV = process.env.NODE_ENV !== 'production';
 const DEBUG = process.env.DEBUG === 'true';
-const MyRouter = (DEV && !DEBUG) ? HashRouter : BrowserRouter;
+// const MyRouter = (DEV && !DEBUG) ? HashRouter : BrowserRouter;
+const MyRouter = HashRouter;
 
 class AppRouter extends React.Component {
     render() {

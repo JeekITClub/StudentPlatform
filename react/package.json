@@ -4,7 +4,7 @@
   "description": "package for student platform",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --mode production",
+    "build": "webpack --config webpack.prod.js",
     "start": "node dev-server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -3,3 +3,6 @@ venv/
 *.pyc
 react/node_modules/
 react/dist/
+collectstatic/
+static/
+templates/react/index.html
