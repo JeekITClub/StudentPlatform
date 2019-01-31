@@ -1,6 +1,6 @@
 import React from 'react';
 import {Switch, Route} from 'react-router-dom';
-import {Layout, Row, Col, Affix, Button, Drawer} from "antd";
+import {Layout, Row, Col} from "antd";
 import "antd/dist/antd.css";
 
 import SocietyBureauHeader from './components/SocietyBureauHeader/index';
@@ -10,9 +10,6 @@ import DrawerMenu from './components/DrawerMenu';
 import './styles/index.scss';
 
 const {
-    Sider,
-    Content,
-    Header,
     Footer
 } = Layout;
 

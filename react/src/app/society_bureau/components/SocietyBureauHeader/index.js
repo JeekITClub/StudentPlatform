@@ -1,5 +1,5 @@
 import React from 'react';
-import {Layout, Row, Col} from 'antd';
+import {Row, Col} from 'antd';
 
 import LocationBreadcrumb from './components/LocationBreadcrumb';
 import HeaderMenu from './components/HeaderMenu';

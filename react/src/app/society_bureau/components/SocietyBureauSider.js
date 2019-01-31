@@ -1,5 +1,5 @@
 import React from 'react';
-import {Menu, Icon, Col} from 'antd';
+import {Menu, Icon} from 'antd';
 
 
 class SocietyBureauSider extends React.Component {
