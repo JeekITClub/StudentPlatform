@@ -5,7 +5,12 @@ from testing.testcases import TestCase
 from student.models import Student
 from society.models import Society, JoinSocietyRequest
 from society.constants import JoinSocietyRequestStatus
-from utils.permissions import IsStudent, SingleJoinSocietyRequestCheck, JoinSociety
+from utils.permissions import (
+    IsStudent,
+    SingleJoinSocietyRequestCheck,
+    JoinSociety,
+    QuitSociety
+)
 
 
 # Create your tests here.
@@ -84,7 +89,7 @@ class SocietyTestCase(TestCase):
         client = APIClient(enforce_csrf_checks=True)
         client.force_authenticate(self.society1.user)
         response = client.post(url)
-        self.assertEqual(response.data['detail'], 'Student Only')
+        self.assertEqual(response.data['detail'], IsStudent.message)
 
         # make first request
         client.force_authenticate(self.student.user)
@@ -112,7 +117,21 @@ class SocietyTestCase(TestCase):
         url = '/api/society/{}/quit/'.format(self.society1.pk)
         client = APIClient(enforce_csrf_checks=True)
         self.society1.members.add(self.student)
+
+        # identity check
+        client.force_authenticate(self.society1.user)
+        response = client.post(url)
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.data['detail'], IsStudent.message)
+
+        # quit successfully
         client.force_authenticate(self.student.user)
         response = client.post(url)
+        self.society1.refresh_from_db()
         self.assertEqual(response.status_code, 200)
         self.assertNotIn(self.student, self.society1.members.all())
+
+        # already quit
+        response = client.post(url)
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.data['detail'], QuitSociety.message)
