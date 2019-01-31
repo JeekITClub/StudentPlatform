@@ -14,6 +14,7 @@ from society.api.serializers import (
 from utils.permissions import (
     IsStudent,
     JoinSociety,
+    QuitSociety,
     SingleJoinSocietyRequestCheck
 )
 from student.models import Student
@@ -53,3 +54,15 @@ class SocietyViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retr
                             status=status.HTTP_201_CREATED)
         return Response(data={'detail': '申请失败！'},
                         status=status.HTTP_400_BAD_REQUEST)
+
+    @action(
+        detail=True, methods=['post'],
+        permission_classes=(IsStudent, QuitSociety)
+    )
+    def quit(self, request, pk=None):
+        society = self.get_object()
+        member = request.user.student
+
+        society.members.remove(member)
+        return Response(data={'detail': '退出成功！'},
+                        status=status.HTTP_200_OK)
