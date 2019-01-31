@@ -1,19 +1,6 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 import {Avatar, Popover, Menu, Icon, Row, Col} from 'antd';
-
-
-const text = <span>设置</span>;
-const content = (
-    <div>
-        <p>
-            <Link to={'/manage/profile'}>个人信息</Link>
-        </p>
-        <p>
-            <Link to={'/manage/profile'}>退出</Link>
-        </p>
-    </div>
-);
+import {withRouter, Link} from "react-router-dom";
 
 class HeaderMenu extends React.Component {
     constructor(props) {
@@ -26,28 +13,36 @@ class HeaderMenu extends React.Component {
     }
 
     handleClick = (e) => {
-        console.log('click ', e);
-        this.setState({
-            current: e.key,
-        });
+        this.props.history.push(e.key);
+    };
+
+    logout = () => {
+        console.log('Logout!');
     };
 
     render() {
+        const text = <span>设置</span>;
+        const content = (
+            <div>
+                <p>
+                    <a onClick={this.logout}>修改密码</a>
+                </p>
+                <p style={{margin: '0'}}>
+                    <a onClick={this.logout}>退出</a>
+                </p>
+            </div>
+        );
+
         return (
             <Col>
                 <Row type="flex" align="middle" gutter={20}>
                     <Col>
                         <Menu
-                            onClick={this.handleClick}
                             selectedKeys={[this.state.current]}
-                            mode="horizontal"
-                        >
-                            <Menu.Item key="mail">
-                                <Icon type="mail"/>首页
-                            </Menu.Item>
-                            <Menu.Item key="app">
-                                <Icon type="appstore"/>帮助
-                            </Menu.Item>
+                            onClick={this.handleClick}
+                            mode="horizontal">
+                            <Menu.Item key="/">首页</Menu.Item>
+                            <Menu.Item key="/manage/help">帮助</Menu.Item>
                         </Menu>
                     </Col>
                     <Col>
@@ -68,4 +63,4 @@ class HeaderMenu extends React.Component {
     }
 }
 
-export default HeaderMenu;
+export default withRouter(HeaderMenu);

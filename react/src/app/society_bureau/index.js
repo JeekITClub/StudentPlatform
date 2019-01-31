@@ -21,8 +21,10 @@ export default function SocietyBureau({match}) {
         <div>
             <DrawerMenu/>
             <Row className="society-bureau-container">
-                <SocietyBureauSider/>
-                <Col xs={24} sm={24} md={20} lg={21} xl={21} className="main-wrapper">
+                <Col xs={0} sm={0} md={4} lg={4} xl={3} className="sider-container">
+                    <SocietyBureauSider/>
+                </Col>
+                <Col xs={24} sm={24} md={20} lg={20} xl={21} className="main-wrapper">
                     <Row>
                         <SocietyBureauHeader/>
                     </Row>

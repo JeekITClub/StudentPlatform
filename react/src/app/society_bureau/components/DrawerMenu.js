@@ -22,7 +22,7 @@ class DrawerMenu extends React.Component {
                 <Drawer
                     title="Basic Drawer"
                     placement="left"
-                    closable={false}
+                    closable={true}
                     onClose={this.onClose}
                     visible={this.state.visible}>
                     <p>Some contents...</p>
@@ -31,7 +31,7 @@ class DrawerMenu extends React.Component {
                 </Drawer>
                 <Row>
                     <Col lg={0} xl={0} xxl={0}>
-                        <Affix offsetTop={70} className="drawer-handle">
+                        <Affix offsetTop={30} className="drawer-handle">
                             <div className="drawer-handle-container" onClick={this.showDrawer}><Icon
                                 type="menu-unfold"/></div>
                         </Affix>
