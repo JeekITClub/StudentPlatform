@@ -31,8 +31,8 @@ class DrawerMenu extends React.Component {
                 </Drawer>
                 <Row>
                     <Col lg={0} xl={0} xxl={0}>
-                        <Affix offsetTop={30} className="drawer-handle">
-                            <div className="drawer-handle-container" onClick={this.showDrawer}><Icon
+                        <Affix offsetTop={30} className="society-bureau-drawer-handle">
+                            <div className="society-bureau-drawer-handle-container" onClick={this.showDrawer}><Icon
                                 type="menu-unfold"/></div>
                         </Affix>
                     </Col>

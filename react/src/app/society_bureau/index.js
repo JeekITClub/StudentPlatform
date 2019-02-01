@@ -18,14 +18,14 @@ export default function SocietyBureau({match}) {
         <div>
             <DrawerMenu/>
             <Row className="society-bureau-container">
-                <Col xs={0} sm={0} md={0} lg={4} xl={3} className="sider-container">
+                <Col xs={0} sm={0} md={0} lg={4} xl={3} className="society-bureau-sider-container">
                     <SocietyBureauSider/>
                 </Col>
-                <Col xs={24} sm={24} md={24} lg={20} xl={21} className="main-wrapper">
+                <Col xs={24} sm={24} md={24} lg={20} xl={21} className="society-bureau-main-wrapper">
                     <Row>
                         <SocietyBureauHeader/>
                     </Row>
-                    <Row className="container mt-4">
+                    <Row className="container-fluid mt-4">
                         <Switch>
                             <Route path={`${match.url}/profile`} component={Dashboard}/>
                             <Route path={`${match.url}`} exact component={Dashboard}/>
