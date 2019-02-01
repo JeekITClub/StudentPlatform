@@ -26,6 +26,16 @@ class JoinSociety(permissions.BasePermission):
         return request.user.student not in obj.members.all()
 
 
+class QuitSociety(permissions.BasePermission):
+    message = '你未加入该社团，无法退出'
+
+    def has_permission(self, request, view):
+        return True
+
+    def has_object_permission(self, request, view, obj):
+        return request.user.student in obj.members.all()
+
+
 class SingleJoinSocietyRequestCheck(permissions.BasePermission):
     message = '社长已正在审核你发出的加入请求，请勿重复提交'
 
