@@ -16,7 +16,6 @@ from utils.permissions import (
     JoinSociety,
     SingleJoinSocietyRequestCheck
 )
-from student.models import Student
 
 
 class SocietyViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):

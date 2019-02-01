@@ -48,5 +48,6 @@ class TestCase(DjangoTestCase):
             type=society_type,
             name=name
         )
-        society.members.set(members)
+        if members is not None:
+            society.members.set(members)
         return society

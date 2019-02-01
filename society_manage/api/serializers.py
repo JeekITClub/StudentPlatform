@@ -8,4 +8,11 @@ class JoinSocietyRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = JoinSocietyRequest
-        fields = ('member', 'status')
+        fields = ('id', 'member', 'status')
+
+
+class KickMemberSerializer(serializers.Serializer):
+    member_id = serializers.IntegerField()
+
+    class Meta:
+        fields = ('member_id',)
