@@ -2,6 +2,9 @@ import React from 'react';
 import {Avatar, Popover, Menu, Icon, Row, Col} from 'antd';
 import {withRouter, Link} from "react-router-dom";
 
+const SubMenu = Menu.SubMenu;
+const MenuItemGroup = Menu.ItemGroup;
+
 class HeaderMenu extends React.Component {
     constructor(props) {
         super(props);
@@ -13,7 +16,11 @@ class HeaderMenu extends React.Component {
     }
 
     handleClick = (e) => {
-        this.props.history.push(e.key);
+        if (e.key === 'logout') {
+            this.logout()
+        } else {
+            this.props.history.push(e.key);
+        }
     };
 
     logout = () => {
@@ -21,42 +28,31 @@ class HeaderMenu extends React.Component {
     };
 
     render() {
-        const text = <span>设置</span>;
-        const content = (
+        const avatar = (
             <div>
-                <p>
-                    <a onClick={this.logout}>修改密码</a>
-                </p>
-                <p style={{margin: '0'}}>
-                    <a onClick={this.logout}>退出</a>
-                </p>
+                <Avatar className="society-bureau-header-menu-avatar">
+                    {this.state.username}
+                </Avatar>
+                <Icon type="down"/>
             </div>
         );
 
         return (
-                <Row type="flex" align="middle" gutter={20}>
-                    <Col>
-                        <Menu
-                            selectedKeys={[this.state.current]}
-                            onClick={this.handleClick}
-                            mode="horizontal">
-                            <Menu.Item key="/">首页</Menu.Item>
-                            <Menu.Item key="/manage/help">帮助</Menu.Item>
-                        </Menu>
-                    </Col>
-                    <Col>
-                        <Popover placement="bottomRight" title={text} content={content} trigger="hover">
-                            <div>
-                                <Link to={'/manage/profile'}>
-                                    <Avatar className="header-menu-avatar">
-                                        {this.state.username}
-                                    </Avatar>
-                                </Link>
-                                <Icon type="down"/>
-                            </div>
-                        </Popover>
-                    </Col>
-                </Row>
+            <Row type="flex" align="middle" gutter={20}>
+                <Col>
+                    <Menu
+                        selectedKeys={[this.state.current]}
+                        onClick={this.handleClick}
+                        mode="horizontal">
+                        <Menu.Item key="/">首页</Menu.Item>
+                        <Menu.Item key="/manage/help">帮助</Menu.Item>
+                        <SubMenu title={avatar}>
+                            <Menu.Item key="/manage/profile">个人信息</Menu.Item>
+                            <Menu.Item key="logout">退出</Menu.Item>
+                        </SubMenu>
+                    </Menu>
+                </Col>
+            </Row>
         )
     }
 }

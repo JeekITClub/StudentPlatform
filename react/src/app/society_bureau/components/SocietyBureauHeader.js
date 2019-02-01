@@ -9,7 +9,7 @@ import '../styles/header.scss'
 class SocietyBureauHeader extends React.Component {
     render() {
         return (
-            <Row type="flex" className="header-container" align="middle" justify="space-between">
+            <Row type="flex" className="society-bureau-header-container" align="middle" justify="space-between">
                 <Col>
                     <LocationBreadcrumb/>
                 </Col>
