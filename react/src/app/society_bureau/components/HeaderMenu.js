@@ -1,9 +1,8 @@
 import React from 'react';
-import {Avatar, Popover, Menu, Icon, Row, Col} from 'antd';
-import {withRouter, Link} from "react-router-dom";
+import {Avatar, Menu, Icon, Row, Col} from 'antd';
+import {withRouter} from "react-router-dom";
 
 const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
 
 class HeaderMenu extends React.Component {
     constructor(props) {
