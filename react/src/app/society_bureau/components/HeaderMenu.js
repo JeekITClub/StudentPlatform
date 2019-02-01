@@ -34,7 +34,6 @@ class HeaderMenu extends React.Component {
         );
 
         return (
-            <Col>
                 <Row type="flex" align="middle" gutter={20}>
                     <Col>
                         <Menu
@@ -58,7 +57,6 @@ class HeaderMenu extends React.Component {
                         </Popover>
                     </Col>
                 </Row>
-            </Col>
         )
     }
 }

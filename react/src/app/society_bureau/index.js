@@ -3,7 +3,7 @@ import {Switch, Route} from 'react-router-dom';
 import {Layout, Row, Col} from "antd";
 import "antd/dist/antd.css";
 
-import SocietyBureauHeader from './components/SocietyBureauHeader/index';
+import SocietyBureauHeader from './components/SocietyBureauHeader';
 import SocietyBureauSider from './components/SocietyBureauSider';
 import Dashboard from './pages/Dashboard';
 import DrawerMenu from './components/DrawerMenu';

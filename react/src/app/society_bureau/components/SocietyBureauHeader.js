@@ -1,9 +1,9 @@
 import React from 'react';
 import {Row, Col} from 'antd';
 
-import LocationBreadcrumb from './components/LocationBreadcrumb';
-import HeaderMenu from './components/HeaderMenu';
-import './styles/header.scss'
+import LocationBreadcrumb from './LocationBreadcrumb';
+import HeaderMenu from './HeaderMenu';
+import '../styles/header.scss'
 
 
 class SocietyBureauHeader extends React.Component {
@@ -13,7 +13,9 @@ class SocietyBureauHeader extends React.Component {
                 <Col>
                     <LocationBreadcrumb/>
                 </Col>
-                <HeaderMenu/>
+                <Col>
+                    <HeaderMenu/>
+                </Col>
             </Row>
         )
     }
