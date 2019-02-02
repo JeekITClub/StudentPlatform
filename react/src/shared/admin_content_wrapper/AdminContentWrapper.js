@@ -1,6 +1,7 @@
 import React from 'react';
 
-class ContentWrapper extends React.Component {
+// Used for society_admin and sb_admin
+class AdminContentWrapper extends React.Component {
 
     render() {
         return (
@@ -11,4 +12,4 @@ class ContentWrapper extends React.Component {
     }
 }
 
-export default ContentWrapper;
+export default AdminContentWrapper;

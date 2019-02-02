@@ -25,9 +25,7 @@ class DrawerMenu extends React.Component {
                     closable={true}
                     onClose={this.onClose}
                     visible={this.state.visible}>
-                    <p>Some contents...</p>
-                    <p>Some contents...</p>
-                    <p>Some contents...</p>
+                    {this.props.children}
                 </Drawer>
                 <Row>
                     <Col lg={0} xl={0} xxl={0}>

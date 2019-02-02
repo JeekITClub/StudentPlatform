@@ -1,5 +1,5 @@
 import React from 'react';
-import ContentWrapper from '../../components/ContentWrapper';
+import AdminContentWrapper from '../../../../shared/admin_content_wrapper/AdminContentWrapper';
 
 const tmp = new Array(5).fill('').map((item, index) => index + 1);
 
@@ -8,21 +8,21 @@ class Dashboard extends React.Component {
     render() {
         return (
             <div>
-                <ContentWrapper>
+                <AdminContentWrapper>
                     {tmp.map((value) => {
                         return <h1 key={value}>{value} Dashboard</h1>
                     })}
-                </ContentWrapper>
-                <ContentWrapper>
+                </AdminContentWrapper>
+                <AdminContentWrapper>
                     {tmp.map((value) => {
                         return <h1 key={value}>{value} Dashboard</h1>
                     })}
-                </ContentWrapper>
-                <ContentWrapper>
+                </AdminContentWrapper>
+                <AdminContentWrapper>
                     {tmp.map((value) => {
                         return <h1 key={value}>{value} Dashboard</h1>
                     })}
-                </ContentWrapper>
+                </AdminContentWrapper>
             </div>
         )
     }
