@@ -4,7 +4,7 @@ const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
 module.exports = {
     entry: {
-        index: './src/index.js'
+        index: './src/index.js',
     },
     module: {
         rules: [
@@ -54,6 +54,9 @@ module.exports = {
                 sourceMap: true // set to true if you want JS source maps
             }),
             new OptimizeCSSAssetsPlugin({})
-        ]
+        ],
+        splitChunks: {
+            chunks: 'all'
+        }
     },
 };

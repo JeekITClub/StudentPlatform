@@ -50,7 +50,7 @@ class SingleJoinSocietyRequestCheck(permissions.BasePermission):
         ).count() == 0
 
 
-class AccessSocietyAdmin(permissions.BasePermission):
+class IsSociety(permissions.BasePermission):
     message = 'Society Only'
 
     def has_permission(self, request, view):

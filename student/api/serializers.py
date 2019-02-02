@@ -12,7 +12,7 @@ class StudentSerializer(serializers.ModelSerializer):
 class StudentMiniSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
-        fields = ('id', 'student_id', 'name', 'grade', 'class_num')
+        fields = ('id', 'name', 'grade', 'class_num')
 
 
 class StudentChangePasswordSerializer(serializers.Serializer):
