@@ -1,15 +1,13 @@
 import React from 'react';
-import {Layout, Menu, Icon} from 'antd';
-import '../styles/sider.scss'
+import {Menu, Icon} from 'antd';
 
-const { Sider } = Layout;
+import '../styles/sider.scss';
+
 
 class AdminSocietySider extends React.Component {
     render () {
         return (
-            <Sider className="admin-society-sider" theme="light">
-                <div>Logo</div>
-                <Menu theme="light" mode="inline" defaultSelectedKeys={['4']}>
+                <Menu theme="light" mode="vertical" className="admin-society-sider-menu">
                     <Menu.Item key="1">
                         <Icon type="user"/>
                         <span className="nav-text">nav 1</span>
@@ -43,7 +41,6 @@ class AdminSocietySider extends React.Component {
                         <span className="nav-text">nav 8</span>
                     </Menu.Item>
                 </Menu>
-            </Sider>
         )
     }
 }

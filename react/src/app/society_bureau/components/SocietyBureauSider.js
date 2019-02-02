@@ -5,7 +5,7 @@ import {Menu, Icon} from 'antd';
 class SocietyBureauSider extends React.Component {
     render() {
         return (
-            <Menu theme="dark" mode="vertical" defaultSelectedKeys={['4']}>
+            <Menu theme="dark" mode="vertical">
                 <Menu.Item key="1">
                     <Icon type="user"/>
                     <span className="nav-text">nav 1</span>

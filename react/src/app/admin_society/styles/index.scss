@@ -1,0 +1,24 @@
+.admin-society-container {
+  height: 100vh;
+  background-color: #fff;
+}
+
+.admin-society-main-wrapper {
+  height: 100%;
+  overflow: auto;
+}
+
+.admin-society-sider-container {
+  height: 100%;
+  overflow: auto;
+  background-color: #fff;
+  border-right: 0 !important;
+  //box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
+  //-webkit-box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
+}
+
+.admin-society-content-wrapper {
+  height: 100%;
+  border-radius: 6px;
+  background-color: #ffffff;
+}
