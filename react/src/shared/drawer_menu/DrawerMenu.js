@@ -1,22 +1,36 @@
 import React from 'react';
 import {Drawer, Affix, Icon, Row, Col} from 'antd';
 
+import '../styles/DrawerMenu.scss';
+
 class DrawerMenu extends React.Component {
-    state = {visible: false};
+    state = {drawerVisible: false, handleVisible: true};
 
     showDrawer = () => {
         this.setState({
-            visible: true,
+            drawerVisible: true,
+            handleVisible: false
         });
     };
 
     onClose = () => {
         this.setState({
-            visible: false,
+            drawerVisible: false,
+            handleVisible: true
         });
     };
 
     render() {
+        const drawerHandle = (
+            <Row>
+                <Col lg={0} xl={0} xxl={0}>
+                    <Affix offsetTop={30} className="drawer-handle">
+                        <div className="drawer-handle-container" onClick={this.showDrawer}><Icon
+                            type="menu-unfold"/></div>
+                    </Affix>
+                </Col>
+            </Row>
+        );
         return (
             <div>
                 <Drawer
@@ -24,17 +38,10 @@ class DrawerMenu extends React.Component {
                     placement="left"
                     closable={true}
                     onClose={this.onClose}
-                    visible={this.state.visible}>
+                    visible={this.state.drawerVisible}>
                     {this.props.children}
                 </Drawer>
-                <Row>
-                    <Col lg={0} xl={0} xxl={0}>
-                        <Affix offsetTop={30} className="society-bureau-drawer-handle">
-                            <div className="society-bureau-drawer-handle-container" onClick={this.showDrawer}><Icon
-                                type="menu-unfold"/></div>
-                        </Affix>
-                    </Col>
-                </Row>
+                {this.state.handleVisible ? drawerHandle : null}
             </div>
         )
     }
