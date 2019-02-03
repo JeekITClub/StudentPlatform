@@ -34,7 +34,6 @@ class SocietyCard extends React.Component {
                     >
                         <Meta
                             title={society.name}
-
                         />
                         <div className="society-card-tag-container">
                             <Tag color="magenta">magenta</Tag>

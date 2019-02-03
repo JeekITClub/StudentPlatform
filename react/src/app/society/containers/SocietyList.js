@@ -8,20 +8,6 @@ import SocietySearch from "../components/SocietySearch";
 import SocietyStore from "../stores/SocietyStore";
 import '../styles/SocietyList.scss'
 
-const data = [
-    {
-        title: 'Ant Design Title 1',
-    },
-    {
-        title: 'Ant Design Title 2',
-    },
-    {
-        title: 'Ant Design Title 3',
-    },
-    {
-        title: 'Ant Design Title 4',
-    },
-];
 
 @observer
 class SocietyList extends React.Component {
@@ -46,30 +32,20 @@ class SocietyList extends React.Component {
         return <Empty/>
     };
 
-    renderItemList = () => {
-        if (SocietyStore.societies.length !== 0) {
-            return <List
-                bordered={true}
-                itemLayout="vertical"
-                dataSource={SocietyStore.societies}
-                renderItem={item => (
-                    <List.Item
-                        key={item.society_id}>
-                        <List.Item.Meta
-                            avatar={<Avatar
-                                shape="square"
-                                size="large"
-                                src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
-                            title={<Link to={`/society/${item.society_id}/`}>{item.name}</Link>}
-                            description={(<div><Tag color="red">red</Tag><Tag color="geekblue">geekblue</Tag></div>)}
-                        />
-
-                    </List.Item>
-                )}
+    renderListItem = item => (
+        <List.Item
+            key={item.society_id}>
+            <List.Item.Meta
+                avatar={<Avatar
+                    shape="square"
+                    size="large"
+                    src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
+                title={<Link to={`/society/${item.society_id}/`}>{item.name}</Link>}
+                description={(
+                    <div><Tag color="red">red</Tag><Tag color="geekblue">geekblue</Tag></div>)}
             />
-        }
-        return <Empty/>
-    };
+        </List.Item>
+    );
 
     renderHeader = () => {
         return <SocietySearch/>
@@ -88,7 +64,12 @@ class SocietyList extends React.Component {
                         {this.renderCardList()}
                     </Col>
                     <Col xxl={0} xl={0} lg={0} md={0} sm={24} xs={24} className="society-list-body">
-                        {this.renderItemList()}
+                        <List
+                            bordered={true}
+                            itemLayout="vertical"
+                            dataSource={SocietyStore.societies}
+                            renderItem={this.renderListItem}
+                        />
                     </Col>
                 </Row>
             </div>
