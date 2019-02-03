@@ -21,7 +21,7 @@ class TagContainer extends React.Component {
         const tag = this.props.tags;
 
         return (
-            <div>
+            <div style={{display: 'none'}}>
                 {tag.map((item, index) => {
                     return <Tag className="society-tag" key={index} color={colorList[Math.floor(Math.random() * colorList.length)]}>{item}</Tag>
                 })}
