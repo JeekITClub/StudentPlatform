@@ -1,11 +1,13 @@
 from rest_framework import viewsets, response, status
 from rest_framework.decorators import action
+from rest_framework.generics import UpdateAPIView
 from rest_framework.mixins import ListModelMixin, UpdateModelMixin
 
 from utils.permissions import IsSociety
 from society.models import Society, JoinSocietyRequest
 from society_manage.api.serializers import (
     JoinSocietyRequestSerializer,
+    ReviewJoinSocietyRequestSerializer,
     KickMemberSerializer
 )
 from student.models import Student
@@ -48,11 +50,16 @@ class SocietyMemberViewSet(viewsets.GenericViewSet, ListModelMixin):
 
 class JoinSocietyRequestViewSet(
     viewsets.GenericViewSet,
-    ListModelMixin
+    ListModelMixin,
+    UpdateAPIView,
 ):
-    # todo: update request
     permission_classes = (IsSociety,)
     serializer_class = JoinSocietyRequestSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'update':
+            return ReviewJoinSocietyRequestSerializer
+        return JoinSocietyRequestSerializer
 
     def get_queryset(self):
         return JoinSocietyRequest.objects.filter(society__user=self.request.user)
