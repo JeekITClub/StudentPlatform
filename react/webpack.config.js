@@ -43,7 +43,11 @@ module.exports = {
                     'postcss-loader',
                     'sass-loader',
                 ],
-            }
+            },
+            {
+                test: /\.(jpe?g|png|gif|eot|woff|woff2|svg|ttf)([\?]?.*)$/i,
+                use: ['cache-loader', 'url-loader'],
+            },
         ],
     },
     optimization: {
