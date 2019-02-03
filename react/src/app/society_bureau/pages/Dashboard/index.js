@@ -1,15 +1,29 @@
 import React from 'react';
-import {Row, Col} from 'antd';
+import AdminContentWrapper from '../../../../shared/admin_content_wrapper/AdminContentWrapper';
 
-const tmp = new Array(20).fill('').map((item, index) => index + 1);
+const tmp = new Array(5).fill('').map((item, index) => index + 1);
 
 class Dashboard extends React.Component {
 
     render() {
         return (
-            tmp.map((value) => {
-                return <h1 key={value}>{value} Dashboard</h1>
-            })
+            <div>
+                <AdminContentWrapper>
+                    {tmp.map((value) => {
+                        return <h1 key={value}>{value} Dashboard</h1>
+                    })}
+                </AdminContentWrapper>
+                <AdminContentWrapper>
+                    {tmp.map((value) => {
+                        return <h1 key={value}>{value} Dashboard</h1>
+                    })}
+                </AdminContentWrapper>
+                <AdminContentWrapper>
+                    {tmp.map((value) => {
+                        return <h1 key={value}>{value} Dashboard</h1>
+                    })}
+                </AdminContentWrapper>
+            </div>
         )
     }
 }
