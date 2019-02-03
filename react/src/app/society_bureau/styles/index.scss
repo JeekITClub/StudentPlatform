@@ -3,30 +3,21 @@
   background-color: #f2f2f2;
 }
 
-.main-wrapper {
+.society-bureau-main-wrapper {
   overflow: auto;
   height: 100%;
 }
 
-.drawer-handle {
-  position: absolute;
-  left: 0;
-}
-
-.drawer-handle-container {
-  font-size: 21px;
-  text-align: center;
-  background-color: #fff;
-  border-radius: 0 4px 4px 0;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
-  width: 41px;
-  height: 40px;
-}
-
-.sider-container {
+.society-bureau-sider-container {
   height: 100%;
   overflow: auto;
   background-color: #001529;
   box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
   -webkit-box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
+}
+
+.society-bureau-content-wrapper {
+  width: 100%;
+  border-radius: 6px;
+  background-color: #ffffff;
 }

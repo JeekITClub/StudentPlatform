@@ -6,35 +6,33 @@ import PropTypes from "prop-types";
 
 @withRouter
 class SocietyBureauSider extends React.Component {
-    state = {
-        key: ['dashboard']
-    };
-    handleOnClick = (e) => {
-        this.setState({key: [e.key]});
+    handleClick = (e) => {
+        console.log('click ', e);
         this.props.history.push(e.key);
     };
 
     render() {
         return (
-            <Menu
-                multiple={false}
-                onClick={this.handleOnClick}
-                theme="dark"
-                mode="vertical"
-                defaultSelectedKeys={['dashboard']}
-                selectedKeys={this.state.key}
-            >
-                <Menu.Item key="dashboard">
+            <Menu theme="dark" mode="inline" onClick={this.handleClick}>
+                <Menu.Item key="/manage">
                     <Icon type="dashboard"/>
-                    仪表盘
+                    <span>Dashboard</span>
                 </Menu.Item>
-                <Menu.Item key="society">
-                    <Icon type="reconciliation"/>
-                    <span className="nav-text">社团</span>
+                <Menu.Item key="/manage/society">
+                    <Icon type="team"/>
+                    <span>社团管理</span>
                 </Menu.Item>
-                <Menu.Item key="student-user">
-                    <Icon type="user"/>
-                    <span className="nav-text">学生用户</span>
+                <Menu.Item key="/manage/audit">
+                    <Icon type="edit"/>
+                    <span>社团审核</span>
+                </Menu.Item>
+                <Menu.Item key="/manage/credit">
+                    <Icon type="star"/>
+                    <span>学分管理</span>
+                </Menu.Item>
+                <Menu.Item key="/manage/message">
+                    <Icon type="mail"/>
+                    <span>收件箱</span>
                 </Menu.Item>
             </Menu>
         )

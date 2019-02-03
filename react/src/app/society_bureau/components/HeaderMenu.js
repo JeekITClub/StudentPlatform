@@ -1,9 +1,11 @@
 import React from 'react';
 import {Avatar, Menu, Icon, Row, Col} from 'antd';
 import {withRouter} from "react-router-dom";
+import PropTypes from "prop-types";
 
 const SubMenu = Menu.SubMenu;
 
+@withRouter
 class HeaderMenu extends React.Component {
     // TODO: extract username from store
     state = {
@@ -53,4 +55,10 @@ class HeaderMenu extends React.Component {
     }
 }
 
-export default withRouter(HeaderMenu);
+HeaderMenu.propTypes = {
+    match: PropTypes.object,
+    location: PropTypes.object,
+    history: PropTypes.object
+};
+
+export default HeaderMenu;
