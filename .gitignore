@@ -6,3 +6,4 @@ react/dist/
 collectstatic/
 static/
 templates/react/index.html
+*.DS_Store
