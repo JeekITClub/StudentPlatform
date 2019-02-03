@@ -54,8 +54,8 @@ class SocietyList extends React.Component {
     render() {
         return (
             <div className="society-list-container">
-                <Row className="society-list-header">
-                    <Col lg={6} md={8} sm={24}>
+                <Row className="society-list-header" gutter={16}>
+                    <Col lg={6} md={12} sm={24}>
                         {this.renderHeader()}
                     </Col>
                 </Row>
