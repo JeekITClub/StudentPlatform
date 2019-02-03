@@ -6,14 +6,11 @@ import PropTypes from "prop-types";
 const SubMenu = Menu.SubMenu;
 
 class HeaderMenu extends React.Component {
-    constructor(props) {
-        super(props);
-        // TODO: extract username from store
-        this.state = {
-            username: 'QSM',
-            current: '',
-        };
-    }
+    // TODO: extract username from store
+    state = {
+        username: 'QSM',
+        current: '',
+    };
 
     static propTypes = {
         match: PropTypes.object.isRequired,

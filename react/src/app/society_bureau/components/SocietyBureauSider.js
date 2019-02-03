@@ -4,13 +4,8 @@ import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 
 
+@withRouter
 class SocietyBureauSider extends React.Component {
-    static propTypes = {
-        match: PropTypes.object.isRequired,
-        location: PropTypes.object.isRequired,
-        history: PropTypes.object.isRequired,
-    };
-
     handleClick = (e) => {
         console.log('click ', e);
         this.props.history.push(e.key);
@@ -44,4 +39,10 @@ class SocietyBureauSider extends React.Component {
     }
 }
 
-export default withRouter(SocietyBureauSider);
+SocietyBureauSider.propTypes = {
+    match: PropTypes.object,
+    location: PropTypes.object,
+    history: PropTypes.object
+};
+
+export default SocietyBureauSider;
