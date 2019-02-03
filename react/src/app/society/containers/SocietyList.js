@@ -39,8 +39,10 @@ class SocietyList extends React.Component {
             <List.Item.Meta
                 avatar={<Avatar
                     shape="square"
-                    size="large"
-                    src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
+                    size={72}
+                    icon="user"
+                    // src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                />}
                 title={<Link to={`/society/${item.society_id}/`}>{item.name}</Link>}
                 description={<TagContainer tags={item.tags}/>}
             />

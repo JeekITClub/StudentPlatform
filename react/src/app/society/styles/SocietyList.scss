@@ -1,5 +1,5 @@
 .society-list-container {
-  padding: 0 2vh;
+
 }
 
 .society-list-header {
@@ -13,7 +13,18 @@
   margin-right: 5px;
 }
 
-.society-card-tag-container {
-  display: none;
-  margin-top: 1rem;
+.society-list-avatar {
+  height: 100%;
+  width: 100%;
+  display: block;
+}
+
+.society-list-container {
+  .ant-list-item-meta {
+    margin-bottom: 0 !important;
+  }
+}
+
+.society-tag {
+  margin-bottom: 5px;
 }
