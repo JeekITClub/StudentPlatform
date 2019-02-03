@@ -1,10 +1,11 @@
 import React from 'react';
 import {observer} from 'mobx-react';
-import {Empty, Row, Col, List, Avatar, Tag} from "antd";
+import {Empty, Row, Col, List, Avatar} from "antd";
 import {Link} from 'react-router-dom';
 
 import SocietyCard from "../components/SocietyCard";
 import SocietySearch from "../components/SocietySearch";
+import TagContainer from '../components/TagContainer';
 import SocietyStore from "../stores/SocietyStore";
 import '../styles/SocietyList.scss'
 
@@ -41,8 +42,7 @@ class SocietyList extends React.Component {
                     size="large"
                     src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
                 title={<Link to={`/society/${item.society_id}/`}>{item.name}</Link>}
-                description={(
-                    <div><Tag color="red">red</Tag><Tag color="geekblue">geekblue</Tag></div>)}
+                description={<TagContainer tags={item.tags}/>}
             />
         </List.Item>
     );

@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
-import {
-    Card, Tag
-} from 'antd';
+import {Card} from 'antd';
 
 const {Meta} = Card;
 
+import TagContainer from '../components/TagContainer';
 import '../styles/SocietyCard.scss'
 
 class SocietyCard extends React.Component {
@@ -30,15 +29,9 @@ class SocietyCard extends React.Component {
                     <Card
                         loading={this.state.loading}
                         cover={this.renderCover(this.state.src)}
-                        hoverable
-                    >
-                        <Meta
-                            title={society.name}
-                        />
-                        <div className="society-card-tag-container">
-                            <Tag color="magenta">magenta</Tag>
-                            <Tag color="red">red</Tag>
-                        </div>
+                        hoverable>
+                        <Meta title={society.name}/>
+                        <TagContainer tags={society.tags}/>
                     </Card>
                 </Link>
             </div>
