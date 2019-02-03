@@ -5,14 +5,11 @@ import {withRouter} from "react-router-dom";
 const SubMenu = Menu.SubMenu;
 
 class HeaderMenu extends React.Component {
-    constructor(props) {
-        super(props);
-        // TODO: extract username from store
-        this.state = {
-            username: 'QSM',
-            current: '',
-        };
-    }
+    // TODO: extract username from store
+    state = {
+        username: 'QSM',
+        current: '',
+    };
 
     handleClick = (e) => {
         if (e.key === 'logout') {
