@@ -1,5 +1,7 @@
 .society-list-container {
-
+  .ant-list-item-meta {
+    margin-bottom: 0 !important;
+  }
 }
 
 .society-list-header {
@@ -17,12 +19,6 @@
   height: 100%;
   width: 100%;
   display: block;
-}
-
-.society-list-container {
-  .ant-list-item-meta {
-    margin-bottom: 0 !important;
-  }
 }
 
 .society-tag {
