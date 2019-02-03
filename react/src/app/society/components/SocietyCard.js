@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 import {
-    Skeleton, Card
+    Card, Tag
 } from 'antd';
 
 const {Meta} = Card;
@@ -17,24 +17,29 @@ class SocietyCard extends React.Component {
 
     renderCover = () => {
         return (
-            <img alt="cover" src={this.state.src} className="society-card-cover"/>
+            <img alt="cover" src={this.state.src}/>
         )
     };
 
     render() {
+        // Mini Serializer
+        const society = this.props.society;
         return (
             <div className="society-card">
-                <Link to={`/society/${this.props.society_id}/`}>
+                <Link to={`/society/${society.society_id}/`}>
                     <Card
                         loading={this.state.loading}
                         cover={this.renderCover(this.state.src)}
                         hoverable
                     >
-                        <Skeleton loading={this.state.loading}>
-                            <Meta
-                                title={this.props.name}
-                            />
-                        </Skeleton>
+                        <Meta
+                            title={society.name}
+
+                        />
+                        <div className="society-card-tag-container">
+                            <Tag color="magenta">magenta</Tag>
+                            <Tag color="red">red</Tag>
+                        </div>
                     </Card>
                 </Link>
             </div>
@@ -43,8 +48,7 @@ class SocietyCard extends React.Component {
 }
 
 SocietyCard.propTypes = {
-    name: PropTypes.string,
-    society_id: PropTypes.number
+    society: PropTypes.object
 };
 
 export default SocietyCard;

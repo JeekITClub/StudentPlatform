@@ -1,15 +1,31 @@
 import React from 'react';
 import {observer} from 'mobx-react';
-import {Empty, Row, Col} from "antd";
+import {Empty, Row, Col, List, Avatar, Tag} from "antd";
+import {Link} from 'react-router-dom';
+
 import SocietyCard from "../components/SocietyCard";
 import SocietySearch from "../components/SocietySearch";
 import SocietyStore from "../stores/SocietyStore";
-
 import '../styles/SocietyList.scss'
+
+const data = [
+    {
+        title: 'Ant Design Title 1',
+    },
+    {
+        title: 'Ant Design Title 2',
+    },
+    {
+        title: 'Ant Design Title 3',
+    },
+    {
+        title: 'Ant Design Title 4',
+    },
+];
 
 @observer
 class SocietyList extends React.Component {
-    renderList = () => {
+    renderCardList = () => {
         if (SocietyStore.societies.length !== 0) {
             return (
                 <Row gutter={16}>
@@ -18,8 +34,7 @@ class SocietyList extends React.Component {
                             return (
                                 <Col lg={6} xs={12} key={society.society_id}>
                                     <SocietyCard
-                                        name={society.name}
-                                        society_id={society.society_id}
+                                        society={society}
                                     />
                                 </Col>
                             )
@@ -27,6 +42,31 @@ class SocietyList extends React.Component {
                     }
                 </Row>
             )
+        }
+        return <Empty/>
+    };
+
+    renderItemList = () => {
+        if (SocietyStore.societies.length !== 0) {
+            return <List
+                bordered={true}
+                itemLayout="vertical"
+                dataSource={SocietyStore.societies}
+                renderItem={item => (
+                    <List.Item
+                        key={item.society_id}>
+                        <List.Item.Meta
+                            avatar={<Avatar
+                                shape="square"
+                                size="large"
+                                src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
+                            title={<Link to={`/society/${item.society_id}/`}>{item.name}</Link>}
+                            description={(<div><Tag color="red">red</Tag><Tag color="geekblue">geekblue</Tag></div>)}
+                        />
+
+                    </List.Item>
+                )}
+            />
         }
         return <Empty/>
     };
@@ -43,9 +83,14 @@ class SocietyList extends React.Component {
                         {this.renderHeader()}
                     </Col>
                 </Row>
-                <div className="society-list-body">
-                    {this.renderList()}
-                </div>
+                <Row>
+                    <Col xxl={24} xl={24} lg={24} md={24} sm={0} xs={0} className="society-list-body">
+                        {this.renderCardList()}
+                    </Col>
+                    <Col xxl={0} xl={0} lg={0} md={0} sm={24} xs={24} className="society-list-body">
+                        {this.renderItemList()}
+                    </Col>
+                </Row>
             </div>
         )
     }
