@@ -1,0 +1,47 @@
+$hover-color: #00FFCF;
+$color: #FFF;
+
+.home-header {
+  padding-top: 1vh;
+  border-bottom: 1px rgba(255, 255, 255, 0.2) solid;
+}
+
+.home-header-brand {
+  padding: 10px;
+  font-size: 2rem;
+  color: $color;
+  letter-spacing: 2px;
+  &:hover {
+    color: $color;
+  }
+}
+
+.home-header-link {
+  line-height: 50px;
+  font-size: 1.2rem;
+  color: $color;
+  letter-spacing: 5px;
+  &:hover {
+    color: $color !important;
+  }
+  &:before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    transform: scaleX(0);
+    background-color: $hover-color;
+    visibility: hidden;
+    transition: all 0.4s ease-in-out 0s;
+  }
+  &:hover:before {
+    transform: scaleX(1);
+    visibility: visible;
+  }
+}
+
+.center {
+  height: 100%;
+}
