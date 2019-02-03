@@ -3,6 +3,7 @@ venv/
 *.pyc
 react/node_modules/
 react/dist/
+react/.cache-loader/
 collectstatic/
 static/
 templates/react/index.html
