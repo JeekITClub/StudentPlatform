@@ -1,6 +1,7 @@
 import React from 'react';
 import {Avatar, Menu, Icon, Row, Col} from 'antd';
 import {withRouter} from "react-router-dom";
+import PropTypes from "prop-types";
 
 const SubMenu = Menu.SubMenu;
 
@@ -13,6 +14,12 @@ class HeaderMenu extends React.Component {
             current: '',
         };
     }
+
+    static propTypes = {
+        match: PropTypes.object.isRequired,
+        location: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired,
+    };
 
     handleClick = (e) => {
         if (e.key === 'logout') {

@@ -1,9 +1,16 @@
 import React from 'react';
 import {Menu, Icon} from 'antd';
 import {withRouter} from "react-router-dom";
+import PropTypes from "prop-types";
 
 
 class SocietyBureauSider extends React.Component {
+    static propTypes = {
+        match: PropTypes.object.isRequired,
+        location: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired,
+    };
+
     handleClick = (e) => {
         console.log('click ', e);
         this.props.history.push(e.key);
