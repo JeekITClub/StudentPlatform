@@ -5,17 +5,12 @@ import PropTypes from "prop-types";
 
 const SubMenu = Menu.SubMenu;
 
+@withRouter
 class HeaderMenu extends React.Component {
     // TODO: extract username from store
     state = {
         username: 'QSM',
         current: '',
-    };
-
-    static propTypes = {
-        match: PropTypes.object.isRequired,
-        location: PropTypes.object.isRequired,
-        history: PropTypes.object.isRequired,
     };
 
     handleClick = (e) => {
@@ -60,4 +55,10 @@ class HeaderMenu extends React.Component {
     }
 }
 
-export default withRouter(HeaderMenu);
+HeaderMenu.propTypes = {
+    match: PropTypes.object,
+    location: PropTypes.object,
+    history: PropTypes.object
+};
+
+export default HeaderMenu;

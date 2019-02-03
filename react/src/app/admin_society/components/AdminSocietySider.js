@@ -5,14 +5,8 @@ import {withRouter} from "react-router-dom";
 import '../styles/sider.scss';
 import PropTypes from "prop-types";
 
-
+@withRouter
 class AdminSocietySider extends React.Component {
-    static propTypes = {
-        match: PropTypes.object.isRequired,
-        location: PropTypes.object.isRequired,
-        history: PropTypes.object.isRequired,
-    };
-
     handleClick = (e) => {
         console.log('click ', e);
         this.props.history.push(e.key);
@@ -58,4 +52,10 @@ class AdminSocietySider extends React.Component {
     }
 }
 
-export default withRouter(AdminSocietySider);
+AdminSocietySider.propTypes = {
+    match: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
+};
+
+export default AdminSocietySider;
