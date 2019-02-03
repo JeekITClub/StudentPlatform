@@ -103,3 +103,15 @@ class SocietyManageJoinRequestTests(TestCase):
 
         response = self.client.get(url)
         self.assertEqual(response.status_code, 403)
+
+    def test_update_join_request(self):
+        url = '/api/society_manage/join_request/{}/'.format(self.jr1.pk)
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(self.society_user)
+        data = {
+            'status': JoinSocietyRequestStatus.DENIED
+        }
+        response = client.put(url, data=data, decode=True)
+        self.assertEqual(response.status_code, 200)
+        self.jr1.refresh_from_db()
+        self.assertEqual(self.jr1.status, JoinSocietyRequestStatus.DENIED)
