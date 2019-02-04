@@ -39,9 +39,6 @@ class Society(models.Model):
     credit = models.PositiveSmallIntegerField(default=0)
     tags = models.ManyToManyField(SocietyTag)
 
-    def get_current_credit_receivers(self):
-        pass
-
     class Meta:
         ordering = ['-established_time']
 
