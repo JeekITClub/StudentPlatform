@@ -1,5 +1,7 @@
 .society-list-container {
-  padding: 0 2vh;
+  .ant-list-item-meta {
+    margin-bottom: 0 !important;
+  }
 }
 
 .society-list-header {
@@ -11,4 +13,18 @@
 
 .anticon-close-circle {
   margin-right: 5px;
+}
+
+.society-list-avatar {
+  height: 100%;
+  width: 100%;
+  display: block;
+}
+
+.society-tag {
+  margin-bottom: 5px;
+}
+
+.society-card-tag-container {
+  margin-top: 1rem;
 }

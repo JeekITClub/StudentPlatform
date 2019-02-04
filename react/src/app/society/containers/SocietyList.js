@@ -1,15 +1,18 @@
 import React from 'react';
 import {observer} from 'mobx-react';
-import {Empty, Row, Col} from "antd";
+import {Empty, Row, Col, List, Avatar} from "antd";
+import {Link} from 'react-router-dom';
+
 import SocietyCard from "../components/SocietyCard";
 import SocietySearch from "../components/SocietySearch";
+import TagContainer from '../components/TagContainer';
 import SocietyStore from "../stores/SocietyStore";
-
 import '../styles/SocietyList.scss'
+
 
 @observer
 class SocietyList extends React.Component {
-    renderList = () => {
+    renderCardList = () => {
         if (SocietyStore.societies.length !== 0) {
             return (
                 <Row gutter={16}>
@@ -18,8 +21,7 @@ class SocietyList extends React.Component {
                             return (
                                 <Col lg={6} xs={12} key={society.society_id}>
                                     <SocietyCard
-                                        name={society.name}
-                                        society_id={society.society_id}
+                                        society={society}
                                     />
                                 </Col>
                             )
@@ -31,6 +33,22 @@ class SocietyList extends React.Component {
         return <Empty/>
     };
 
+    renderListItem = item => (
+        <List.Item
+            key={item.society_id}>
+            <List.Item.Meta
+                avatar={<Avatar
+                    shape="square"
+                    size={72}
+                    icon="user"
+                    // src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                />}
+                title={<Link to={`/society/${item.society_id}/`}>{item.name}</Link>}
+                description={<TagContainer tags={item.tags}/>}
+            />
+        </List.Item>
+    );
+
     renderHeader = () => {
         return <SocietySearch/>
     };
@@ -38,14 +56,24 @@ class SocietyList extends React.Component {
     render() {
         return (
             <div className="society-list-container">
-                <Row className="society-list-header">
-                    <Col lg={6} md={8} sm={24}>
+                <Row className="society-list-header" gutter={16}>
+                    <Col lg={6} md={12} sm={24}>
                         {this.renderHeader()}
                     </Col>
                 </Row>
-                <div className="society-list-body">
-                    {this.renderList()}
-                </div>
+                <Row>
+                    <Col xxl={24} xl={24} lg={24} md={24} sm={0} xs={0} className="society-list-body">
+                        {this.renderCardList()}
+                    </Col>
+                    <Col xxl={0} xl={0} lg={0} md={0} sm={24} xs={24} className="society-list-body">
+                        <List
+                            bordered={true}
+                            itemLayout="vertical"
+                            dataSource={SocietyStore.societies}
+                            renderItem={this.renderListItem}
+                        />
+                    </Col>
+                </Row>
             </div>
         )
     }
