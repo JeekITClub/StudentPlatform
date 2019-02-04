@@ -12,6 +12,12 @@ society_type = (
     (5, '领袖气质'),
 )
 
+activity_confirm_status = (
+    (0, '审核中'),
+    (1, '通过'),
+    (2, '未通过')
+)
+
 
 class JoinSocietyRequestStatus:
     WAITING = 0
@@ -25,3 +31,9 @@ class SocietyType:
     SCIENTIFIC = 3
     HUMANISTIC = 4
     LEADERSHIP = 5
+
+
+class ActivityRequestStatus:
+    WAITING = 0
+    ACCEPTED = 1
+    DENIED = 2
