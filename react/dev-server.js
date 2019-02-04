@@ -8,7 +8,16 @@ const PORT = 3000;
 
 const options = {
     host: HOST,
-    port: PORT
+    port: PORT,
+    proxy: [
+        {
+            context: (pathname) => {
+                return pathname.match(/\/api\//g)
+            },
+            target: 'http://127.0.0.1:8000',
+            secure: false
+        }
+    ]
 };
 
 WebpackDevServer.addDevServerEntrypoints(devConfig, options);
@@ -16,8 +25,8 @@ const compiler = webpack(devConfig);
 const server = new WebpackDevServer(compiler, options);
 
 server.listen(PORT, HOST, function (err) {
-  if (err) {
-    return console.log(err);
-  }
-  console.log(chalk.blue(`Listening at http://${HOST}:${PORT}/`));
+    if (err) {
+        return console.log(err);
+    }
+    console.log(chalk.blue(`Listening at http://${HOST}:${PORT}/`));
 });

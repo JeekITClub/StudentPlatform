@@ -12,6 +12,10 @@ import '../styles/SocietyList.scss'
 
 @observer
 class SocietyList extends React.Component {
+    componentDidMount() {
+        SocietyStore.fetch()
+    }
+
     renderCardList = () => {
         if (SocietyStore.societies.length !== 0) {
             return (

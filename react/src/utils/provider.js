@@ -25,6 +25,10 @@ const Provider = {
 
     get(...args) {
         return this.provider.post(...args)
+    },
+
+    patch(...args) {
+        return this.provider.patch(...args)
     }
 };
 
