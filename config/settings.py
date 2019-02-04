@@ -42,11 +42,7 @@ INSTALLED_APPS = [
     'society.apps.SocietyConfig',
     'society_bureau.apps.SocietyBureauConfig',
     'society_manage.apps.SocietyManageConfig',
-<<<<<<< refs/remotes/origin/master
     'account.apps.AccountConfig',
-=======
-    'account.apps.AuthConfig',
->>>>>>> rename
 ]
 
 MIDDLEWARE = [
