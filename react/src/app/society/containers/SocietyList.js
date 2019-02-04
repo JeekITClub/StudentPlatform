@@ -48,7 +48,7 @@ class SocietyList extends React.Component {
                     // src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
                 />}
                 title={<Link to={`/society/${item.society_id}/`}>{item.name}</Link>}
-                description={<TagContainer tags={item.tags}/>}
+                // description={<TagContainer tags={item.tags}/>}
             />
         </List.Item>
     );

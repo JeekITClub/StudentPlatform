@@ -31,9 +31,9 @@ class SocietyCard extends React.Component {
                         cover={this.renderCover(this.state.src)}
                         hoverable>
                         <Meta title={society.name}/>
-                        <div className="society-card-tag-container">
-                            <TagContainer tags={society.tags}/>
-                        </div>
+                        {/*<div className="society-card-tag-container">*/}
+                            {/*<TagContainer tags={society.tags}/>*/}
+                        {/*</div>*/}
                     </Card>
                 </Link>
             </div>
