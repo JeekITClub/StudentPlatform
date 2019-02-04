@@ -12,6 +12,10 @@ import '../styles/SocietyList.scss'
 
 @observer
 class SocietyList extends React.Component {
+    componentDidMount() {
+        SocietyStore.fetch()
+    }
+
     renderCardList = () => {
         if (SocietyStore.societies.length !== 0) {
             return (
@@ -44,7 +48,7 @@ class SocietyList extends React.Component {
                     // src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
                 />}
                 title={<Link to={`/society/${item.society_id}/`}>{item.name}</Link>}
-                description={<TagContainer tags={item.tags}/>}
+                // description={<TagContainer tags={item.tags}/>}
             />
         </List.Item>
     );
