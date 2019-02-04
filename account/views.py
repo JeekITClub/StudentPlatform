@@ -7,7 +7,7 @@ from django.contrib.auth import (
     logout as django_logout
 )
 
-from auth.serializers import LoginSerializer
+from account.serializers import LoginSerializer
 
 
 class AuthViewSet(viewsets.ViewSet):
