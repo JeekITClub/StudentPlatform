@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'society.apps.SocietyConfig',
     'society_bureau.apps.SocietyBureauConfig',
     'society_manage.apps.SocietyManageConfig',
+    'auth.apps.AuthConfig',
 ]
 
 MIDDLEWARE = [
