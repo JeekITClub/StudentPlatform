@@ -68,13 +68,3 @@ class ActivityRequest(models.Model):
 
     def __str__(self):
         return str(self.society) + ' ' + self.title
-
-
-class CreditReceivers(models.Model):
-    society = models.ForeignKey(Society, on_delete=models.DO_NOTHING)
-    receivers = models.ForeignKey(Student, on_delete=models.DO_NOTHING)
-    year = models.PositiveSmallIntegerField()
-    semester = models.PositiveSmallIntegerField()
-
-    def __str__(self):
-        return str(self.society)
