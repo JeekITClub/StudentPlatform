@@ -21,7 +21,7 @@ class AuthViewSet(viewsets.ViewSet):
             password=serializer.validated_data['password']
         )
         if user is None:
-            return Response({'detail': '不存在该用户'})
+            return Response({'detail': '不存在该用户'}, status=status.HTTP_406_NOT_ACCEPTABLE)
         django_login(request, user)
         return Response(status=status.HTTP_200_OK)
 
