@@ -15,8 +15,7 @@ class SettingsService:
         settings = SiteSettings.objects.all().first()
         if settings is None:
             return SiteSettings.objects.create(settings=default_settings)
-        else:
-            return settings
+        return settings
 
     @classmethod
     def get_dict(cls):
@@ -28,8 +27,7 @@ class SettingsService:
         if settings is None:
             SiteSettings.objects.create(settings=json.dumps(default_settings))
             return default_settings
-        else:
-            return json.loads(settings.settings)
+        return json.loads(settings.settings)
 
     @classmethod
     def update(cls, content):

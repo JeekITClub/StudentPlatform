@@ -20,7 +20,7 @@ class SocietyTag(models.Model):
 
 class Society(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    members = models.ManyToManyField(Student, blank=True, null=True)
+    members = models.ManyToManyField(Student, blank=True)
     society_id = models.PositiveIntegerField(null=True, blank=True, unique=True)
     name = models.CharField(max_length=64)
     introduction = models.TextField(blank=True)
@@ -37,7 +37,7 @@ class Society(models.Model):
     established_time = models.DateTimeField(blank=True, null=True)
     password_changed = models.BooleanField(default=False)
     credit = models.PositiveSmallIntegerField(default=0)
-    tags = models.ManyToManyField(SocietyTag, blank=True, null=True)
+    tags = models.ManyToManyField(SocietyTag, blank=True)
 
     class Meta:
         ordering = ['-established_time']
