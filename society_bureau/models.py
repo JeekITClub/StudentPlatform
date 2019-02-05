@@ -3,9 +3,6 @@ from django.contrib.auth.models import User
 from student.models import Student
 
 
-# Create your models here.
-
-
 class SocietyBureau(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     real_name = models.CharField(max_length=64)
@@ -15,3 +12,7 @@ class SocietyBureau(models.Model):
 
     def __str__(self):
         return self.real_name
+
+
+class SiteSettings(models.Model):
+    settings = models.TextField()

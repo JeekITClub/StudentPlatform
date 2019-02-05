@@ -1,5 +1,5 @@
 from django.contrib import admin
-from society.models import Society, JoinSocietyRequest
+from society.models import Society, JoinSocietyRequest, ActivityRequest, SocietyTag
 
 
 # Register your models here.
@@ -14,3 +14,5 @@ class JoinSocietyRequestAdmin(admin.ModelAdmin):
 
 admin.site.register(Society, SocietyAdmin)
 admin.site.register(JoinSocietyRequest, JoinSocietyRequestAdmin)
+admin.site.register(ActivityRequest)
+admin.site.register(SocietyTag)
