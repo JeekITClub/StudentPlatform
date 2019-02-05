@@ -1,9 +1,9 @@
 import React from 'react';
 import {Row, Col} from 'antd';
 
-import WrappedStudentLoginForm from '../components/StudentLoginForm';
+import WrappedLoginForm from '../components/LoginForm';
 
-class StudentLogin extends React.Component {
+class Login extends React.Component {
     render() {
         return (
             <div>
@@ -11,12 +11,7 @@ class StudentLogin extends React.Component {
                     <Col xl={6} lg={12} md={20}>
                         <Row>
                             <Col>
-                                <h2 className="text-center">学生登录</h2>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col>
-                                <WrappedStudentLoginForm/>
+                                <WrappedLoginForm/>
                             </Col>
                         </Row>
                     </Col>
@@ -26,4 +21,4 @@ class StudentLogin extends React.Component {
     }
 }
 
-export default StudentLogin;
+export default Login;

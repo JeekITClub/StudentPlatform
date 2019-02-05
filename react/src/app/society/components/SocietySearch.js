@@ -26,7 +26,7 @@ class SocietySearch extends React.Component {
         return (
             <div className="society-search">
                 <Form>
-                    <Form.Item>
+                    <Form.Item className="society-search-form-item">
                         <Search
                             value={SocietyStore.query}
                             onChange={this.handleQueryChange}
