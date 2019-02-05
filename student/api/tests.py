@@ -59,7 +59,6 @@ class StudentTests(TestCase):
         response = self.client.patch(url, data=data, decode=True)
         self.assertEqual(response.status_code, 403)
 
-
     def test_change_password(self):
         user = self.createUser(username='ncj')
         student = self.createStudent(user=user)
@@ -100,16 +99,3 @@ class StudentTests(TestCase):
         response = client.post(url, data=data, decode=False)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data['detail'], '表单填写错误')
-
-    def test_change_password_with_wrong_method(self):
-        user = self.createUser(username='ncj')
-        student = self.createStudent(user=user)
-        data = {
-            'old_password23': 'ncjnb',
-            'new_password1': 'ncj233'
-        }
-        url = '/api/student/change_password/'
-        client = APIClient(enforce_csrf_checks=True)
-        client.force_authenticate(user)
-        response = client.get(url, data=data, decode=False)
-        self.assertEqual(response.status_code, 405)
