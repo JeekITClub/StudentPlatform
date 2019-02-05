@@ -1,17 +1,32 @@
 from rest_framework import viewsets, mixins, response, status
 from rest_framework.decorators import action
+from rest_framework.generics import RetrieveUpdateAPIView
 
 from student.models import Student
-from student.api.serializers import StudentSerializer, StudentChangePasswordSerializer
+from student.api.serializers import (
+    StudentSerializer,
+    StudentUpdateProfileSerializer,
+    StudentChangePasswordSerializer
+)
+
 from utils.permissions import IsStudentSelf
 
 
-class StudentViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
+class StudentViewSet(
+    viewsets.GenericViewSet,
+    RetrieveUpdateAPIView
+):
     queryset = Student.objects.all()
-    serializer_class = StudentSerializer
-    permission_classes = (IsStudentSelf, )
+    permission_classes = (IsStudentSelf,)
 
-    @action(methods=['POST'], detail=False, serializer_class=StudentChangePasswordSerializer)
+    def get_serializer_class(self):
+        if self.action == 'change_password':
+            return StudentChangePasswordSerializer
+        elif self.action == 'update':
+            return StudentUpdateProfileSerializer
+        return StudentSerializer
+
+    @action(methods=['POST'], detail=False)
     def change_password(self, request):
         serializer = self.get_serializer_class()(data=request.data)
         if not serializer.is_valid():
