@@ -1,17 +1,15 @@
 import React from 'react';
 
+import HomeHeader from '../components/HomeHeader'
 import '../styles/Home.scss'
 
 class HomeContainer extends React.Component {
     render() {
         return (
-            <div className="container-fluid">
-                <div className="block-1">
-
+            <div>
+                <div className="landing-container">
+                    <HomeHeader/>
                 </div>
-                {/*<div className="text">*/}
-                    {/*J*/}
-                {/*</div>*/}
             </div>
         )
     }

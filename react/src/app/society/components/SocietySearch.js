@@ -24,16 +24,18 @@ class SocietySearch extends React.Component {
 
     render() {
         return (
-            <Form>
-                <Form.Item>
-                    <Search
-                        value={SocietyStore.query}
-                        onChange={this.handleQueryChange}
-                        onSearch={this.handleSearch}
-                        allowClear
-                    />
-                </Form.Item>
-            </Form>
+            <div className="society-search">
+                <Form>
+                    <Form.Item className="society-search-form-item">
+                        <Search
+                            value={SocietyStore.query}
+                            onChange={this.handleQueryChange}
+                            onSearch={this.handleSearch}
+                            allowClear
+                        />
+                    </Form.Item>
+                </Form>
+            </div>
         )
     }
 }

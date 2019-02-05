@@ -1,12 +1,13 @@
 import axios from 'axios';
 import {computed} from 'mobx';
+import {getCookie} from './cookie';
 
 const Provider = {
     @computed get provider() {
         return axios.create({
             withCredentials: true,
             headers: {
-                'X-CSRFToken': null, // todo
+                'X-CSRFToken': getCookie('csrftoken'), // todo
             },
         })
     },
@@ -24,7 +25,11 @@ const Provider = {
     },
 
     get(...args) {
-        return this.provider.post(...args)
+        return this.provider.get(...args)
+    },
+
+    patch(...args) {
+        return this.provider.patch(...args)
     }
 };
 

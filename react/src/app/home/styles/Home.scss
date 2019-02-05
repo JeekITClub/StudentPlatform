@@ -9,12 +9,10 @@
   text-shadow: 0 1px 0 #c0c0c0, 0 2px 0 #b0b0b0, 0 3px 0 #a0a0a0, 0 4px 0 #909090, 0 5px 10px rgba(0, 0, 0, 0.6);
 }
 
-.block-1 {
-  position: absolute;
-  top: -330px;
-  right: -120px;
-  width: 800px;
-  height: 1200px;
-  background-color: #0f6674;
-  transform: rotate(-30deg);
+.landing-container {
+  min-height: 110vh;
+  background-image: url("../../../static/shape-bg.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position-y: bottom;
 }
