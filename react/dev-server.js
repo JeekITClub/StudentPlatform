@@ -26,7 +26,7 @@ const server = new WebpackDevServer(compiler, options);
 
 server.listen(PORT, HOST, function (err) {
     if (err) {
-        return console.log(err);
+        console.log(err);
     }
     console.log(chalk.blue(`Listening at http://${HOST}:${PORT}/`));
 });
