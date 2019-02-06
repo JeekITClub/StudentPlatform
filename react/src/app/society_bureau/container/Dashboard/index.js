@@ -1,7 +1,6 @@
 import React from 'react';
 import AdminContentWrapper from '../../../../shared/admin_content_wrapper/AdminContentWrapper';
-
-const tmp = new Array(5).fill('').map((item, index) => index + 1);
+import DashboardStatistic from "../../components/DashboardStatistic";
 
 class Dashboard extends React.Component {
 
@@ -9,19 +8,7 @@ class Dashboard extends React.Component {
         return (
             <div>
                 <AdminContentWrapper>
-                    {tmp.map((value) => {
-                        return <h1 key={value}>{value} Dashboard</h1>
-                    })}
-                </AdminContentWrapper>
-                <AdminContentWrapper>
-                    {tmp.map((value) => {
-                        return <h1 key={value}>{value} Dashboard</h1>
-                    })}
-                </AdminContentWrapper>
-                <AdminContentWrapper>
-                    {tmp.map((value) => {
-                        return <h1 key={value}>{value} Dashboard</h1>
-                    })}
+                    <DashboardStatistic/>
                 </AdminContentWrapper>
             </div>
         )
