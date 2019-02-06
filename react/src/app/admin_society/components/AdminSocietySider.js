@@ -53,9 +53,9 @@ class AdminSocietySider extends React.Component {
 }
 
 AdminSocietySider.propTypes = {
-    match: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired,
+    match: PropTypes.object,
+    location: PropTypes.object,
+    history: PropTypes.object,
 };
 
 export default AdminSocietySider;

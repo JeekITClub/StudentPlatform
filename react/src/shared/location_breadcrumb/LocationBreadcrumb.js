@@ -34,9 +34,9 @@ class LocationBreadcrumb extends React.Component {
 }
 
 LocationBreadcrumb.propTypes = {
-    match: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired,
+    match: PropTypes.object,
+    location: PropTypes.object,
+    history: PropTypes.object,
     breadcrumbNameMap: PropTypes.object.isRequired
 };
 

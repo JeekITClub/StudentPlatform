@@ -1,13 +1,15 @@
 import React from 'react';
-import {Switch, Route, Link} from 'react-router-dom';
 import {Layout, Col, Row} from 'antd';
 import "antd/dist/antd.css";
 
 import AdminSocietySider from './components/AdminSocietySider.js';
 import AdminSocietyHeader from './components/AdminSocietyHeader.js';
-import DrawerMenu from "../../shared/drawer_menu/DrawerMenu";
-import Member from './members/index.js';
+import AdminSocietyRouter from './router.js'
+
+import AdminSocietyDrawerMenu from "./components/AdminSocietyDrawerMenu";
+
 import './styles/index.scss'
+import AdminSocietyFooter from "./components/AdminSocietyFooter";
 
 const {
     Footer,
@@ -16,11 +18,7 @@ const {
 export default function AdminClub({match}) {
     return (
         <div>
-            <DrawerMenu>
-                <Link to={'/'}><p>233</p></Link>
-                <Link to={'/'}><p>233</p></Link>
-                <Link to={'/'}><p>233</p></Link>
-            </DrawerMenu>
+            <AdminSocietyDrawerMenu/>
             <Row className="admin-society-container">
                 <Col xs={0} sm={0} md={0} lg={4} xl={3} className="admin-society-sider-container">
                     <h2>Logo</h2>
@@ -31,19 +29,11 @@ export default function AdminClub({match}) {
                         <AdminSocietyHeader/>
                     </Row>
                     <Row className="container-fluid mt-4">
-                        <Switch>
-                            <Route path={`${match.url}/member`} component={Member}/>
-                        </Switch>
+                        <AdminSocietyRouter match={match} />
                     </Row>
                 </Col>
             </Row>
-            <Layout>
-                <Footer>
-                    <Row>
-                        <h2>Logo</h2>
-                    </Row>
-                </Footer>
-            </Layout>
+            <AdminSocietyFooter/>
         </div>
     );
 }
