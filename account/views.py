@@ -7,7 +7,10 @@ from django.contrib.auth import (
     logout as django_logout
 )
 
-from account.serializers import LoginSerializer
+from account.serializers import (
+    LoginSerializer,
+    ChangePasswordSerializer
+)
 
 
 class AuthViewSet(viewsets.ViewSet):
@@ -29,3 +32,17 @@ class AuthViewSet(viewsets.ViewSet):
     def logout(self, request):
         django_logout(request)
         return Response(status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['POST'])
+    def change_password(self, request):
+        serializer = ChangePasswordSerializer(data=request.data)
+        if not serializer.is_valid():
+            error = '表单填写错误'
+        elif not request.user.check_password(serializer.validated_data['old_password']):
+            error = '原密码错误'
+        else:
+            success = '密码更改成功'
+            request.user.set_password(serializer.validated_data['new_password'])
+            request.user.save()
+            return Response(data={'detail': success}, status=status.HTTP_202_ACCEPTED)
+        return Response(data={'detail': error}, status=status.HTTP_400_BAD_REQUEST)
