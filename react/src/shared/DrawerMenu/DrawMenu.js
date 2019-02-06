@@ -1,5 +1,6 @@
 import React from 'react';
 import {Drawer, Affix, Icon, Row, Col} from 'antd';
+import PropTypes from 'prop-types';
 
 import '../styles/DrawerMenu.scss';
 
@@ -34,7 +35,7 @@ class DrawerMenu extends React.Component {
         return (
             <div>
                 <Drawer
-                    title="Basic Drawer"
+                    title={this.props.title}
                     placement="left"
                     closable={true}
                     onClose={this.onClose}
@@ -46,5 +47,9 @@ class DrawerMenu extends React.Component {
         )
     }
 }
+
+DrawerMenu.propTypes = {
+    title: PropTypes.string.isRequired
+};
 
 export default DrawerMenu;
