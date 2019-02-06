@@ -57,7 +57,7 @@ class IsSociety(permissions.BasePermission):
         return request.user.is_authenticated and hasattr(request.user, 'society')
 
 
-class AccessSocietyBureauAdmin(permissions.BasePermission):
+class IsSocietyBureau(permissions.BasePermission):
     message = 'Society Bureau Only'
 
     def has_permission(self, request, view):
