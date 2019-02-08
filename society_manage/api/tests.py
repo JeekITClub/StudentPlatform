@@ -4,7 +4,7 @@ from testing.testcases import TestCase
 from society.constants import SocietyType, JoinSocietyRequestStatus, ActivityRequestStatus
 from society.models import JoinSocietyRequest, ActivityRequest
 
-from datetime import datetime
+from django.utils import timezone
 
 
 class SocietyManageMemberTests(TestCase):
@@ -132,25 +132,66 @@ class SocietyManageActivityTests(TestCase):
         )
         self.ar1 = ActivityRequest.objects.create(
             society=self.society,
-            title='stay calm',
+            title='keep calm',
             place='5510',
-            start_time=datetime.now()
+            start_time=timezone.now()
         )
-        self.ar1 = ActivityRequest.objects.create(
+        self.ar2 = ActivityRequest.objects.create(
             society=self.society,
             title='make epic shit',
             place='little forest',
             status=ActivityRequestStatus.ACCEPTED,
-            start_time=datetime.now()
+            start_time=timezone.now()
         )
 
     def test_list_activity_requests(self):
         url = '/api/society_manage/activity/'
 
         client = APIClient(enforce_csrf_checks=True)
+        response = client.get(url, decode=True)
+        self.assertEqual(response.status_code, 403)
+
         client.force_authenticate(self.society_user)
         response = client.get(url, decode=True)
-        print(response.data)
-        self.assertEqual(response.data[0]['title'], 'stay calm')
+        self.assertEqual(response.data[0]['title'], 'keep calm')
         self.assertEqual(response.data[1]['title'], 'make epic shit')
         self.assertEqual(response.data[0]['status'], ActivityRequestStatus.WAITING)
+
+        data = {
+            'status': ActivityRequestStatus.ACCEPTED
+        }
+        response = client.get(url, data=data, decode=True)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['title'], 'make epic shit')
+
+        data = {
+            'status': ActivityRequestStatus.WAITING
+        }
+        response = client.get(url, data=data, decode=True)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['title'], 'keep calm')
+
+    def test_update_activity_requests(self):
+        url = '/api/society_manage/activity/{}/'.format(self.ar1.pk)
+
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(self.society_user)
+        data = {
+            'status': ActivityRequestStatus.ACCEPTED,
+            'title': 'do homework',
+            'place': 'principal room'
+        }
+        response = client.patch(url, data=data, decode=True)
+        self.assertEqual(response.status_code, 200)
+        self.ar1.refresh_from_db()
+        self.assertEqual(self.ar1.status, ActivityRequestStatus.WAITING)
+        self.assertEqual(self.ar1.title, 'do homework')
+        self.assertEqual(self.ar1.place, 'principal room')
+
+        url = '/api/society_manage/activity/{}/'.format(self.ar2.pk)
+        data = {
+            'title': 'do homework',
+            'place': 'principal room'
+        }
+        response = client.patch(url, data=data, decode=True)
+        self.assertEqual(response.status_code, 403)

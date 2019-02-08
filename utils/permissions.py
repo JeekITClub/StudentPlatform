@@ -63,12 +63,15 @@ class IsSocietyBureau(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.is_authenticated and hasattr(request.user, 'society_bureau')
 
+
 # Only unconfirmed activities are allowed to be edited.
-class ActivityEditable(permissions.BasePermission):
-    message = 'No longer Allowed To Edit'
+class SocietyActivityEditable(permissions.BasePermission):
+    message = 'Not Allowed To Edit'
 
     def has_permission(self, request, view):
         return True
 
     def has_object_permission(self, request, view, obj):
+        if request.method != 'PATCH' and request.method != 'PUT':
+            return True
         return obj.status == ActivityRequestStatus.WAITING

@@ -28,8 +28,11 @@ class ActivityRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActivityRequest
         fields = '__all__'
+        read_only_fields = ('status',)
+
 
 class ActivityRequestMiniSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActivityRequest
         fields = ('title', 'status', 'place', 'start_time')
+        read_only_fields = ('status',)
