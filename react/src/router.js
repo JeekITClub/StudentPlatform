@@ -1,9 +1,27 @@
 import React from 'react';
 import {Route, HashRouter, Switch} from 'react-router-dom';
-import Home from './app/home/index.js';
-import Society from './app/society/index.js';
-import AdminSociety from './app/admin_society/index.js';
-import SocietyBureau from './app/society_bureau/index.js';
+import Loadable from 'react-loadable';
+import Loading from './shared/loading';
+
+const Home = Loadable({
+    loader: () => import(/* webpackChunkName: "home" */'./app/home/index.js'),
+    loading: Loading,
+});
+
+const Society = Loadable({
+    loader: () => import(/* webpackChunkName: "society" */'./app/society/index.js'),
+    loading: Loading,
+});
+
+const AdminSociety = Loadable({
+    loader: () => import(/* webpackChunkName: "admin_society" */'./app/admin_society/index.js'),
+    loading: Loading,
+});
+
+const SocietyBureau = Loadable({
+    loader: () => import(/* webpackChunkName: "society_bureau" */'./app/society_bureau/index.js'),
+    loading: Loading,
+});
 
 // const DEV = process.env.NODE_ENV !== 'production';
 // const DEBUG = process.env.DEBUG === 'true';
