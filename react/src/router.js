@@ -4,22 +4,22 @@ import Loadable from 'react-loadable';
 import Loading from './shared/loading';
 
 const Home = Loadable({
-    loader: () => import('./app/home/index.js'),
+    loader: () => import(/* webpackChunkName: "home" */'./app/home/index.js'),
     loading: Loading,
 });
 
 const Society = Loadable({
-    loader: () => import('./app/society/index.js'),
+    loader: () => import(/* webpackChunkName: "society" */'./app/society/index.js'),
     loading: Loading,
 });
 
 const AdminSociety = Loadable({
-    loader: () => import('./app/admin_society/index.js'),
+    loader: () => import(/* webpackChunkName: "admin_society" */'./app/admin_society/index.js'),
     loading: Loading,
 });
 
 const SocietyBureau = Loadable({
-    loader: () => import('./app/society_bureau/index.js'),
+    loader: () => import(/* webpackChunkName: "society_bureau" */'./app/society_bureau/index.js'),
     loading: Loading,
 });
 
