@@ -43,7 +43,7 @@ class SocietyDetailModal extends React.Component {
 
     render() {
         return (
-            <div className="society-detail-modal">
+            <div>
                 {
                     this.state.loading
                         ? <Spin/>
