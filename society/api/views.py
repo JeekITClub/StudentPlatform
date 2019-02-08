@@ -1,11 +1,8 @@
 from rest_framework import viewsets, mixins, status
-from rest_framework.decorators import action, permission_classes
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from django.shortcuts import get_object_or_404
-
-from society.constants import JoinSocietyRequestStatus
-from society.models import Society, JoinSocietyRequest
+from society.models import Society
 from society.api.serializers import (
     SocietySerializer,
     SocietyMiniSerializer,
@@ -30,7 +27,7 @@ class SocietyViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retr
         return queryset
 
     def get_serializer_class(self):
-        if self.action == 'content':
+        if self.action == 'retrieve':
             return SocietySerializer
         elif self.action == 'list':
             return SocietyMiniSerializer
