@@ -1,7 +1,7 @@
 from rest_framework import viewsets, response, status
 from rest_framework.decorators import action
 from rest_framework.generics import UpdateAPIView
-from rest_framework.mixins import ListModelMixin, UpdateModelMixin
+from rest_framework.mixins import ListModelMixin
 
 from utils.permissions import IsSociety
 from society.models import Society, JoinSocietyRequest
@@ -10,7 +10,6 @@ from society_manage.api.serializers import (
     ReviewJoinSocietyRequestSerializer,
     KickMemberSerializer
 )
-from student.models import Student
 from student.api.serializers import StudentMiniSerializer
 
 
