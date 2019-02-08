@@ -1,6 +1,7 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const path = require('path');
 
 module.exports = {
     entry: {
@@ -22,6 +23,24 @@ module.exports = {
                         loader: "html-loader"
                     }
                 ]
+            },
+            {
+                test: /\.less$/,
+                include: [
+                    path.resolve(__dirname, "node_modules/antd")
+                ],
+                use: [
+                    {
+                        loader: 'style-loader'
+                    },
+                    {
+                        loader: 'css-loader'
+                    },
+                    {
+                        loader: 'less-loader', options: {
+                            javascriptEnabled: true // allow inline javascript
+                        }
+                    }]
             },
             {
                 test: /\.css$/,

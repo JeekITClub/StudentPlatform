@@ -17,6 +17,13 @@
       {
         "loose": true
       }
+    ],
+    [
+      "babel-plugin-import",
+      {
+        "libraryName": "antd",
+        "style": true
+      }
     ]
   ]
 }
