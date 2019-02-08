@@ -74,7 +74,13 @@ class JoinSocietyRequestViewSet(
 
 class ActivityRequestViewSet(viewsets.ModelViewSet):
     serializer_class = ActivityRequestSerializer
-    permission_classes = (IsSociety, SocietyActivityEditable)
+
+    def get_permissions(self):
+        if self.action == 'update' or self.action == 'partial_update':
+            permission_classes = [IsSociety, SocietyActivityEditable]
+        else:
+            permission_classes = [IsSociety]
+        return [permission() for permission in permission_classes]
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
