@@ -1,8 +1,10 @@
 from rest_framework.test import APIClient
 from testing.testcases import TestCase
 
-from society.constants import SocietyType, JoinSocietyRequestStatus
-from society.models import JoinSocietyRequest
+from society.constants import SocietyType, JoinSocietyRequestStatus, ActivityRequestStatus
+from society.models import JoinSocietyRequest, ActivityRequest
+
+from datetime import datetime
 
 
 class SocietyManageMemberTests(TestCase):
@@ -115,3 +117,40 @@ class SocietyManageJoinRequestTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.jr1.refresh_from_db()
         self.assertEqual(self.jr1.status, JoinSocietyRequestStatus.DENIED)
+
+
+class SocietyManageActivityTests(TestCase):
+    def setUp(self):
+        self.society_user = self.createUser(
+            username='101'
+        )
+        self.society = self.createSociety(
+            user=self.society_user,
+            members=None,
+            society_id=101,
+            society_type=SocietyType.HUMANISTIC
+        )
+        self.ar1 = ActivityRequest.objects.create(
+            society=self.society,
+            title='stay calm',
+            place='5510',
+            start_time=datetime.now()
+        )
+        self.ar1 = ActivityRequest.objects.create(
+            society=self.society,
+            title='make epic shit',
+            place='little forest',
+            status=ActivityRequestStatus.ACCEPTED,
+            start_time=datetime.now()
+        )
+
+    def test_list_activity_requests(self):
+        url = '/api/society_manage/activity/'
+
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(self.society_user)
+        response = client.get(url, decode=True)
+        print(response.data)
+        self.assertEqual(response.data[0]['title'], 'stay calm')
+        self.assertEqual(response.data[1]['title'], 'make epic shit')
+        self.assertEqual(response.data[0]['status'], ActivityRequestStatus.WAITING)
