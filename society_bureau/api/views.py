@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.mixins import ListModelMixin, UpdateModelMixin, RetrieveModelMixin, DestroyModelMixin
+from rest_framework.mixins import ListModelMixin
 from rest_framework.generics import RetrieveUpdateAPIView
 
 from society.models import Society
@@ -22,12 +22,7 @@ class DashboardViewSet(viewsets.GenericViewSet):
         pass
 
 
-class SocietyManageViewSet(
-    viewsets.GenericViewSet,
-    ListModelMixin,
-    RetrieveModelMixin,
-    DestroyModelMixin
-):
+class SocietyManageViewSet(viewsets.ModelViewSet):
     permission_classes = (IsSocietyBureau,)
 
     def get_queryset(self):
@@ -40,8 +35,3 @@ class SocietyManageViewSet(
         if 'name' in self.request.query_params:
             tmp_queryset = tmp_queryset.filter(name__icontains=self.request.query_params['name'])
         return tmp_queryset
-
-    def get_serializer_class(self):
-        if self.action == 'list':
-            return SocietyMiniSerializer
-        return SocietySerializer
