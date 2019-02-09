@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from student.api.serializers import StudentMiniSerializer
-from society.models import JoinSocietyRequest
+from society.models import JoinSocietyRequest, ActivityRequest
 
 
 class JoinSocietyRequestSerializer(serializers.ModelSerializer):
@@ -22,3 +22,17 @@ class KickMemberSerializer(serializers.Serializer):
 
     class Meta:
         fields = ('member_id',)
+
+
+class ActivityRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ActivityRequest
+        fields = '__all__'
+        read_only_fields = ('status',)
+
+
+class ActivityRequestMiniSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ActivityRequest
+        fields = ('title', 'status', 'place', 'start_time')
+        read_only_fields = ('status',)

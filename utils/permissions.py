@@ -1,7 +1,7 @@
 from rest_framework import permissions
 
-from society.models import JoinSocietyRequest
-from society.constants import JoinSocietyRequestStatus
+from society.models import JoinSocietyRequest, ActivityRequest
+from society.constants import JoinSocietyRequestStatus, ActivityRequestStatus
 
 
 class IsStudent(permissions.BasePermission):
@@ -62,3 +62,13 @@ class IsSocietyBureau(permissions.BasePermission):
 
     def has_permission(self, request, view):
         return request.user.is_authenticated and hasattr(request.user, 'society_bureau')
+
+
+# Only unconfirmed activities are allowed to be edited.
+class SocietyActivityEditable(permissions.BasePermission):
+    message = 'Not Allowed To Edit'
+
+    def has_object_permission(self, request, view, obj):
+        if request.method != 'PATCH' and request.method != 'PUT':
+            return True
+        return obj.status == ActivityRequestStatus.WAITING

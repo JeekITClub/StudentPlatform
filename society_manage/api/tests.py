@@ -1,8 +1,10 @@
 from rest_framework.test import APIClient
 from testing.testcases import TestCase
 
-from society.constants import SocietyType, JoinSocietyRequestStatus
-from society.models import JoinSocietyRequest
+from society.constants import SocietyType, JoinSocietyRequestStatus, ActivityRequestStatus
+from society.models import JoinSocietyRequest, ActivityRequest
+
+from django.utils import timezone
 
 
 class SocietyManageMemberTests(TestCase):
@@ -115,3 +117,134 @@ class SocietyManageJoinRequestTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.jr1.refresh_from_db()
         self.assertEqual(self.jr1.status, JoinSocietyRequestStatus.DENIED)
+
+
+class SocietyManageActivityTests(TestCase):
+    def setUp(self):
+        self.society_user = self.createUser(
+            username='101'
+        )
+        self.society = self.createSociety(
+            user=self.society_user,
+            members=None,
+            society_id=101,
+            society_type=SocietyType.HUMANISTIC
+        )
+        self.ar1 = ActivityRequest.objects.create(
+            society=self.society,
+            title='keep calm',
+            content='pick hanzo or die',
+            place='5510',
+            start_time=timezone.now()
+        )
+        self.ar2 = ActivityRequest.objects.create(
+            society=self.society,
+            title='make epic shit',
+            place='little forest',
+            status=ActivityRequestStatus.ACCEPTED,
+            start_time=timezone.now()
+        )
+
+    def test_retrieve_activity_requests(self):
+        url = '/api/society_manage/activity/{}/'.format(self.ar1.pk)
+
+        client = APIClient(enforce_csrf_checks=True)
+        response = client.get(url, decode=True)
+        self.assertEqual(response.status_code, 403)
+
+        client.force_authenticate(self.society_user)
+        response = client.get(url, decode=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['title'], 'keep calm')
+        self.assertEqual(response.data['content'], 'pick hanzo or die')
+        self.assertEqual(response.data['place'], '5510')
+
+    def test_list_activity_requests(self):
+        url = '/api/society_manage/activity/'
+
+        client = APIClient(enforce_csrf_checks=True)
+        response = client.get(url, decode=True)
+        self.assertEqual(response.status_code, 403)
+
+        client.force_authenticate(self.society_user)
+        response = client.get(url, decode=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data[0]['title'], 'keep calm')
+        self.assertEqual(response.data[1]['title'], 'make epic shit')
+        self.assertEqual(response.data[0]['status'], ActivityRequestStatus.WAITING)
+
+        data = {
+            'status': ActivityRequestStatus.ACCEPTED
+        }
+        response = client.get(url, data=data, decode=True)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['title'], 'make epic shit')
+
+        data = {
+            'status': ActivityRequestStatus.WAITING
+        }
+        response = client.get(url, data=data, decode=True)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['title'], 'keep calm')
+
+    def test_update_activity_requests(self):
+        url = '/api/society_manage/activity/{}/'.format(self.ar1.pk)
+
+        client = APIClient(enforce_csrf_checks=True)
+        data = {
+            'status': ActivityRequestStatus.ACCEPTED,
+            'title': 'do homework',
+            'place': 'principal room'
+        }
+        response = client.patch(url, data=data, decode=True)
+        self.assertEqual(response.status_code, 403)
+
+        client.force_authenticate(self.society_user)
+        response = client.patch(url, data=data, decode=True)
+        self.assertEqual(response.status_code, 200)
+        self.ar1.refresh_from_db()
+        self.assertEqual(self.ar1.status, ActivityRequestStatus.WAITING)  # test read_only
+        self.assertEqual(self.ar1.title, 'do homework')
+        self.assertEqual(self.ar1.place, 'principal room')
+
+        url = '/api/society_manage/activity/{}/'.format(self.ar2.pk)
+        data = {
+            'title': 'do homework',
+            'place': 'principal room'
+        }
+        response = client.patch(url, data=data, decode=True)
+        self.assertEqual(response.status_code, 403)
+
+    def test_create_activity_requests(self):
+        url = '/api/society_manage/activity/'
+        data = {
+            'title': 'fudan lecture',
+            'society': self.society_user.society.id,
+            'content': '666',
+            'place': '5106',
+            'start_time': timezone.now()
+        }
+        client = APIClient(enforce_csrf_checks=True)
+        response = client.post(url, data=data, decode=True)
+        self.assertEqual(response.status_code, 403)
+
+        client.force_authenticate(self.society_user)
+        response = client.post(url, data=data, decode=True)
+        self.assertEqual(response.status_code, 201)
+        ar3 = ActivityRequest.objects.get(pk=response.data['id'])
+        self.assertEqual(ar3.status, ActivityRequestStatus.WAITING)
+        self.assertEqual(ar3.title, 'fudan lecture')
+        self.assertEqual(ar3.content, '666')
+        self.assertEqual(ar3.society, self.society)
+
+    def test_destroy_activity_requests(self):
+        url = '/api/society_manage/activity/{}/'.format(self.ar1.pk)
+
+        client = APIClient(enforce_csrf_checks=True)
+        response = client.delete(url, decode=True)
+        self.assertEqual(response.status_code, 403)
+
+        client.force_authenticate(self.society_user)
+        response = client.delete(url, decode=True)
+        self.assertEqual(response.status_code, 204)
+        self.assertIsNone(ActivityRequest.objects.filter(pk=self.ar1.pk).first())
