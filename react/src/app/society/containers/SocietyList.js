@@ -1,6 +1,6 @@
 import React from 'react';
 import {observer} from 'mobx-react';
-import {Empty, Row, Col, List, Avatar} from "antd";
+import {Empty, Row, Col, List, Avatar, Spin} from "antd";
 import {Link} from 'react-router-dom';
 
 import SocietyCard from "../components/SocietyCard";
@@ -34,7 +34,7 @@ class SocietyList extends React.Component {
                 </Row>
             )
         }
-        return <Empty/>
+        return <Empty description="社团都不见了"/>
     };
 
     renderListItem = item => (
@@ -67,7 +67,7 @@ class SocietyList extends React.Component {
                 </Row>
                 <Row>
                     <Col xxl={24} xl={24} lg={24} md={24} sm={0} xs={0} className="society-list-body">
-                        {this.renderCardList()}
+                        {SocietyStore.loading ? <Spin/>: this.renderCardList()}
                     </Col>
                     <Col xxl={0} xl={0} lg={0} md={0} sm={24} xs={24} className="society-list-body">
                         <List

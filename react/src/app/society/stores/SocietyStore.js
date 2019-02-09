@@ -22,11 +22,14 @@ class SocietyStore {
     };
 
     @action fetch = () => {
+        this.changeLoading();
         Provider.get('/api/society/')
             .then((res) => {
+                this.changeLoading();
                 this.updateSociety(res.data)
             })
             .catch((err) => {
+                this.changeLoading();
                 console.log(err)
             })
     }

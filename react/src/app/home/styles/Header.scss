@@ -1,5 +1,6 @@
 $hover-color: #00FFCF;
 $color: #FFF;
+$primary-color: #69BEF7;
 
 .home-header {
   padding-top: 1vh;
@@ -53,7 +54,7 @@ $color: #FFF;
   padding-left: 20px;
   margin-left: auto;
   margin-right: auto;
-  background-color: #69BEF7;
+  background-color: $primary-color;
   .generic-header-brand {
     display: inline-block;
   }

@@ -8,11 +8,6 @@ const Home = Loadable({
     loading: Loading,
 });
 
-const Society = Loadable({
-    loader: () => import(/* webpackChunkName: "society" */'./app/society/index.js'),
-    loading: Loading,
-});
-
 const AdminSociety = Loadable({
     loader: () => import(/* webpackChunkName: "admin_society" */'./app/admin_society/index.js'),
     loading: Loading,
@@ -35,7 +30,6 @@ class AppRouter extends React.Component {
                 <div style={{height: '100%'}}>
                     <Switch>
                         <Route path="/manage" component={SocietyBureau}/>
-                        <Route path="/society" component={Society}/>
                         <Route path="/admin_society" component={AdminSociety}/>
                         <Route path="" component={Home}/>
                     </Switch>
