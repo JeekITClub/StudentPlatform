@@ -6,7 +6,7 @@ import AccountStore from '../../../shared/stores/AccountStore'
 
 const {SubMenu} = Menu;
 
-import '../styles/Header.scss'
+import '../styles/GenericHeader.scss'
 
 class GenericHeader extends React.Component {
     renderLeftMenu = () => {
@@ -32,11 +32,54 @@ class GenericHeader extends React.Component {
         if (AccountStore.authenticated) {
             return (
                 <Menu mode="horizontal" className="generic-header-menu pull-right">
-                    <SubMenu title="username">
-                        <Menu.Item>
-                            <Link to={'/profile'} className="generic-header-link">个人资料</Link>
-                        </Menu.Item>
-                    </SubMenu>
+                    {
+                        AccountStore.is_student && (
+                            <SubMenu title={AccountStore.user.username}>
+                                <Menu.Item>
+                                    <Link to={'/profile'}>个人资料</Link>
+                                </Menu.Item>
+                                <Menu.Item>
+                                    <Link to={'/change_password'}>修改密码</Link>
+                                </Menu.Item>
+                                <Menu.Divider/>
+                                <Menu.Item>
+                                    <Link to={'/logout'}>注销</Link>
+                                </Menu.Item>
+                            </SubMenu>
+                        )
+                    }
+                    {
+                        AccountStore.is_society && (
+                            <SubMenu title={AccountStore.user.username}>
+                                <Menu.Item>
+                                    <Link to={'/admin_society/'}>社团管理</Link>
+                                </Menu.Item>
+                                <Menu.Item>
+                                    <Link to={'/admin_society/profile'}>社团资料</Link>
+                                </Menu.Item>
+                                <Menu.Item>
+                                    <Link to={'/admin_society/change_password'}>修改密码</Link>
+                                </Menu.Item>
+                                <Menu.Divider/>
+                                <Menu.Item>
+                                    <Link to={'/logout'}>注销</Link>
+                                </Menu.Item>
+                            </SubMenu>
+                        )
+                    }
+                    {
+                        AccountStore.is_society_bureau && (
+                            <SubMenu title="社团部">
+                                <Menu.Item>
+                                    <Link to={'/'}>社团部管理</Link>
+                                </Menu.Item>
+                                <Menu.Divider/>
+                                <Menu.Item>
+                                    <Link to={'/logout'}>注销</Link>
+                                </Menu.Item>
+                            </SubMenu>
+                        )
+                    }
                 </Menu>
             )
         }

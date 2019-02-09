@@ -34,7 +34,7 @@ class SocietyList extends React.Component {
                 </Row>
             )
         }
-        return <Empty description="社团都不见了"/>
+        return <Empty description="社团们不见了"/>
     };
 
     renderListItem = item => (

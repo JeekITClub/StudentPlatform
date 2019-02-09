@@ -5,8 +5,6 @@ class SocietyStore {
     @observable loading = false;
     @observable societies = [];
 
-    @observable filteredSocieties = [];
-
     @observable query = '';
 
     @action changeLoading() {
@@ -32,8 +30,20 @@ class SocietyStore {
                 this.changeLoading();
                 console.log(err)
             })
-    }
+    };
 
+    @action search = () => {
+        this.changeLoading();
+        Provider.get('/api/society/', {params: {'name': this.query}})
+            .then((res) => {
+                this.changeLoading();
+                this.updateSociety(res.data)
+            })
+            .catch((err) => {
+                this.changeLoading();
+                console.log(err)
+            })
+    }
 }
 
 export default new SocietyStore;

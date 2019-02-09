@@ -19,8 +19,6 @@ class LoginForm extends React.Component {
                     password: values.password
                 }).then((res) => {
                     if (res.status === 200) {
-                        console.log('success');
-                        // todo: add next to
                         this.props.history.push('/')
                     }
                 }).catch((err) => {
