@@ -8,6 +8,7 @@ import '../styles/header.scss'
 const breadcrumbNameMap = {
     '/manage': '主页',
     '/manage/profile': '个人信息',
+    '/manage/society': '社团管理'
 };
 
 class SocietyBureauHeader extends React.Component {

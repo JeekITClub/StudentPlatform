@@ -30,5 +30,6 @@ module.exports = merge(config, {
             outputPath: path.resolve(__dirname, 'dist'),
         }),
     ],
+    devtool: "source-map"
 })
 ;

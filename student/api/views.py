@@ -1,5 +1,4 @@
-from rest_framework import viewsets, mixins, response, status
-from rest_framework.decorators import action
+from rest_framework import viewsets
 from rest_framework.generics import RetrieveUpdateAPIView
 
 from student.models import Student

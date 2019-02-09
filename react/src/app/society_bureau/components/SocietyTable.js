@@ -1,11 +1,14 @@
 import React from 'react';
-import {Table, Tooltip, Button} from 'antd';
+import {Table, Tooltip, Button, Modal} from 'antd';
 
 import Provider from '../../../utils/provider'
+import SocietyDetailModal from "./SocietyDetailModal";
 
 class SocietyTable extends React.Component {
     state = {
-        societies: []
+        societies: [],
+        editingSocietyId: 0,
+        modalVisible: false
     };
 
     componentDidMount() {
@@ -18,6 +21,14 @@ class SocietyTable extends React.Component {
             })
     }
 
+    handleInspectButtonClick = (row) => {
+        this.setState({modalVisible: true, editingSocietyId: row.society_id});
+    };
+
+    handleCloseModal = () => {
+        this.setState({modalVisible: false})
+    };
+
     renderPresidentTooltip = (president_name, index) => {
         const row = this.state.societies[index];
         return (
@@ -27,9 +38,9 @@ class SocietyTable extends React.Component {
         )
     };
 
-    renderInspectButton = () => {
+    renderInspectButton = (index) => {
         return (
-            <Button type="primary">查看</Button>
+            <Button type="primary" onClick={() => this.handleInspectButtonClick(index)} htmlType="button">查看</Button>
         )
     };
 
@@ -54,12 +65,19 @@ class SocietyTable extends React.Component {
             {
                 title: '查看',
                 key: 'inspect',
-                render: this.renderInspectButton
+                render: (row) => this.renderInspectButton(row)
             }
         ];
 
+
         return (
-            <Table rowKey="society_id" columns={columns} dataSource={this.state.societies}/>
+            <div>
+                <Table rowKey="society_id" columns={columns} dataSource={this.state.societies}/>
+                {
+                    this.state.modalVisible &&
+                    <SocietyDetailModal society_id={this.state.editingSocietyId} closeModal={() => this.handleCloseModal()}/>
+                }
+            </div>
         )
     }
 }

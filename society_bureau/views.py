@@ -31,6 +31,6 @@ class SocietyManageViewSet(
     # permission_classes = (IsSocietyBureau, )
 
     def get_serializer_class(self):
-        if self.action == 'content':
+        if self.action == 'retrieve':
             return SocietySerializer
         return SocietyMiniSerializer

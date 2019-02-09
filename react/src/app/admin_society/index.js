@@ -1,19 +1,14 @@
 import React from 'react';
-import {Layout, Col, Row} from 'antd';
-import "antd/dist/antd.css";
+import {Col, Row} from 'antd';
 
 import AdminSocietySider from './components/AdminSocietySider.js';
 import AdminSocietyHeader from './components/AdminSocietyHeader.js';
+import AdminSocietyDrawerMenu from "./components/AdminSocietyDrawerMenu";
+import AdminSocietyFooter from "./components/AdminSocietyFooter";
+import './styles/index.scss'
+
 import AdminSocietyRouter from './router.js'
 
-import AdminSocietyDrawerMenu from "./components/AdminSocietyDrawerMenu";
-
-import './styles/index.scss'
-import AdminSocietyFooter from "./components/AdminSocietyFooter";
-
-const {
-    Footer,
-} = Layout;
 
 export default function AdminClub({match}) {
     return (
@@ -29,7 +24,7 @@ export default function AdminClub({match}) {
                         <AdminSocietyHeader/>
                     </Row>
                     <Row className="container-fluid mt-4">
-                        <AdminSocietyRouter match={match} />
+                        <AdminSocietyRouter match={match}/>
                     </Row>
                 </Col>
             </Row>

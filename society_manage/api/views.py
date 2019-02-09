@@ -12,7 +12,6 @@ from society_manage.api.serializers import (
     ActivityRequestSerializer,
     ActivityRequestMiniSerializer
 )
-from student.models import Student
 from student.api.serializers import StudentMiniSerializer
 
 
