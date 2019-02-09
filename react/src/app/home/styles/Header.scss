@@ -45,3 +45,47 @@ $color: #FFF;
 .center {
   height: 100%;
 }
+
+.generic-header {
+  display: block;
+  width: 100%;
+  padding-right: 20px;
+  padding-left: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #69BEF7;
+  .generic-header-brand {
+    display: inline-block;
+  }
+  .generic-header-menu {
+    display: inline-block;
+  }
+}
+
+.pull-left {
+  float: left;
+}
+
+.pull-right {
+  float: right;
+}
+
+.ant-menu {
+  background-color: inherit !important;
+}
+
+.ant-menu-horizontal {
+  border-bottom: 0 !important;
+}
+
+.ant-submenu {
+  border-bottom: 0 !important;
+}
+
+.ant-menu-item {
+  border-bottom: 0 !important;
+}
+
+.generic-header-link {
+  color: #fff !important;
+}

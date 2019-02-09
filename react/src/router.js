@@ -1,7 +1,7 @@
 import React from 'react';
 import {Route, HashRouter, Switch} from 'react-router-dom';
 import Loadable from 'react-loadable';
-import Loading from './shared/loading';
+import Loading from './shared/Loading';
 
 const Home = Loadable({
     loader: () => import(/* webpackChunkName: "home" */'./app/home/index.js'),
