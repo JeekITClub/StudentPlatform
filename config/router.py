@@ -7,7 +7,7 @@ from society_manage.api.views import (
     SocietyMemberViewSet,
     JoinSocietyRequestViewSet
 )
-from society_bureau.views import (
+from society_bureau.api.views import (
     DashboardViewSet,
     SocietyManageViewSet
 )

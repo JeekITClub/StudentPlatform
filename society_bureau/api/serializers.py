@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from society.models import Society
+from society_bureau.models import SiteSettings
 
 
 class SocietySerializer(serializers.ModelSerializer):
@@ -19,3 +20,9 @@ class SocietyMiniSerializer(serializers.ModelSerializer):
             'president_class',
             'president_grade'
         )
+
+
+class SettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SiteSettings
+        fields = '__all__'
