@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from society.models import Society
 from society_bureau.models import SiteSettings
+from society_manage.models import CreditReceivers
 
 
 class SocietySerializer(serializers.ModelSerializer):
@@ -26,4 +27,21 @@ class SocietyMiniSerializer(serializers.ModelSerializer):
 class SettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = SiteSettings
+        fields = '__all__'
+
+
+class SocietyCreditSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Society
+        fields = (
+            'society_id',
+            'name',
+            'credit'
+        )
+        read_only_fields = ('society_id', 'name')
+
+
+class SocietyCreditReceiversSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CreditReceivers
         fields = '__all__'
