@@ -68,9 +68,6 @@ class IsSocietyBureau(permissions.BasePermission):
 class SocietyActivityEditable(permissions.BasePermission):
     message = 'Not Allowed To Edit'
 
-    def has_permission(self, request, view):
-        return True
-
     def has_object_permission(self, request, view, obj):
         if request.method != 'PATCH' and request.method != 'PUT':
             return True
