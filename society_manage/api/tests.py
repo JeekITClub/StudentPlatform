@@ -145,6 +145,20 @@ class SocietyManageActivityTests(TestCase):
             start_time=timezone.now()
         )
 
+    def test_retrieve_activity_requests(self):
+        url = '/api/society_manage/activity/{}/'.format(self.ar1.pk)
+
+        client = APIClient(enforce_csrf_checks=True)
+        response = client.get(url, decode=True)
+        self.assertEqual(response.status_code, 403)
+
+        client.force_authenticate(self.society_user)
+        response = client.get(url, decode=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['title'], 'keep calm')
+        self.assertEqual(response.data['content'], 'pick hanzo or die')
+        self.assertEqual(response.data['place'], '5510')
+
     def test_list_activity_requests(self):
         url = '/api/society_manage/activity/'
 
@@ -154,6 +168,7 @@ class SocietyManageActivityTests(TestCase):
 
         client.force_authenticate(self.society_user)
         response = client.get(url, decode=True)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data[0]['title'], 'keep calm')
         self.assertEqual(response.data[1]['title'], 'make epic shit')
         self.assertEqual(response.data[0]['status'], ActivityRequestStatus.WAITING)
@@ -188,9 +203,8 @@ class SocietyManageActivityTests(TestCase):
         response = client.patch(url, data=data, decode=True)
         self.assertEqual(response.status_code, 200)
         self.ar1.refresh_from_db()
-        self.assertEqual(self.ar1.status, ActivityRequestStatus.WAITING)
+        self.assertEqual(self.ar1.status, ActivityRequestStatus.WAITING)  # test read_only
         self.assertEqual(self.ar1.title, 'do homework')
-        self.assertEqual(self.ar1.content, 'pick hanzo or die')
         self.assertEqual(self.ar1.place, 'principal room')
 
         url = '/api/society_manage/activity/{}/'.format(self.ar2.pk)
