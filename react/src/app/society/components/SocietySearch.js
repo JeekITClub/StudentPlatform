@@ -17,9 +17,7 @@ class SocietySearch extends React.Component {
     };
 
     handleSearch = () => {
-        SocietyStore.changeLoading();
-        console.log(SocietyStore.query);
-        SocietyStore.changeLoading();
+        SocietyStore.search();
     };
 
     render() {

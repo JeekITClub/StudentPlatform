@@ -1,0 +1,10 @@
+.global-loading-container {
+  height: 100vh;
+  display: flex;
+  .global-loading-text {
+    width: 100%;
+    font-size: 2.2rem;
+    align-self: center;
+    text-align: center;
+  }
+}
