@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.mixins import ListModelMixin, UpdateModelMixin, RetrieveModelMixin
+from rest_framework.mixins import ListModelMixin, UpdateModelMixin, RetrieveModelMixin, DestroyModelMixin
 from rest_framework.generics import RetrieveUpdateAPIView
 
 from society.models import Society
@@ -25,7 +25,12 @@ class DashboardViewSet(viewsets.GenericViewSet):
         pass
 
 
-class SocietyManageViewSet(viewsets.ModelViewSet):
+class SocietyManageViewSet(
+    viewsets.GenericViewSet,
+    ListModelMixin,
+    RetrieveModelMixin,
+    DestroyModelMixin
+):
     permission_classes = (IsSocietyBureau,)
 
     def get_queryset(self):
@@ -39,6 +44,11 @@ class SocietyManageViewSet(viewsets.ModelViewSet):
             tmp_queryset = tmp_queryset.filter(name__icontains=self.request.query_params['name'])
         return tmp_queryset
 
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return SocietyMiniSerializer
+        return SocietySerializer
+
 
 class CreditManageViewSet(
     viewsets.GenericViewSet,
@@ -47,7 +57,9 @@ class CreditManageViewSet(
 ):
     permission_classes = (IsSocietyBureau,)
     serializer_class = SocietyCreditSerializer
-    queryset = Society.objects.all()
+
+    def get_queryset(self):
+        return Society.objects.all()
 
     def filter_queryset(self, queryset):
         tmp_queryset = queryset
@@ -62,17 +74,21 @@ class CreditManageViewSet(
         self.queryset.update(credit=request.data['credit'])
 
 
-class CreditReceiversManageViewSet(
+class CreditReceiversViewSet(
     viewsets.GenericViewSet,
     ListModelMixin,
     RetrieveModelMixin
 ):
     permission_classes = (IsSocietyBureau,)
     serializer_class = SocietyCreditReceiversSerializer
-    queryset = CreditReceivers.objects.all()
+
+    def get_queryset(self):
+        return CreditReceivers.objects.all()
 
     def filter_queryset(self, queryset):
         tmp_queryset = queryset
+        if 'name' in self.request.query_params:
+            tmp_queryset = tmp_queryset.filter(society__name__icontains=self.request.query_params['name'])
         if 'year' in self.request.query_params:
             tmp_queryset = tmp_queryset.filter(year=self.request.query_params['year'])
         if 'semester' in self.request.query_params:
