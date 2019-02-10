@@ -4,6 +4,7 @@ from testing.client import Client
 
 from student.models import Student
 from society.models import Society
+from society_bureau.models import SocietyBureau
 
 
 class TestCase(DjangoTestCase):
@@ -51,3 +52,18 @@ class TestCase(DjangoTestCase):
         if members is not None:
             society.members.set(members)
         return society
+
+    def createSocietyBureau(
+            self,
+            user,
+            real_name='qsm',
+            qq='2333',
+            email='ncj19991213@126.com',
+    ):
+        society_bureau = SocietyBureau.objects.create(
+            user=user,
+            real_name=real_name,
+            qq=qq,
+            email=email
+        )
+        return society_bureau

@@ -30,6 +30,13 @@ class SettingsService:
         return json.loads(settings.settings)
 
     @classmethod
+    def get(cls, key):
+        settings = SiteSettings.objects.all().first()
+        if settings is None:
+            return None
+        return json.loads(settings.settings).get(key, None)
+
+    @classmethod
     def update(cls, content):
         settings = SiteSettings.objects.all().first()
         settings.settings = content
