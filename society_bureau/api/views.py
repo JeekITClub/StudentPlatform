@@ -71,7 +71,8 @@ class CreditManageViewSet(
 
     @action(detail=False, methods=['post'])
     def set_all(self, request):
-        if 'credit' in request.data.keys() and int(request.data['credit']) >= 0:
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
             self.get_queryset().update(credit=request.data['credit'])
             return response.Response(status=status.HTTP_202_ACCEPTED)
         return response.Response(

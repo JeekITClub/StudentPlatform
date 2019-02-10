@@ -3,6 +3,8 @@ from rest_framework import serializers
 from society.models import Society
 from society_bureau.models import SiteSettings
 from society_manage.models import CreditReceivers
+from student.api.serializers import StudentMiniField
+from society.api.serializers import SocietyMiniField
 
 
 class SocietySerializer(serializers.ModelSerializer):
@@ -40,8 +42,21 @@ class SocietyCreditSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ('society_id', 'name')
 
+    def to_internal_value(self, data):
+        credit = data.get('credit')
+        if not credit:
+            raise serializers.ValidationError({
+                'credit': 'This field is required.'
+            })
 
-class SocietyCreditReceiversSerializer(serializers.ModelSerializer):
+        return {
+            'credit': int(credit)
+        }
+
+    def validate(self, data):
+        if data['credit'] < 0 or data['credit'] > 32767:
+            raise serializers.ValidationError("Credit value is incorrect.")
+        return data
     class Meta:
         model = CreditReceivers
         fields = '__all__'
