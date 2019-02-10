@@ -179,4 +179,62 @@ class CreditManageTests(TestCase):
 
 
 class CreditReceiversTests(TestCase):
-    pass
+    def setUp(self):
+        self.user1 = self.createUser('society1')
+        self.user2 = self.createUser('society2')
+        self.user3 = self.createUser('society_bureau')
+        self.society1 = self.createSociety(
+            user=self.user1,
+            society_id=401,
+            name='jeek',
+            members=None,
+            society_type=SocietyType.HUMANISTIC
+        )
+        self.society2 = self.createSociety(
+            user=self.user2,
+            society_id=301,
+            name='jtv',
+            members=None,
+            society_type=SocietyType.SCIENTIFIC
+        )
+        self.society_bureau = self.createSocietyBureau(user=self.user3, real_name='xxx')
+        self.credit_receivers1 = CreditReceivers.objects.create(
+            society=self.society1,
+            receivers=None,
+            year=2018,
+            semester=2)
+        self.credit_receivers2 = CreditReceivers.objects.create(
+            society=self.society2,
+            receivers=None,
+            year=2018,
+            semester=1)
+        self.credit_receivers3 = CreditReceivers.objects.create(
+            society=self.society2,
+            receivers=None,
+            year=2017,
+            semester=1)
+
+    def test_list_credit_receivers(self):
+        url = '/api/manage/credit_receiver/'
+
+        client = APIClient(enforce_csrf_checks=True)
+        response = client.get(url, decode=True)
+        self.assertEqual(response.status_code, 403)
+
+        client.force_authenticate(self.user3)
+        response = client.get(url, decode=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 3)
+
+        response = client.get(url, data={'name': 'jee'}, decode=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data[0]['id'], 1)
+
+        data = {
+            'year': 2018,
+            'semester': 1
+        }
+        response = client.get(url, data=data, decode=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['id'], 2)
