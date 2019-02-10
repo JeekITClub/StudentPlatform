@@ -3,6 +3,7 @@ import {
     Form, Icon, Input, Button,
 } from 'antd';
 
+import Provider from '../../utils/provider'
 
 class ChangePasswordForm extends React.Component {
 
@@ -10,10 +11,14 @@ class ChangePasswordForm extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                // perform ajax request
-                console.log(values.oldPassword);
-                console.log(values.newPassword);
-                console.log(values.confirmPassword);
+                Provider.post('/api/account/change_password/', {
+                    old_password: values.oldPassword,
+                    new_password: values.newPassword
+                }).then((res) => {
+                    console.log(res.status)
+                }).catch((e) => {
+                    console.log(e)
+                })
             }
         });
     };
