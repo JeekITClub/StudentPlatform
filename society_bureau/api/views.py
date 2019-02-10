@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, response, status
 from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin, UpdateModelMixin, RetrieveModelMixin, DestroyModelMixin
 from rest_framework.generics import RetrieveUpdateAPIView
@@ -71,7 +71,13 @@ class CreditManageViewSet(
 
     @action(detail=False, methods=['post'])
     def set_all(self, request):
-        self.queryset.update(credit=request.data['credit'])
+        if 'credit' in request.data.keys() and int(request.data['credit']) >= 0:
+            self.get_queryset().update(credit=request.data['credit'])
+            return response.Response(status=status.HTTP_202_ACCEPTED)
+        return response.Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data={'detail': '表单填写错误'}
+        )
 
 
 class CreditReceiversViewSet(
