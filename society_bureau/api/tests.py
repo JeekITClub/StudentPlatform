@@ -200,19 +200,19 @@ class CreditReceiversTests(TestCase):
         self.society_bureau = self.createSocietyBureau(user=self.user3, real_name='xxx')
         self.credit_receivers1 = CreditReceivers.objects.create(
             society=self.society1,
-            receivers=None,
             year=2018,
-            semester=2)
+            semester=2
+        )
         self.credit_receivers2 = CreditReceivers.objects.create(
             society=self.society2,
-            receivers=None,
             year=2018,
-            semester=1)
+            semester=1
+        )
         self.credit_receivers3 = CreditReceivers.objects.create(
             society=self.society2,
-            receivers=None,
             year=2017,
-            semester=1)
+            semester=1
+        )
 
     def test_list_credit_receivers(self):
         url = '/api/manage/credit_receiver/'
