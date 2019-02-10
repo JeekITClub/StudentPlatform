@@ -45,17 +45,3 @@ class SocietyManageViewSet(
         if self.action == 'list':
             return SocietyMiniSerializer
         return SocietySerializer
-
-
-    permission_classes = (IsSocietyBureau,)
-
-    def get_queryset(self):
-        return Society.objects.all()
-
-    def filter_queryset(self, queryset):
-        tmp_queryset = queryset
-        if 'type' in self.request.query_params:
-            tmp_queryset = tmp_queryset.filter(type=self.request.query_params['type'])
-        if 'name' in self.request.query_params:
-            tmp_queryset = tmp_queryset.filter(name__icontains=self.request.query_params['name'])
-        return tmp_queryset
