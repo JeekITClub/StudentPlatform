@@ -57,6 +57,8 @@ class SocietyCreditSerializer(serializers.ModelSerializer):
         if data['credit'] < 0 or data['credit'] > 32767:
             raise serializers.ValidationError("Credit value is incorrect.")
         return data
+
+class SocietyCreditReceiversSerializer(serializers.ModelSerializer):
     class Meta:
         model = CreditReceivers
         fields = '__all__'
