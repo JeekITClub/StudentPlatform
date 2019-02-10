@@ -16,6 +16,7 @@ class SocietyMiniSerializer(serializers.ModelSerializer):
         fields = (
             'society_id',
             'name',
+            'type',
             'president_name',
             'president_class',
             'president_grade'
