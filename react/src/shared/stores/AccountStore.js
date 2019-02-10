@@ -1,6 +1,10 @@
-import {observable, computed} from "mobx";
+import {observable, computed, action} from "mobx";
+
+import Provider from '../../utils/provider'
 
 class AccountStore {
+    @observable loading = false;
+
     @observable user = {};
 
     @observable authenticated = true;
@@ -15,6 +19,17 @@ class AccountStore {
 
     @computed get is_society_bureau() {
         return this.user.identity === 'society_bureau';
+    }
+
+    @action fetch () {
+        Provider.get('/api/account/profile/')
+            .then((res) => {
+                this.authenticated = true;
+                console.log(res.data)
+            })
+            .catch((e) => {
+                console.log(e)
+            })
     }
 }
 

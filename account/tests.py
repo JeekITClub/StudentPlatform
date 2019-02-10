@@ -76,3 +76,32 @@ class AccountTests(TestCase):
         response = client.post(url, data=data, decode=False)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data['detail'], '表单填写错误')
+
+    def test_retrieve_profile(self):
+        student_user = self.createUser('smsnb')
+        self.createStudent(student_user)
+        society_user = self.createUser('tjwnb')
+        self.createSociety(society_user, 101, None)
+        sb_user = self.createUser('ncjnb')
+        self.createSocietyBureau(sb_user)
+
+        url = '/api/account/identity/'
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(self.user)
+        res = client.get(url)
+        self.assertEqual(res.data['identity'], 'who are u?')
+
+        client.force_authenticate(student_user)
+        res = client.get(url)
+        self.assertEqual(res.data['identity'], 'student')
+
+        client.force_authenticate(society_user)
+        res = client.get(url)
+        self.assertEqual(res.data['identity'], 'society')
+
+        client.force_authenticate(sb_user)
+        res = client.get(url)
+        self.assertEqual(res.data['identity'], 'society_bureau')
+
+        res = self.client.get(url)
+        self.assertEqual(res.status_code, 403)

@@ -9,6 +9,10 @@ const {SubMenu} = Menu;
 import '../styles/GenericHeader.scss'
 
 class GenericHeader extends React.Component {
+    componentDidMount() {
+        AccountStore.fetch();
+    }
+
     renderLeftMenu = () => {
         return (
             <Menu mode="horizontal" className="generic-header-menu">
