@@ -73,7 +73,7 @@ class CreditManageViewSet(
     def set_all(self, request):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            self.get_queryset().update(credit=request.data['credit'])
+            self.get_queryset().update(credit=serializer.data.get('credit'))
             return response.Response(status=status.HTTP_202_ACCEPTED)
         return response.Response(
             status=status.HTTP_400_BAD_REQUEST,
