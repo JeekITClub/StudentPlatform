@@ -8,5 +8,8 @@ class CreditReceivers(models.Model):
     year = models.PositiveSmallIntegerField()
     semester = models.PositiveSmallIntegerField()
 
+    class Meta:
+        unique_together = ("society", "year", "semester")
+
     def __str__(self):
         return str(self.society)
