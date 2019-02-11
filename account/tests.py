@@ -77,7 +77,7 @@ class AccountTests(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data['detail'], '表单填写错误')
 
-    def test_retrieve_profile(self):
+    def test_retrieve_identity(self):
         student_user = self.createUser('smsnb')
         self.createStudent(student_user)
         society_user = self.createUser('tjwnb')
