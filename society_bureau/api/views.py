@@ -12,6 +12,10 @@ from society_bureau.api.serializers import (
     # CreditReceiversMiniSerializer
 )
 from utils.permissions import IsSocietyBureau
+from utils.filters import (
+    NameFilterBackend,
+    TypeFilterBackend
+)
 
 
 class DashboardViewSet(viewsets.GenericViewSet):
@@ -32,17 +36,10 @@ class SocietyManageViewSet(
     DestroyModelMixin
 ):
     permission_classes = (IsSocietyBureau,)
+    filter_backends = [NameFilterBackend, TypeFilterBackend]
 
     def get_queryset(self):
         return Society.objects.all()
-
-    def filter_queryset(self, queryset):
-        tmp_queryset = queryset
-        if 'type' in self.request.query_params:
-            tmp_queryset = tmp_queryset.filter(type=self.request.query_params['type'])
-        if 'name' in self.request.query_params:
-            tmp_queryset = tmp_queryset.filter(name__icontains=self.request.query_params['name'])
-        return tmp_queryset
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -57,6 +54,7 @@ class CreditManageViewSet(
 ):
     permission_classes = (IsSocietyBureau,)
     serializer_class = SocietyCreditSerializer
+    filter_backends = []
 
     def get_queryset(self):
         return Society.objects.all()
@@ -79,7 +77,6 @@ class CreditManageViewSet(
             status=status.HTTP_400_BAD_REQUEST,
             data={'detail': '表单填写错误'}
         )
-
 
 # class CreditReceiversViewSet(
 #     viewsets.GenericViewSet,
