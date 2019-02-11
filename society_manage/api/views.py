@@ -32,7 +32,7 @@ class SocietyMemberViewSet(viewsets.GenericViewSet, ListModelMixin):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             member = self.get_queryset().filter(
-                id=serializer.validated_data['member_id']
+                student_id=serializer.validated_data['member_student_id']
             ).first()
             if member is None:
                 return response.Response(

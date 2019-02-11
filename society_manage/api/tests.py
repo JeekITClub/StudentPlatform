@@ -26,7 +26,7 @@ class SocietyManageMemberTests(TestCase):
     def test_kick_member(self):
         url = '/api/society_manage/member/kick/'
         data = {
-            'member_id': self.student.id
+            'student_member_id': self.student.student_id
         }
         client = APIClient(enforce_csrf_checks=True)
         client.force_authenticate(self.user1)

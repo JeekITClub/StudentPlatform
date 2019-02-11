@@ -18,10 +18,10 @@ class ReviewJoinSocietyRequestSerializer(serializers.ModelSerializer):
 
 
 class KickMemberSerializer(serializers.Serializer):
-    member_id = serializers.IntegerField()
+    member_student_id = serializers.IntegerField()
 
     class Meta:
-        fields = ('member_id',)
+        fields = ('member_student_id',)
 
 
 class ActivityRequestSerializer(serializers.ModelSerializer):
