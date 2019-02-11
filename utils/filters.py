@@ -18,3 +18,10 @@ class StatusFilterBackend(filters.BaseFilterBackend):
         if status:
             return queryset.filter(status=status)
         return queryset
+
+class TypeFilterBackend(filters.BaseFilterBackend):
+    def filter_queryset(self, request, queryset, view):
+        type = request.query_params.get('type', None)
+        if status:
+            return queryset.filter(type=type)
+        return queryset
