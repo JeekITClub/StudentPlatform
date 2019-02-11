@@ -8,7 +8,7 @@ class AccountStore {
     @observable identity = null;
     @observable user = {};
 
-    @observable authenticated = true;
+    @observable authenticated = false;
 
     @computed get is_student() {
         return this.identity === 'student';

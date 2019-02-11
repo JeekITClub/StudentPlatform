@@ -1,0 +1,10 @@
+.not-authorized-container {
+  display: flex;
+  height: 100vh;
+  .not-authorized-text {
+    width: 100%;
+    font-size: 2.2rem;
+    text-align: center;
+    align-self: center;
+  }
+}
