@@ -9,11 +9,12 @@ from django.contrib.auth import (
 
 from account.serializers import (
     LoginSerializer,
-    ChangePasswordSerializer
+    ChangePasswordSerializer,
+    IdentitySerializer
 )
 
 
-class AuthViewSet(viewsets.ViewSet):
+class AccountViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['POST'])
     def login(self, request):
         serializer = LoginSerializer(data=request.data)
@@ -46,3 +47,10 @@ class AuthViewSet(viewsets.ViewSet):
             request.user.save()
             return Response(data={'detail': success}, status=status.HTTP_202_ACCEPTED)
         return Response(data={'detail': error}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['GET'])
+    def identity(self, request):
+        if not request.user.is_authenticated:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        serializer = IdentitySerializer(request.user)
+        return Response(serializer.data)

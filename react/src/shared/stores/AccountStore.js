@@ -1,20 +1,36 @@
-import {observable, computed} from "mobx";
+import {observable, computed, action} from "mobx";
+
+import Provider from '../../utils/provider'
 
 class AccountStore {
+    @observable loading = false;
+
+    @observable identity = null;
     @observable user = {};
 
     @observable authenticated = true;
 
     @computed get is_student() {
-        return this.user.identity === 'student';
+        return this.identity === 'student';
     }
 
     @computed get is_society() {
-        return this.user.identity === 'society';
+        return this.identity === 'society';
     }
 
     @computed get is_society_bureau() {
-        return this.user.identity === 'society_bureau';
+        return this.identity === 'society_bureau';
+    }
+
+    @action fetch () {
+        Provider.get('/api/account/identity/')
+            .then((res) => {
+                this.authenticated = true;
+                this.identity = res.data['identity'];
+            })
+            .catch((e) => {
+                console.log(e)
+            })
     }
 }
 

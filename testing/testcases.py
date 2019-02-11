@@ -1,5 +1,7 @@
 from django.test import TestCase as DjangoTestCase
 from django.contrib.auth.models import User
+
+from society.constants import SocietyType
 from testing.client import Client
 
 from student.models import Student
@@ -34,7 +36,7 @@ class TestCase(DjangoTestCase):
             user,
             society_id,
             members,
-            society_type,
+            society_type=SocietyType.HUMANISTIC,
             name='jeek1',
             president_name='ncj',
             president_class=1,
