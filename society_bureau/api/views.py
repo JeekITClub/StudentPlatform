@@ -1,15 +1,15 @@
 from rest_framework import viewsets, response, status
 from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin, UpdateModelMixin, RetrieveModelMixin, DestroyModelMixin
-from rest_framework.generics import RetrieveUpdateAPIView
 
 from society.models import Society
-from society_manage.models import CreditReceivers
+# from society_manage.models import CreditReceivers
 from society_bureau.api.serializers import (
     SocietySerializer,
     SocietyMiniSerializer,
     SocietyCreditSerializer,
-    SocietyCreditReceiversSerializer
+    # CreditReceiversSerializer,
+    # CreditReceiversMiniSerializer
 )
 from utils.permissions import IsSocietyBureau
 
@@ -81,23 +81,23 @@ class CreditManageViewSet(
         )
 
 
-class CreditReceiversViewSet(
-    viewsets.GenericViewSet,
-    ListModelMixin,
-    RetrieveModelMixin
-):
-    permission_classes = (IsSocietyBureau,)
-    serializer_class = SocietyCreditReceiversSerializer
-
-    def get_queryset(self):
-        return CreditReceivers.objects.all()
-
-    def filter_queryset(self, queryset):
-        tmp_queryset = queryset
-        if 'name' in self.request.query_params:
-            tmp_queryset = tmp_queryset.filter(society__name__icontains=self.request.query_params['name'])
-        if 'year' in self.request.query_params:
-            tmp_queryset = tmp_queryset.filter(year=self.request.query_params['year'])
-        if 'semester' in self.request.query_params:
-            tmp_queryset = tmp_queryset.filter(semester=self.request.query_params['semester'])
-        return tmp_queryset
+# class CreditReceiversViewSet(
+#     viewsets.GenericViewSet,
+#     ListModelMixin,
+#     RetrieveModelMixin
+# ):
+#     permission_classes = (IsSocietyBureau,)
+#     serializer_class = CreditReceiversMiniSerializer
+#
+#     def get_queryset(self):
+#         return CreditReceivers.objects.all()
+#
+#     def filter_queryset(self, queryset):
+#         tmp_queryset = queryset
+#         if 'name' in self.request.query_params:
+#             tmp_queryset = tmp_queryset.filter(society__name__icontains=self.request.query_params['name'])
+#         if 'year' in self.request.query_params:
+#             tmp_queryset = tmp_queryset.filter(year=self.request.query_params['year'])
+#         if 'semester' in self.request.query_params:
+#             tmp_queryset = tmp_queryset.filter(semester=self.request.query_params['semester'])
+#         return tmp_queryset
