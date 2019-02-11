@@ -19,9 +19,9 @@ class MemberList extends React.Component {
             })
     }
 
-    handleKickMember = (student_id) => {
+    handleKickMember = (member_id) => {
         Provider.post('/api/society_manage/member/kick', {
-            member_student_id: student_id
+            member_id: member_id
         })
             .then((res) => {
                 console.log(res.status)
@@ -55,7 +55,7 @@ class MemberList extends React.Component {
             {
                 title: '操作',
                 key: 'operation',
-                dataIndex: 'student_id',
+                dataIndex: 'id',
                 render: (text) => {
                     return (<Button onClick={() => this.handleKickMember(text)}>踢出成员</Button>)
                 }
