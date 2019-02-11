@@ -1,4 +1,5 @@
-from rest_framework import viewsets, mixins, status
+from rest_framework import viewsets, status
+from rest_framework.generics import RetrieveAPIView, ListAPIView
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -14,17 +15,15 @@ from utils.permissions import (
     QuitSociety,
     SingleJoinSocietyRequestCheck
 )
+from utils.filters import (
+    NameFilterBackend
+)
 
 
-class SocietyViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
+class SocietyViewSet(viewsets.GenericViewSet, RetrieveAPIView, ListAPIView):
     queryset = Society.objects.filter(confirmed=True)
     serializer_class = SocietySerializer
-
-    def filter_queryset(self, queryset):
-        # there is a better and more elegant way to implement it
-        if 'name' in self.request.query_params:
-            return queryset.filter(name__contains=self.request.query_params['name'])
-        return queryset
+    filter_backends = (NameFilterBackend,)
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
