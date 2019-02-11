@@ -29,13 +29,3 @@ class JoinSocietyRequestSerializer(serializers.ModelSerializer):
             society=Society.objects.get(id=validated_data['society_id']),
             member=Student.objects.get(id=validated_data['member_id'])
         )
-
-
-class SocietyMiniField(serializers.RelatedField):
-    queryset = Society.objects.all()
-
-    def to_representation(self, value):
-        return {
-            'id': value.id,
-            'info': '%d %s' % (value.society_id, value.name)
-        }
