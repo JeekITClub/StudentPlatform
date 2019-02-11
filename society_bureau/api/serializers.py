@@ -2,9 +2,9 @@ from rest_framework import serializers
 
 from society.models import Society
 from society_bureau.models import SiteSettings
-# from society_manage.models import CreditReceivers
-# from student.api.serializers import StudentMiniField
-# from society.api.serializers import SocietyMiniField
+from society_manage.models import CreditReceivers
+
+from student.api.serializers import StudentMiniSerializer
 
 
 class SocietySerializer(serializers.ModelSerializer):
@@ -17,6 +17,7 @@ class SocietyMiniSerializer(serializers.ModelSerializer):
     class Meta:
         model = Society
         fields = (
+            'id',
             'society_id',
             'name',
             'type',
@@ -58,19 +59,19 @@ class SocietyCreditSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Credit value is incorrect.")
         return data
 
-#
-# class CreditReceiversMiniSerializer(serializers.ModelSerializer):
-#     society = SocietyMiniField()
-#
-#     class Meta:
-#         model = CreditReceivers
-#         fields = ('society', 'year', 'semester')
-#
-#
-# class CreditReceiversSerializer(serializers.ModelSerializer):
-#     receivers = StudentMiniField(many=True)
-#     society = SocietyMiniField()
-#
-#     class Meta:
-#         model = CreditReceivers
-#         fields = '__all__'
+
+class CreditReceiversMiniSerializer(serializers.ModelSerializer):
+    society = SocietyMiniSerializer(read_only=True)
+
+    class Meta:
+        model = CreditReceivers
+        fields = ('id', 'society', 'year', 'semester')
+
+
+class CreditReceiversSerializer(serializers.ModelSerializer):
+    receivers = StudentMiniSerializer(many=True, read_only=True)
+    society = SocietyMiniSerializer(read_only=True)
+
+    class Meta:
+        model = CreditReceivers
+        fields = '__all__'
