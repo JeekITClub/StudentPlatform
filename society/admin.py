@@ -5,7 +5,7 @@ from society.models import Society, JoinSocietyRequest, ActivityRequest, Society
 # Register your models here.
 
 class SocietyAdmin(admin.ModelAdmin):
-    list_display = ('society_id', 'name', 'confirmed', 'recruit')
+    list_display = ('society_id', 'name', 'status', 'recruit')
 
 
 class JoinSocietyRequestAdmin(admin.ModelAdmin):

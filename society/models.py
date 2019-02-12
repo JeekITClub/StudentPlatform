@@ -4,9 +4,14 @@ from student.models import Student
 from society.constants import (
     member_confirm_status,
     society_type,
-    activity_confirm_status
+    activity_confirm_status,
+    society_status
 )
-from society.constants import JoinSocietyRequestStatus, ActivityRequestStatus
+from society.constants import (
+    JoinSocietyRequestStatus,
+    ActivityRequestStatus,
+    SocietyStatus
+)
 from student.constants import (
     grade_choices,
     class_choices,
@@ -32,7 +37,7 @@ class Society(models.Model):
     recruit = models.BooleanField(default=False)
     email = models.EmailField(blank=True)
     type = models.PositiveSmallIntegerField(choices=society_type)
-    confirmed = models.BooleanField(default=False)
+    status = models.PositiveSmallIntegerField(choices=society_status, default=SocietyStatus.WAITING)
     recruit_qq_group = models.CharField(max_length=32, blank=True)
     established_time = models.DateTimeField(blank=True, null=True)
     password_changed = models.BooleanField(default=False)
