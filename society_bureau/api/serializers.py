@@ -27,6 +27,12 @@ class SocietyMiniSerializer(serializers.ModelSerializer):
         )
 
 
+class ConfirmSocietySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Society
+        fields = ('id', 'society_id')
+
+
 class SettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = SiteSettings

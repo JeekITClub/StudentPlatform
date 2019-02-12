@@ -34,8 +34,8 @@ class TestCase(DjangoTestCase):
     def createSociety(
             self,
             user,
-            society_id,
             members,
+            society_id=None,
             status=SocietyStatus.WAITING,
             society_type=SocietyType.HUMANISTIC,
             name='jeek1',

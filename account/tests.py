@@ -81,7 +81,7 @@ class AccountTests(TestCase):
         student_user = self.createUser('smsnb')
         self.createStudent(student_user)
         society_user = self.createUser('tjwnb')
-        self.createSociety(society_user, 101, None)
+        self.createSociety(user=society_user, society_id=101, members=None)
         sb_user = self.createUser('ncjnb')
         self.createSocietyBureau(sb_user)
 
