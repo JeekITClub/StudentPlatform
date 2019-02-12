@@ -3,7 +3,7 @@ from testing.testcases import TestCase
 
 from society.constants import SocietyType
 from society.models import ActivityRequest
-# from society_manage.models import CreditReceivers
+from society_manage.models import CreditReceivers
 
 
 class DashboardTests(TestCase):
@@ -176,67 +176,87 @@ class CreditManageTests(TestCase):
         self.assertEqual(self.society1.credit, 10)
         self.assertEqual(self.society2.credit, 10)
 
-#
-# class CreditReceiversTests(TestCase):
-#     def setUp(self):
-#         self.user1 = self.createUser('society1')
-#         self.user2 = self.createUser('society2')
-#         self.user3 = self.createUser('society_bureau')
-#         self.society1 = self.createSociety(
-#             user=self.user1,
-#             society_id=401,
-#             name='jeek',
-#             members=None,
-#             society_type=SocietyType.HUMANISTIC
-#         )
-#         self.society2 = self.createSociety(
-#             user=self.user2,
-#             society_id=301,
-#             name='jtv',
-#             members=None,
-#             society_type=SocietyType.SCIENTIFIC
-#         )
-#         self.society_bureau = self.createSocietyBureau(user=self.user3, real_name='xxx')
-#         self.credit_receivers1 = CreditReceivers.objects.create(
-#             society=self.society1,
-#             year=2018,
-#             semester=2
-#         )
-#         self.credit_receivers2 = CreditReceivers.objects.create(
-#             society=self.society2,
-#             year=2018,
-#             semester=1
-#         )
-#         self.credit_receivers3 = CreditReceivers.objects.create(
-#             society=self.society2,
-#             year=2017,
-#             semester=1
-#         )
-#
-#     def test_list_credit_receivers(self):
-#         url = '/api/manage/credit_receiver/'
-#
-#         client = APIClient(enforce_csrf_checks=True)
-#         response = client.get(url, decode=True)
-#         self.assertEqual(response.status_code, 403)
-#
-#         client.force_authenticate(self.user3)
-#         response = client.get(url, decode=True)
-#         self.assertEqual(response.status_code, 200)
-#         self.assertEqual(len(response.data), 3)
-#
-#         response = client.get(url, data={'name': 'jee'}, decode=True)
-#         self.assertEqual(response.status_code, 200)
-#         self.assertEqual(response.data[0]['society']['id'], 1)
-#         data = {
-#             'year': 2018,
-#             'semester': 1
-#         }
-#         response = client.get(url, data=data, decode=True)
-#         self.assertEqual(response.status_code, 200)
-#         self.assertEqual(len(response.data), 1)
-#         self.assertEqual(response.data[0]['society']['id'], 2)
-#
-#     def test_retrieve_credit_receivers(self):
-#         pass
-#         # TODO: leave it to next pr
+
+class CreditReceiversTests(TestCase):
+    def setUp(self):
+        self.user1 = self.createUser('society1')
+        self.user2 = self.createUser('society2')
+        self.user3 = self.createUser('society_bureau')
+        self.user4 = self.createUser('student')
+        self.society1 = self.createSociety(
+            user=self.user1,
+            society_id=401,
+            name='jeek',
+            members=None,
+            society_type=SocietyType.HUMANISTIC
+        )
+        self.society2 = self.createSociety(
+            user=self.user2,
+            society_id=301,
+            name='jtv',
+            members=None,
+            society_type=SocietyType.SCIENTIFIC
+        )
+        self.society_bureau = self.createSocietyBureau(user=self.user3, real_name='xxx')
+        self.credit_receivers1 = CreditReceivers.objects.create(
+            society=self.society1,
+            year=2018,
+            semester=2
+        )
+        self.credit_receivers2 = CreditReceivers.objects.create(
+            society=self.society2,
+            year=2018,
+            semester=1
+        )
+        self.credit_receivers3 = CreditReceivers.objects.create(
+            society=self.society2,
+            year=2017,
+            semester=1
+        )
+        self.student = self.createStudent(user=self.user4)
+        self.credit_receivers1.receivers.add(self.student)
+        self.credit_receivers2.receivers.add(self.student)
+
+    def test_list_credit_receivers(self):
+        url = '/api/manage/credit_receiver/'
+
+        client = APIClient(enforce_csrf_checks=True)
+        response = client.get(url, decode=True)
+        self.assertEqual(response.status_code, 403)
+
+        client.force_authenticate(self.user3)
+        response = client.get(url, decode=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 3)
+
+        response = client.get(url, data={'name': 'jtv'}, decode=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 2)
+        self.assertEqual(response.data[0]['society']['society_id'], 301)
+        self.assertEqual(response.data[1]['society']['society_id'], 301)
+        self.assertEqual(response.data[0]['count'], 1)
+        self.assertEqual(response.data[1]['count'], 0)
+
+        data = {
+            'year': 2018,
+            'semester': 1
+        }
+        response = client.get(url, data=data, decode=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['society']['society_id'], 301)
+
+    def test_retrieve_credit_receivers(self):
+        url = '/api/manage/credit_receiver/{}/'.format(self.credit_receivers1.pk)
+
+        client = APIClient(enforce_csrf_checks=True)
+        response = client.get(url, decode=True)
+        self.assertEqual(response.status_code, 403)
+
+        client.force_authenticate(self.user3)
+        response = client.get(url, decode=True)
+        self.assertEqual(response.data['society']['society_id'], self.society1.society_id)
+        self.assertEqual(response.data['year'], self.credit_receivers1.year)
+        self.assertEqual(response.data['semester'], self.credit_receivers1.semester)
+        self.assertEqual(len(response.data['receivers']), 1)
+        self.assertEqual(response.data['receivers'][0]['name'], 'ncjjj')

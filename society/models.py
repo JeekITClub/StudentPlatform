@@ -60,7 +60,7 @@ class JoinSocietyRequest(models.Model):
 
 
 class ActivityRequest(models.Model):
-    society = models.ForeignKey(Society, on_delete=models.DO_NOTHING)
+    society = models.ForeignKey(Society, on_delete=models.DO_NOTHING, related_name='activity_requests')
     title = models.CharField(max_length=32)
     content = models.TextField(null=True, blank=True)
     place = models.CharField(max_length=32)

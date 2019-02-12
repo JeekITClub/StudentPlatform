@@ -24,13 +24,3 @@ class StudentUpdateProfileSerializer(serializers.ModelSerializer):
 class StudentChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField()
     new_password = serializers.CharField()
-
-
-class StudentMiniField(serializers.RelatedField):
-    queryset = Student.objects.all()
-
-    def to_representation(self, value):
-        return {
-            'id': value.id,
-            'info': '%s %s' % (value.user.username, value.name)
-        }
