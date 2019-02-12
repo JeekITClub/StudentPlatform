@@ -17,8 +17,10 @@ from utils.filters import (
     TypeFilterBackend,
     CreditNameFilterBackend,
     YearFilterBackend,
-    SemesterFilterBackend
+    SemesterFilterBackend,
+    StatusFilterBackend
 )
+from society.constants import SocietyStatus
 
 
 class DashboardViewSet(viewsets.GenericViewSet):
@@ -39,7 +41,7 @@ class SocietyManageViewSet(
     DestroyModelMixin
 ):
     permission_classes = (IsSocietyBureau,)
-    filter_backends = [NameFilterBackend, TypeFilterBackend]
+    filter_backends = [NameFilterBackend, TypeFilterBackend, StatusFilterBackend]
 
     def get_queryset(self):
         return Society.objects.all()
@@ -60,7 +62,7 @@ class CreditManageViewSet(
     filter_backends = []
 
     def get_queryset(self):
-        return Society.objects.all()
+        return Society.objects.filter(status=SocietyStatus.ACTIVE)
 
     def filter_queryset(self, queryset):
         tmp_queryset = queryset

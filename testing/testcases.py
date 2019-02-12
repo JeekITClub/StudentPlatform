@@ -1,7 +1,7 @@
 from django.test import TestCase as DjangoTestCase
 from django.contrib.auth.models import User
 
-from society.constants import SocietyType
+from society.constants import SocietyType, SocietyStatus
 from testing.client import Client
 
 from student.models import Student
@@ -36,6 +36,7 @@ class TestCase(DjangoTestCase):
             user,
             society_id,
             members,
+            status=SocietyStatus.WAITING,
             society_type=SocietyType.HUMANISTIC,
             name='jeek1',
             president_name='ncj',
@@ -49,7 +50,8 @@ class TestCase(DjangoTestCase):
             president_class=president_class,
             president_grade=president_grade,
             type=society_type,
-            name=name
+            name=name,
+            status=status
         )
         if members is not None:
             society.members.set(members)

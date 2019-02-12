@@ -18,10 +18,11 @@ from utils.permissions import (
 from utils.filters import (
     NameFilterBackend
 )
+from society.constants import SocietyStatus
 
 
 class SocietyViewSet(viewsets.GenericViewSet, RetrieveAPIView, ListAPIView):
-    queryset = Society.objects.filter(confirmed=True)
+    queryset = Society.objects.filter(status=SocietyStatus.ACTIVE)
     serializer_class = SocietySerializer
     filter_backends = (NameFilterBackend,)
 

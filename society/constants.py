@@ -18,6 +18,12 @@ activity_confirm_status = (
     (2, '未通过')
 )
 
+society_status = (
+    (0, '审核中'),
+    (1, '活跃'),
+    (2, '归档')
+)
+
 
 class JoinSocietyRequestStatus:
     WAITING = 0
@@ -37,3 +43,9 @@ class ActivityRequestStatus:
     WAITING = 0
     ACCEPTED = 1
     DENIED = 2
+
+
+class SocietyStatus:
+    WAITING = 0
+    ACTIVE = 1
+    ARCHIVED = 2

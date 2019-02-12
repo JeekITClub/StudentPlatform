@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from testing.testcases import TestCase
 from student.models import Student
 from society.models import Society, JoinSocietyRequest
-from society.constants import JoinSocietyRequestStatus
+from society.constants import JoinSocietyRequestStatus, SocietyStatus
 from utils.permissions import (
     IsStudent,
     SingleJoinSocietyRequestCheck,
@@ -31,7 +31,7 @@ class SocietyTestCase(TestCase):
             society_id=101,
             user=user2,
             name='Jeek',
-            confirmed=True,
+            status=SocietyStatus.ACTIVE,
             recruit=True,
             president_grade=1,
             president_class=1,
@@ -42,7 +42,7 @@ class SocietyTestCase(TestCase):
             society_id=102,
             user=user3,
             name='Jeek2',
-            confirmed=True,
+            status=SocietyStatus.ACTIVE,
             recruit=True,
             president_grade=1,
             president_class=1,
@@ -68,7 +68,7 @@ class SocietyTestCase(TestCase):
             society_id=103,
             user=User.objects.create_user(username='test'),
             name='name',
-            confirmed=True,
+            status=SocietyStatus.ACTIVE,
             recruit=True,
             president_grade=1,
             president_class=1,
