@@ -5,10 +5,10 @@ import Provider from '../../utils/provider'
 class AccountStore {
     @observable loading = false;
 
-    @observable identity = null;
+    @observable identity = 'society';
     @observable user = {};
 
-    @observable authenticated = false;
+    @observable authenticated = true;
 
     @computed get is_student() {
         return this.identity === 'student';

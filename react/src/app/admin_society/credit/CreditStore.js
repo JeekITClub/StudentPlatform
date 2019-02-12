@@ -1,5 +1,7 @@
 import {observable, computed, action} from "mobx";
 
+import Provider from '../../../utils/provider'
+
 class CreditStore {
     @observable credit = 0;
 
@@ -16,6 +18,24 @@ class CreditStore {
 
     @action updateChosenIds = (chosenIds) => {
         this.chosenIds = chosenIds
+    };
+
+    @action fetchCredit = () => {
+
+    };
+
+    @action fetchMembers = () => {
+
+    };
+
+    @action submit = () => {
+        Provider.post('/api/society_manage/credit/receiver/')
+            .then((res) => {
+                console.log(res)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
 }
 
