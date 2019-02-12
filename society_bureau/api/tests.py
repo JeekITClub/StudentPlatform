@@ -18,7 +18,6 @@ class SocietyManageTests(TestCase):
         self.user4 = self.createUser('society_bureau')
         self.society1 = self.createSociety(
             user=self.user1,
-            society_id=401,
             name='jeek',
             members=None,
             society_type=SocietyType.HUMANISTIC
@@ -28,7 +27,8 @@ class SocietyManageTests(TestCase):
             society_id=301,
             name='jeek2',
             members=None,
-            society_type=SocietyType.SCIENTIFIC
+            society_type=SocietyType.SCIENTIFIC,
+            status=SocietyStatus.ARCHIVED
         )
         self.society3 = self.createSociety(
             user=self.user3,
@@ -41,7 +41,7 @@ class SocietyManageTests(TestCase):
         self.society_bureau = self.createSocietyBureau(user=self.user4, real_name='xxx')
 
     def test_retrieve_society(self):
-        url = '/api/manage/society/{}/'.format(self.society1.pk)
+        url = '/api/manage/society/{}/'.format(self.society2.pk)
 
         client = APIClient(enforce_csrf_checks=True)
         response = client.get(url, decode=True)
@@ -50,9 +50,9 @@ class SocietyManageTests(TestCase):
         client.force_authenticate(self.user4)
         response = client.get(url, decode=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['society_id'], 401)
-        self.assertEqual(response.data['name'], 'jeek')
-        self.assertEqual(response.data['type'], SocietyType.HUMANISTIC)
+        self.assertEqual(response.data['society_id'], 301)
+        self.assertEqual(response.data['name'], 'jeek2')
+        self.assertEqual(response.data['type'], SocietyType.SCIENTIFIC)
 
     def test_list_societies(self):
         url = '/api/manage/society/'
@@ -89,6 +89,47 @@ class SocietyManageTests(TestCase):
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['name'], 'jtv')
 
+    def test_confirm_society(self):
+        url = '/api/manage/society/{}/confirm/'.format(self.society3.pk)
+        data = {
+            'id': self.society3.pk,
+            'society_id': 401
+        }
+        client = APIClient(enforce_csrf_checks=True)
+        response = client.post(url, data=data, decode=True)
+        self.assertEqual(response.status_code, 403)
+
+        client.force_authenticate(self.user4)
+        response = client.post(url, data=data, decode=True)
+        self.assertEqual(response.status_code, 403)
+
+        url = '/api/manage/society/{}/confirm/'.format(self.society1.pk)
+        data = {
+            'id': self.society1.pk,
+            'society_id': 301
+        }
+        response = client.post(url, data=data, decode=True)
+        self.assertEqual(response.status_code, 400)
+
+        data = {
+            'id': self.society1.pk,
+            'society_id': 401
+        }
+        response = client.post(url, data=data, decode=True)
+        self.assertEqual(response.status_code, 202)
+        self.society1.refresh_from_db()
+        self.assertEqual(self.society1.society_id, 401)
+        self.assertEqual(self.society1.status, SocietyStatus.ACTIVE)
+
+    def test_archive_society(self):
+        url = '/api/manage/society/{}/archive/'.format(self.society1.pk)
+
+        client = APIClient(enforce_csrf_checks=True)
+        response = client.post(url, decode=True)
+        self.assertEqual(response.status_code, 403)
+
+        url = '/api/manage/society/{}/archive/'.format(self.society3.pk)
+
     def test_destroy_society(self):
         url = '/api/manage/society/{}/'.format(self.society1.pk)
 
@@ -100,11 +141,10 @@ class SocietyManageTests(TestCase):
         response = client.delete(url, decode=True)
         self.assertEqual(response.status_code, 403)
 
-        self.society1.status = SocietyStatus.ARCHIVED
-        self.society1.save()
+        url = '/api/manage/society/{}/'.format(self.society2.pk)
         response = client.delete(url, decode=True)
         self.assertEqual(response.status_code, 204)
-        self.assertIsNone(Society.objects.filter(pk=self.society1.pk).first())
+        self.assertIsNone(Society.objects.filter(pk=self.society2.pk).first())
 
 
 class CreditManageTests(TestCase):

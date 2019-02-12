@@ -81,7 +81,7 @@ class SocietyManageViewSet(
             return Response(status=status.HTTP_202_ACCEPTED)
         return Response(
             status=status.HTTP_400_BAD_REQUEST,
-            data={'detail': '表单填写错误'}
+            data={'detail': '社团ID重复'}
         )
 
     @action(detail=True, methods=['post'])
