@@ -14,5 +14,6 @@ class CreditReceivers(models.Model):
     def __str__(self):
         return str(self.society)
 
+    @property
     def count(self):
         return self.receivers.count()
