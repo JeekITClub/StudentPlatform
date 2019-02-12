@@ -1,7 +1,7 @@
 from rest_framework import permissions
 
-from society.models import JoinSocietyRequest, ActivityRequest
-from society.constants import JoinSocietyRequestStatus, ActivityRequestStatus
+from society.models import JoinSocietyRequest
+from society.constants import JoinSocietyRequestStatus, ActivityRequestStatus, SocietyStatus
 
 
 class IsStudent(permissions.BasePermission):
@@ -72,3 +72,24 @@ class SocietyActivityEditable(permissions.BasePermission):
         if request.method != 'PATCH' and request.method != 'PUT':
             return True
         return obj.status == ActivityRequestStatus.WAITING
+
+
+class SocietyIsWaiting(permissions.BasePermission):
+    message = 'Only Waiting Society Allowed'
+
+    def has_object_permission(self, request, view, obj):
+        return obj.status == SocietyStatus.WAITING
+
+
+class SocietyIsActive(permissions.BasePermission):
+    message = 'Only Active Society Allowed'
+
+    def has_object_permission(self, request, view, obj):
+        return obj.status == SocietyStatus.ACTIVE
+
+
+class SocietyIsArchived(permissions.BasePermission):
+    message = 'Only Archived Society Allowed'
+
+    def has_object_permission(self, request, view, obj):
+        return obj.status == SocietyStatus.ARCHIVED

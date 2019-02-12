@@ -2,8 +2,8 @@ from rest_framework.test import APIClient
 from testing.testcases import TestCase
 
 from society.constants import SocietyType, SocietyStatus
-from society.models import ActivityRequest
 from society_manage.models import CreditReceivers
+from society.models import Society
 
 
 class DashboardTests(TestCase):
@@ -98,8 +98,13 @@ class SocietyManageTests(TestCase):
 
         client.force_authenticate(self.user4)
         response = client.delete(url, decode=True)
+        self.assertEqual(response.status_code, 403)
+
+        self.society1.status = SocietyStatus.ARCHIVED
+        self.society1.save()
+        response = client.delete(url, decode=True)
         self.assertEqual(response.status_code, 204)
-        self.assertIsNone(ActivityRequest.objects.filter(pk=self.society1.pk).first())
+        self.assertIsNone(Society.objects.filter(pk=self.society1.pk).first())
 
 
 class CreditManageTests(TestCase):

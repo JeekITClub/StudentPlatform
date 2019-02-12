@@ -1,4 +1,5 @@
-from rest_framework import viewsets, response, status
+from rest_framework import viewsets, status
+from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin, UpdateModelMixin, RetrieveModelMixin, DestroyModelMixin
 
@@ -7,11 +8,17 @@ from society_manage.models import CreditReceivers
 from society_bureau.api.serializers import (
     SocietySerializer,
     SocietyMiniSerializer,
+    ConfirmSocietySerializer,
     SocietyCreditSerializer,
     CreditReceiversSerializer,
     CreditReceiversMiniSerializer
 )
-from utils.permissions import IsSocietyBureau
+from utils.permissions import (
+    IsSocietyBureau,
+    SocietyIsWaiting,
+    SocietyIsActive,
+    SocietyIsArchived
+)
 from utils.filters import (
     NameFilterBackend,
     TypeFilterBackend,
@@ -40,7 +47,6 @@ class SocietyManageViewSet(
     RetrieveModelMixin,
     DestroyModelMixin
 ):
-    permission_classes = (IsSocietyBureau,)
     filter_backends = [NameFilterBackend, TypeFilterBackend, StatusFilterBackend]
 
     def get_queryset(self):
@@ -49,7 +55,38 @@ class SocietyManageViewSet(
     def get_serializer_class(self):
         if self.action == 'list':
             return SocietyMiniSerializer
+        elif self.action == 'confirm':
+            return ConfirmSocietySerializer
         return SocietySerializer
+
+    def get_permissions(self):
+        if self.action == 'confirm':
+            permission_classes = [IsSocietyBureau, SocietyIsWaiting]
+        elif self.action == 'archive':
+            permission_classes = [IsSocietyBureau, SocietyIsActive]
+        elif self.action == 'destroy':
+            permission_classes = [IsSocietyBureau, SocietyIsArchived]
+        else:
+            permission_classes = [IsSocietyBureau]
+        return [permission() for permission in permission_classes]
+
+    @action(detail=True, methods=['post'])
+    def confirm(self, request, pk=None):
+        society = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            society.society_id = serializer.data['society_id']
+            society.status = SocietyStatus.ACTIVE
+            society.save()
+            return Response(status=status.HTTP_202_ACCEPTED)
+        return Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data={'detail': '表单填写错误'}
+        )
+
+    @action(detail=True, methods=['post'])
+    def archive(self, request, pk=None):
+        pass
 
 
 class CreditManageViewSet(
@@ -77,8 +114,8 @@ class CreditManageViewSet(
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             self.get_queryset().update(credit=serializer.data.get('credit'))
-            return response.Response(status=status.HTTP_202_ACCEPTED)
-        return response.Response(
+            return Response(status=status.HTTP_202_ACCEPTED)
+        return Response(
             status=status.HTTP_400_BAD_REQUEST,
             data={'detail': '表单填写错误'}
         )
