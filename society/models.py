@@ -52,6 +52,22 @@ class Society(models.Model):
     def __str__(self):
         return str(self.society_id) + ' ' + self.name
 
+    def auto_generate_id(self):
+        society_id = self.type * 100 + 1
+        societies = Society.objects.filter(type=self.type,
+                                           status__in=[SocietyStatus.ACTIVE, SocietyStatus.ARCHIVED]).order_by(
+            'society_id')
+        for society in societies:
+            if society.society_id != society_id:
+                return society_id
+            society_id += 1
+        return society_id
+
+    def check_id(self, society_id):
+        if society_id <= self.type * 100 or society_id >= (self.type + 1) * 100:
+            return False
+        return True
+
 
 class JoinSocietyRequest(models.Model):
     society = models.ForeignKey(Society, on_delete=models.DO_NOTHING)

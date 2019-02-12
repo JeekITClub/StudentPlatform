@@ -75,18 +75,36 @@ class SocietyManageViewSet(
         society = self.get_object()
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            society.society_id = serializer.data['society_id']
-            society.status = SocietyStatus.ACTIVE
-            society.save()
-            return Response(status=status.HTTP_202_ACCEPTED)
+            # leave the society_id empty in frontend
+            # to generate id automatically
+            if serializer.data['society_id'] is None:
+                society_id = society.auto_generate_id()
+            else:
+                society_id = serializer.data['society_id']
+
+            # check whether the id given is legal
+            if society.check_id(society_id):
+                society.society_id = society_id
+                society.status = SocietyStatus.ACTIVE
+                society.save()
+                return Response(status=status.HTTP_202_ACCEPTED)
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={'detail': '社团ID错误'}
+            )
         return Response(
             status=status.HTTP_400_BAD_REQUEST,
-            data={'detail': '社团ID重复'}
+            data={'detail': '表单填写错误'}
         )
 
     @action(detail=True, methods=['post'])
     def archive(self, request, pk=None):
-        pass
+        society = self.get_object()
+        society.status = SocietyStatus.ARCHIVED
+        society.user.is_active = False
+        society.user.save()
+        society.save()
+        return Response(status=status.HTTP_202_ACCEPTED)
 
 
 class CreditManageViewSet(

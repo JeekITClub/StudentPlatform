@@ -113,7 +113,7 @@ class SocietyManageTests(TestCase):
 
         data = {
             'id': self.society1.pk,
-            'society_id': 401
+            'society_id': ''
         }
         response = client.post(url, data=data, decode=True)
         self.assertEqual(response.status_code, 202)
@@ -128,15 +128,27 @@ class SocietyManageTests(TestCase):
         response = client.post(url, decode=True)
         self.assertEqual(response.status_code, 403)
 
+        # test with a waiting society
+        url = '/api/manage/society/{}/archive/'.format(self.society1.pk)
+        client.force_authenticate(self.user4)
+        response = client.post(url, decode=True)
+        self.assertEqual(response.status_code, 403)
+
         url = '/api/manage/society/{}/archive/'.format(self.society3.pk)
+        response = client.post(url, decode=True)
+        self.society3.refresh_from_db()
+        self.assertEqual(response.status_code, 202)
+        self.assertEqual(self.society3.status, SocietyStatus.ARCHIVED)
+        self.assertEqual(self.society3.user.is_active, False)
 
     def test_destroy_society(self):
-        url = '/api/manage/society/{}/'.format(self.society1.pk)
+        url = '/api/manage/society/{}/'.format(self.society3.pk)
 
         client = APIClient(enforce_csrf_checks=True)
         response = client.delete(url, decode=True)
         self.assertEqual(response.status_code, 403)
 
+        # test with an active society
         client.force_authenticate(self.user4)
         response = client.delete(url, decode=True)
         self.assertEqual(response.status_code, 403)
