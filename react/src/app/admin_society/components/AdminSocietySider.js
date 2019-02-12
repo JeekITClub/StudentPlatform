@@ -9,43 +9,35 @@ import PropTypes from "prop-types";
 class AdminSocietySider extends React.Component {
     handleClick = (e) => {
         console.log('click ', e);
-        this.props.history.push(e.key);
+        this.props.history.push(`/admin_society/${e.key}/`);
     };
 
     render() {
         return (
             <Menu theme="light" mode="inline" onClick={this.handleClick} className="admin-society-sider-menu">
-                <Menu.Item key="1">
-                    <Icon type="user"/>
-                    <span className="nav-text">nav 1</span>
+                <Menu.Item key="dashboard">
+                    <Icon type="dashboard"/>
+                    <span className="nav-text">仪表盘</span>
                 </Menu.Item>
-                <Menu.Item key="2">
-                    <Icon type="video-camera"/>
-                    <span className="nav-text">nav 2</span>
+                <Menu.Item key="profile">
+                    <Icon type="project"/>
+                    <span className="nav-text">社团资料</span>
                 </Menu.Item>
-                <Menu.Item key="3">
-                    <Icon type="upload"/>
-                    <span className="nav-text">nav 3</span>
+                <Menu.Item key="page">
+                    <Icon type="layout"/>
+                    <span className="nav-text">社团首页自定义</span>
                 </Menu.Item>
-                <Menu.Item key="4">
-                    <Icon type="bar-chart"/>
-                    <span className="nav-text">nav 4</span>
-                </Menu.Item>
-                <Menu.Item key="5">
-                    <Icon type="cloud-o"/>
-                    <span className="nav-text">nav 5</span>
-                </Menu.Item>
-                <Menu.Item key="6">
-                    <Icon type="appstore-o"/>
-                    <span className="nav-text">nav 6</span>
-                </Menu.Item>
-                <Menu.Item key="7">
+                <Menu.Item key="members">
                     <Icon type="team"/>
-                    <span className="nav-text">nav 7</span>
+                    <span className="nav-text">社团成员</span>
                 </Menu.Item>
-                <Menu.Item key="8">
-                    <Icon type="shop"/>
-                    <span className="nav-text">nav 8</span>
+                <Menu.Item key="join_request">
+                    <Icon type="user-add"/>
+                    <span className="nav-text">加入请求</span>
+                </Menu.Item>
+                <Menu.Item key="activity">
+                    <Icon type="form"/>
+                    <span className="nav-text">活动</span>
                 </Menu.Item>
             </Menu>
         )

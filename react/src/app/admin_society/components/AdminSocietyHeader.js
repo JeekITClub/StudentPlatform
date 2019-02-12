@@ -7,8 +7,11 @@ import '../styles/header.scss'
 const {SubMenu, Item, Divider} = Menu;
 const breadcrumbNameMap = {
     '/admin_society': '主页',
-    '/admin_society/profile': '个人信息',
-    '/admin_society/member': '社员',
+    '/admin_society/profile': '社团信息',
+    '/admin_society/members': '社员',
+    '/admin_society/page': '社团主页',
+    '/admin_society/activity': '活动',
+    '/admin_society/join_request': '加入请求'
 };
 
 class AdminSocietyHeader extends React.Component {
