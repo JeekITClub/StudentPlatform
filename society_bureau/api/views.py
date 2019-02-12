@@ -17,7 +17,8 @@ from utils.filters import (
     TypeFilterBackend,
     CreditNameFilterBackend,
     YearFilterBackend,
-    SemesterFilterBackend
+    SemesterFilterBackend,
+    StatusFilterBackend
 )
 from society.constants import SocietyStatus
 
@@ -40,7 +41,7 @@ class SocietyManageViewSet(
     DestroyModelMixin
 ):
     permission_classes = (IsSocietyBureau,)
-    filter_backends = [NameFilterBackend, TypeFilterBackend]
+    filter_backends = [NameFilterBackend, TypeFilterBackend, StatusFilterBackend]
 
     def get_queryset(self):
         return Society.objects.all()

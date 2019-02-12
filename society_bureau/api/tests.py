@@ -1,7 +1,7 @@
 from rest_framework.test import APIClient
 from testing.testcases import TestCase
 
-from society.constants import SocietyType
+from society.constants import SocietyType, SocietyStatus
 from society.models import ActivityRequest
 from society_manage.models import CreditReceivers
 
@@ -35,7 +35,8 @@ class SocietyManageTests(TestCase):
             society_id=501,
             name='jtv',
             members=None,
-            society_type=SocietyType.LEADERSHIP
+            society_type=SocietyType.LEADERSHIP,
+            status=SocietyStatus.ACTIVE
         )
         self.society_bureau = self.createSocietyBureau(user=self.user4, real_name='xxx')
 
@@ -81,13 +82,12 @@ class SocietyManageTests(TestCase):
         self.assertEqual(response.data[0]['name'], 'jtv')
 
         data = {
-            'name': 'jee',
-            'type': SocietyType.SCIENTIFIC
+            'status': SocietyStatus.ACTIVE
         }
         response = client.get(url, data=data, decode=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['name'], 'jeek2')
+        self.assertEqual(response.data[0]['name'], 'jtv')
 
     def test_destroy_society(self):
         url = '/api/manage/society/{}/'.format(self.society1.pk)
@@ -112,14 +112,16 @@ class CreditManageTests(TestCase):
             society_id=301,
             name='jeek',
             members=None,
-            society_type=SocietyType.SCIENTIFIC
+            society_type=SocietyType.SCIENTIFIC,
+            status=SocietyStatus.ACTIVE
         )
         self.society2 = self.createSociety(
             user=self.user2,
             society_id=401,
             name='jtv',
             members=None,
-            society_type=SocietyType.HUMANISTIC
+            society_type=SocietyType.HUMANISTIC,
+            status=SocietyStatus.ACTIVE
         )
         self.society_bureau = self.createSocietyBureau(user=self.user3, real_name='xxx')
 
