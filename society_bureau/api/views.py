@@ -19,6 +19,7 @@ from utils.filters import (
     YearFilterBackend,
     SemesterFilterBackend
 )
+from society.constants import SocietyStatus
 
 
 class DashboardViewSet(viewsets.GenericViewSet):
@@ -60,7 +61,7 @@ class CreditManageViewSet(
     filter_backends = []
 
     def get_queryset(self):
-        return Society.objects.all()
+        return Society.objects.filter(status=SocietyStatus.ACTIVE)
 
     def filter_queryset(self, queryset):
         tmp_queryset = queryset
