@@ -65,7 +65,7 @@ class CreditReceiversMiniSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CreditReceivers
-        fields = ('id', 'society', 'year', 'semester')
+        fields = ('id', 'society', 'year', 'semester', 'count')
 
 
 class CreditReceiversSerializer(serializers.ModelSerializer):

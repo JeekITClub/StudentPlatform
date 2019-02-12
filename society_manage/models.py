@@ -13,3 +13,6 @@ class CreditReceivers(models.Model):
 
     def __str__(self):
         return str(self.society)
+
+    def count(self):
+        return self.receivers.count()

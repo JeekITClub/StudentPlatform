@@ -182,6 +182,7 @@ class CreditReceiversTests(TestCase):
         self.user1 = self.createUser('society1')
         self.user2 = self.createUser('society2')
         self.user3 = self.createUser('society_bureau')
+        self.user4 = self.createUser('student')
         self.society1 = self.createSociety(
             user=self.user1,
             society_id=401,
@@ -212,6 +213,9 @@ class CreditReceiversTests(TestCase):
             year=2017,
             semester=1
         )
+        self.student = self.createStudent(user=self.user4)
+        self.credit_receivers1.receivers.add(self.student)
+        self.credit_receivers2.receivers.add(self.student)
 
     def test_list_credit_receivers(self):
         url = '/api/manage/credit_receiver/'
@@ -230,6 +234,8 @@ class CreditReceiversTests(TestCase):
         self.assertEqual(len(response.data), 2)
         self.assertEqual(response.data[0]['society']['society_id'], 301)
         self.assertEqual(response.data[1]['society']['society_id'], 301)
+        self.assertEqual(response.data[0]['count'], 1)
+        self.assertEqual(response.data[1]['count'], 0)
 
         data = {
             'year': 2018,
@@ -252,3 +258,5 @@ class CreditReceiversTests(TestCase):
         self.assertEqual(response.data['society']['society_id'], self.society1.society_id)
         self.assertEqual(response.data['year'], self.credit_receivers1.year)
         self.assertEqual(response.data['semester'], self.credit_receivers1.semester)
+        self.assertEqual(len(response.data['receivers']), 1)
+        self.assertEqual(response.data['receivers'][0]['name'], 'ncjjj')
