@@ -7,7 +7,7 @@ import Credit from "./credit";
 export default function AdminSocietyRouter({match}) {
     return (
         <Switch>
-            <Route path={`${match.url}/member`} component={Member}/>
+            <Route path={`${match.url}/members`} component={Member}/>
             <Route path={`${match.url}/credit`} component={Credit}/>
         </Switch>
     )

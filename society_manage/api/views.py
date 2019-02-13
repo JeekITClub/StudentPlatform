@@ -3,6 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.generics import UpdateAPIView
 from rest_framework.mixins import ListModelMixin
 
+from utils.filters import StatusFilterBackend
 from utils.permissions import IsSociety, SocietyActivityEditable
 from society.models import Society, JoinSocietyRequest, ActivityRequest
 from society_manage.api.serializers import (
@@ -56,6 +57,7 @@ class JoinSocietyRequestViewSet(
 ):
     permission_classes = (IsSociety,)
     serializer_class = JoinSocietyRequestSerializer
+    filter_backends = [StatusFilterBackend, ]
 
     def get_serializer_class(self):
         if self.action == 'update':
@@ -64,11 +66,6 @@ class JoinSocietyRequestViewSet(
 
     def get_queryset(self):
         return JoinSocietyRequest.objects.filter(society__user=self.request.user)
-
-    def filter_queryset(self, queryset):
-        if 'status' in self.request.query_params:
-            return queryset.filter(status=self.request.query_params['status'])
-        return queryset
 
 
 class ActivityRequestViewSet(viewsets.ModelViewSet):
