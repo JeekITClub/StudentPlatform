@@ -13,6 +13,7 @@ from society_manage.api.serializers import (
     ActivityRequestMiniSerializer
 )
 from student.api.serializers import StudentMiniSerializer
+from utils.filters import StatusFilterBackend
 
 
 class SocietyMemberViewSet(viewsets.GenericViewSet, ListModelMixin):
@@ -56,6 +57,7 @@ class JoinSocietyRequestViewSet(
 ):
     permission_classes = (IsSociety,)
     serializer_class = JoinSocietyRequestSerializer
+    filter_backends = [StatusFilterBackend]
 
     def get_serializer_class(self):
         if self.action == 'update':
@@ -64,11 +66,6 @@ class JoinSocietyRequestViewSet(
 
     def get_queryset(self):
         return JoinSocietyRequest.objects.filter(society__user=self.request.user)
-
-    def filter_queryset(self, queryset):
-        if 'status' in self.request.query_params:
-            return queryset.filter(status=self.request.query_params['status'])
-        return queryset
 
 
 class ActivityRequestViewSet(viewsets.ModelViewSet):
