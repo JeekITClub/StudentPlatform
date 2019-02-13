@@ -13,7 +13,7 @@ class CreditReceivers(models.Model):
         unique_together = ("society", "year", "semester")
 
     def __str__(self):
-        return str(self.society)
+        return '{0}-{1}-{2}-{3}'.format(self.society.society_id, self.society.name, self.year, self.semester)
 
     @property
     def count(self):

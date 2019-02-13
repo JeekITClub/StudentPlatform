@@ -37,4 +37,4 @@ class SettingsService:
     def set(cls, key, value):
         settings_content = SettingsService.get_dict()
         settings_content[key] = value
-        SettingsService.update(settings_content)
+        SettingsService.update(json.dumps(settings_content))

@@ -1,18 +1,22 @@
 from rest_framework import viewsets, response, status
 from rest_framework.decorators import action
 from rest_framework.generics import UpdateAPIView
-from rest_framework.mixins import ListModelMixin
+from rest_framework.mixins import ListModelMixin, UpdateModelMixin
 
 from utils.permissions import IsSociety, SocietyActivityEditable
 from society.models import Society, JoinSocietyRequest, ActivityRequest
+from society_manage.models import CreditReceivers
 from society_manage.api.serializers import (
     JoinSocietyRequestSerializer,
     ReviewJoinSocietyRequestSerializer,
     KickMemberSerializer,
     ActivityRequestSerializer,
-    ActivityRequestMiniSerializer
+    ActivityRequestMiniSerializer,
+    CreditReceiversSerializer,
+    CreditReceiversUpdateSerializer
 )
 from student.api.serializers import StudentMiniSerializer
+from society_bureau.api.services import SettingsService
 
 
 class SocietyMemberViewSet(viewsets.GenericViewSet, ListModelMixin):
@@ -92,3 +96,42 @@ class ActivityRequestViewSet(viewsets.ModelViewSet):
         if self.action == 'list':
             return ActivityRequestMiniSerializer
         return ActivityRequestSerializer
+
+
+class SocietyCreditReceiversViewSet(
+    viewsets.GenericViewSet,
+    ListModelMixin,
+):
+    permission_classes = (IsSociety,)
+
+    # only credit_receivers at current semester is available
+    def get_queryset(self):
+        return CreditReceivers.objects.filter(
+            society__user=self.request.user,
+            year=SettingsService.get('year'),
+            semester=SettingsService.get('semester')
+        )
+
+    def get_serializer_class(self):
+        if self.action == 'replace':
+            return CreditReceiversUpdateSerializer
+        return CreditReceiversSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset().first()
+
+        serializer = self.get_serializer(queryset)
+        return response.Response(serializer.data)
+
+    # default route 'update' cannot be override
+    @action(detail=False, methods=['post'])
+    def replace(self, request):
+        instance = self.get_queryset().first()
+        if instance is None:
+            return response.Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return response.Response(serializer.data)
+        return response.Response(status=status.HTTP_400_BAD_REQUEST)
