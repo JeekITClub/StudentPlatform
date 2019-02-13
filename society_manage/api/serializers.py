@@ -41,10 +41,11 @@ class ActivityRequestMiniSerializer(serializers.ModelSerializer):
 
 class CreditReceiversSerializer(serializers.ModelSerializer):
     receivers = StudentMiniSerializer(many=True)
+    candidates = StudentMiniSerializer(many=True)
 
     class Meta:
         model = CreditReceivers
-        fields = '__all__'
+        fields = ('receivers', 'year', 'semester', 'available', 'candidates')
 
 
 class CreditReceiversUpdateSerializer(serializers.ModelSerializer):
@@ -52,6 +53,9 @@ class CreditReceiversUpdateSerializer(serializers.ModelSerializer):
         model = CreditReceivers
         fields = '__all__'
 
+    # validate all submitted receivers:
+    # 1. is a member of this society
+    # 2. hasn't receive credit this semester
     def validate(self, data):
         for member in data['receivers']:
             if member not in self.instance.society.members.all():

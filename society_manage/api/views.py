@@ -118,9 +118,14 @@ class SocietyCreditReceiversViewSet(
         return CreditReceiversSerializer
 
     def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset().first()
+        instance = self.get_queryset().first()
+        if instance is None:
+            return response.Response(
+                status=status.HTTP_404_NOT_FOUND,
+                data={'detail': '社团部伤未设置本学期学分'}
+            )
 
-        serializer = self.get_serializer(queryset)
+        serializer = self.get_serializer(instance=instance)
         return response.Response(serializer.data)
 
     # default route 'update' cannot be override
@@ -128,7 +133,10 @@ class SocietyCreditReceiversViewSet(
     def replace(self, request):
         instance = self.get_queryset().first()
         if instance is None:
-            return response.Response(status=status.HTTP_404_NOT_FOUND)
+            return response.Response(
+                status=status.HTTP_404_NOT_FOUND,
+                data={'detail': '社团部伤未设置本学期学分'}
+            )
 
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         if serializer.is_valid():
