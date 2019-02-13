@@ -8,6 +8,7 @@ import SBDrawerMenu from "./components/SBDrawerMenu";
 import SBRouter from './router'
 
 import './styles/index.scss';
+import AdminSiderBrand from "../../shared/AdminSiderBrand/AdminSiderBrand";
 
 const {
     Footer
@@ -19,6 +20,7 @@ export default function SocietyBureau({match}) {
             <SBDrawerMenu/>
             <Row className="society-bureau-container">
                 <Col xs={0} sm={0} md={0} lg={4} xl={3} className="society-bureau-sider-container">
+                    <AdminSiderBrand/>
                     <SocietyBureauSider/>
                 </Col>
                 <Col xs={24} sm={24} md={24} lg={20} xl={21} className="society-bureau-main-wrapper">

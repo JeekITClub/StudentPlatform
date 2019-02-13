@@ -13,7 +13,7 @@ class SocietyBureauSider extends React.Component {
 
     render() {
         return (
-            <Menu theme="dark" mode="inline" onClick={this.handleClick}>
+            <Menu mode="inline" onClick={this.handleClick}>
                 <Menu.Item key="/manage">
                     <Icon type="dashboard"/>
                     <span>Dashboard</span>
