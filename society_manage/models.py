@@ -7,6 +7,7 @@ class CreditReceivers(models.Model):
     receivers = models.ManyToManyField(Student, blank=True, related_name='credit_givers')
     year = models.PositiveSmallIntegerField()
     semester = models.PositiveSmallIntegerField()
+    available = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ("society", "year", "semester")
