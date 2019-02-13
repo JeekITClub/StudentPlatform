@@ -19,25 +19,22 @@ class SettingsService:
 
     @classmethod
     def get_dict(cls):
-        default_settings = {
-            'year': timezone.datetime.now().year,
-            'semester': 1
-        }
-        settings = SiteSettings.objects.all().first()
-        if settings is None:
-            SiteSettings.objects.create(settings=json.dumps(default_settings))
-            return default_settings
+        settings = SettingsService.get_instance()
         return json.loads(settings.settings)
 
     @classmethod
+    def update(cls, content):
+        settings = SettingsService.get_instance()
+        settings.settings = content
+        settings.save()
+
+    @classmethod
     def get(cls, key):
-        settings = SiteSettings.objects.all().first()
-        if settings is None:
-            return None
+        settings = SettingsService.get_instance()
         return json.loads(settings.settings).get(key, None)
 
     @classmethod
-    def update(cls, content):
-        settings = SiteSettings.objects.all().first()
-        settings.settings = content
-        settings.save()
+    def set(cls, key, value):
+        settings_content = SettingsService.get_dict()
+        settings_content[key] = value
+        SettingsService.update(settings_content)
