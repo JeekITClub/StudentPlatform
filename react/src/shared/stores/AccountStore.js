@@ -5,7 +5,7 @@ import Provider from '../../utils/provider'
 class AccountStore {
     @observable loading = false;
 
-    @observable identity = 'society';
+    @observable identity = 'society_bureau';
     @observable user = {};
 
     @observable authenticated = true;
