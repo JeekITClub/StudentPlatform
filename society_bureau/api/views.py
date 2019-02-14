@@ -115,7 +115,7 @@ class CreditManageViewSet(
     mixins.ListModelMixin,
 ):
     permission_classes = (IsSocietyBureau,)
-    filter_backends = []
+    filter_backends = [YearFilterBackend, SemesterFilterBackend]
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
@@ -125,10 +125,7 @@ class CreditManageViewSet(
         return CreditDistributionMiniSerializer
 
     def get_queryset(self):
-        return CreditDistribution.objects.filter(
-            semester=SettingsService.get('semester'),
-            year=SettingsService.get('year')
-        )
+        return CreditDistribution.objects.all()
 
     def list(self, request, *args, **kwargs):
         if self.get_queryset().exists():
