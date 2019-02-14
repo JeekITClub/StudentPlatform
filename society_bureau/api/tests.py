@@ -236,7 +236,7 @@ class CreditReceiversTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)
 
-    def test_retrieve_credit_receivers(self):
+    def test_retrieve_credit_distribution(self):
         credit_distribution = CreditDistribution.objects.create(
             society=self.society1,
             year=2019,
@@ -258,3 +258,35 @@ class CreditReceiversTests(TestCase):
         self.assertEqual(response.data['semester'], credit_distribution.semester)
         self.assertEqual(len(response.data['receivers']), 1)
         self.assertEqual(response.data['receivers'][0]['name'], self.student.name)
+
+    def test_create_credit_distribution(self):
+        url = '/api/manage/credit/'
+        data = {
+            'society_id': 401,
+            'credit': 5
+        }
+
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(self.user3)
+        response = client.post(url, data=data, decode=True)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.data['credit'], 5)
+
+    def test_update_credit_distribution(self):
+        cd = CreditDistribution.objects.create(
+            society=self.society1,
+            year=2017,
+            semester=1
+        )
+        url = '/api/manage/credit/'
+        data = {
+            'closed': True,
+            'credit': 10
+        }
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(self.user3)
+        res = client.patch(url, data=data, decode=True)
+        self.assertEqual(res.status_code, 200)
+        cd.refresh_from_db()
+        self.assertEqual(cd.closed, True)
+        self.assertEqual(cd.credit, 10)

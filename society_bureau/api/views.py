@@ -1,7 +1,6 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, mixins, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, DestroyModelMixin
 
 from society_bureau.api.services import SettingsService
 from society.models import Society
@@ -44,9 +43,9 @@ class DashboardViewSet(viewsets.GenericViewSet):
 
 class SocietyManageViewSet(
     viewsets.GenericViewSet,
-    ListModelMixin,
-    RetrieveModelMixin,
-    DestroyModelMixin
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.DestroyModelMixin
 ):
     filter_backends = [NameFilterBackend, TypeFilterBackend, StatusFilterBackend]
 
@@ -109,7 +108,11 @@ class SocietyManageViewSet(
 
 
 class CreditManageViewSet(
-    viewsets.ModelViewSet
+    viewsets.GenericViewSet,
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    generics.UpdateAPIView,
+    mixins.ListModelMixin,
 ):
     permission_classes = (IsSocietyBureau,)
     filter_backends = []
