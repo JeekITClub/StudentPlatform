@@ -12,6 +12,7 @@ class CreditReceivers(models.Model):
 
     class Meta:
         unique_together = ("society", "year", "semester")
+        ordering = ['-year', '-semester']
 
     def __str__(self):
         return '{0}-{1}-{2}-{3}'.format(
