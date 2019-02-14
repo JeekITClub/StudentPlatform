@@ -4,14 +4,14 @@ from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin, UpdateModelMixin, RetrieveModelMixin, DestroyModelMixin
 
 from society.models import Society
-from society_manage.models import CreditReceivers
+from society_manage.models import CreditDistribution
 from society_bureau.api.serializers import (
     SocietySerializer,
     SocietyMiniSerializer,
     ConfirmSocietySerializer,
     SocietyCreditSerializer,
-    CreditReceiversSerializer,
-    CreditReceiversMiniSerializer
+    # CreditReceiversSerializer,
+    # CreditReceiversMiniSerializer
 )
 from utils.permissions import (
     IsSocietyBureau,
@@ -110,11 +110,11 @@ class SocietyManageViewSet(
 class CreditManageViewSet(
     viewsets.GenericViewSet,
     ListModelMixin,
-    UpdateModelMixin
+    UpdateModelMixin,
+
 ):
     permission_classes = (IsSocietyBureau,)
     serializer_class = SocietyCreditSerializer
-    filter_backends = []
 
     def get_queryset(self):
         return Society.objects.filter(status=SocietyStatus.ACTIVE)
@@ -131,7 +131,11 @@ class CreditManageViewSet(
     def set_all(self, request):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            self.get_queryset().update(credit=serializer.data.get('credit'))
+            for society in Society.objects.filter(status=SocietyStatus.ACTIVE):
+                CreditDistribution.objects.create(
+                    society=society,
+                    credit=serializer.validated_data['credit']
+                )
             return Response(status=status.HTTP_202_ACCEPTED)
         return Response(
             status=status.HTTP_400_BAD_REQUEST,
@@ -139,16 +143,16 @@ class CreditManageViewSet(
         )
 
 
-class CreditReceiversViewSet(
-    viewsets.GenericViewSet,
-    ListModelMixin,
-    RetrieveModelMixin
-):
-    permission_classes = (IsSocietyBureau,)
-    queryset = CreditReceivers.objects.all()
-    filter_backends = [CreditNameFilterBackend, YearFilterBackend, SemesterFilterBackend]
-
-    def get_serializer_class(self):
-        if self.action == 'list':
-            return CreditReceiversMiniSerializer
-        return CreditReceiversSerializer
+# class CreditReceiversViewSet(
+#     viewsets.GenericViewSet,
+#     ListModelMixin,
+#     RetrieveModelMixin
+# ):
+#     permission_classes = (IsSocietyBureau,)
+#     queryset = CreditReceivers.objects.all()
+#     filter_backends = [CreditNameFilterBackend, YearFilterBackend, SemesterFilterBackend]
+#
+#     def get_serializer_class(self):
+#         if self.action == 'list':
+#             return CreditReceiversMiniSerializer
+#         return CreditReceiversSerializer

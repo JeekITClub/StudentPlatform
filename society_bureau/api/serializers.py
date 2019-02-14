@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from society.models import Society
 from society_bureau.models import SiteSettings
-from society_manage.models import CreditReceivers
+from society_manage.models import CreditDistribution
 
 from student.api.serializers import StudentMiniSerializer
 
@@ -66,18 +66,18 @@ class SocietyCreditSerializer(serializers.ModelSerializer):
         return data
 
 
-class CreditReceiversMiniSerializer(serializers.ModelSerializer):
-    society = SocietyMiniSerializer(read_only=True)
-
-    class Meta:
-        model = CreditReceivers
-        fields = ('id', 'society', 'year', 'semester', 'count')
-
-
-class CreditReceiversSerializer(serializers.ModelSerializer):
-    receivers = StudentMiniSerializer(many=True, read_only=True)
-    society = SocietyMiniSerializer(read_only=True)
-
-    class Meta:
-        model = CreditReceivers
-        fields = '__all__'
+# class CreditReceiversMiniSerializer(serializers.ModelSerializer):
+#     society = SocietyMiniSerializer(read_only=True)
+#
+#     class Meta:
+#         model = CreditReceivers
+#         fields = ('id', 'society', 'year', 'semester', 'count')
+#
+#
+# class CreditReceiversSerializer(serializers.ModelSerializer):
+#     receivers = StudentMiniSerializer(many=True, read_only=True)
+#     society = SocietyMiniSerializer(read_only=True)
+#
+#     class Meta:
+#         model = CreditReceivers
+#         fields = '__all__'
