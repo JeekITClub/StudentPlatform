@@ -182,59 +182,6 @@ class CreditManageTests(TestCase):
         )
         self.society_bureau = self.createSocietyBureau(user=self.user3, real_name='xxx')
 
-    def test_list_societies_credit(self):
-        url = '/api/manage/credit/'
-
-        client = APIClient(enforce_csrf_checks=True)
-        response = client.get(url, decode=True)
-        self.assertEqual(response.status_code, 403)
-
-        client.force_authenticate(self.user3)
-        response = client.get(url, decode=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 2)
-        self.assertEqual(response.data[0]['credit'], 0)
-
-    def test_update_society_credit(self):
-        url = '/api/manage/credit/{}/'.format(self.society1.pk)
-        data = {
-            'credit': 15
-        }
-
-        client = APIClient(enforce_csrf_checks=True)
-        response = client.put(url, data=data, decode=True)
-        self.assertEqual(response.status_code, 403)
-
-        client.force_authenticate(self.user3)
-        response = client.put(url, data=data, decode=True)
-        self.assertEqual(response.status_code, 200)
-        self.society1.refresh_from_db()
-        self.assertEqual(self.society1.credit, 15)
-
-    def test_set_all_credit(self):
-        url = '/api/manage/credit/set_all/'
-        data = {
-            'credit': -10
-        }
-
-        client = APIClient(enforce_csrf_checks=True)
-        response = client.post(url, data=data, decode=True)
-        self.assertEqual(response.status_code, 403)
-
-        client.force_authenticate(self.user3)
-        response = client.post(url, data=data, decode=True)
-        self.assertEqual(response.status_code, 400)
-
-        data = {
-            'credit': 10
-        }
-        response = client.post(url, data=data, decode=True)
-        self.society1.refresh_from_db()
-        self.society2.refresh_from_db()
-        self.assertEqual(response.status_code, 202)
-        self.assertEqual(self.society1.credit, 10)
-        self.assertEqual(self.society2.credit, 10)
-
 
 # class CreditReceiversTests(TestCase):
 #     def setUp(self):
