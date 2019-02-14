@@ -278,7 +278,7 @@ class CreditReceiversTests(TestCase):
             year=2017,
             semester=1
         )
-        url = '/api/manage/credit/{}'.format(cd.pk)
+        url = '/api/manage/credit/{}/'.format(cd.pk)
         data = {
             'closed': True,
             'credit': 10
