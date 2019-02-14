@@ -66,14 +66,14 @@ class SocietyCreditSerializer(serializers.ModelSerializer):
         return data
 
 
-# class CreditReceiversMiniSerializer(serializers.ModelSerializer):
-#     society = SocietyMiniSerializer(read_only=True)
-#
-#     class Meta:
-#         model = CreditReceivers
-#         fields = ('id', 'society', 'year', 'semester', 'count')
-#
-#
+class CreditDistributionMiniSerializer(serializers.ModelSerializer):
+    society = SocietyMiniSerializer(read_only=True)
+
+    class Meta:
+        model = CreditDistribution
+        fields = ('id', 'society', 'credit', 'year', 'semester', 'receivers_count', 'closed')
+
+
 # class CreditReceiversSerializer(serializers.ModelSerializer):
 #     receivers = StudentMiniSerializer(many=True, read_only=True)
 #     society = SocietyMiniSerializer(read_only=True)

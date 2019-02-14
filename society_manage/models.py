@@ -8,6 +8,7 @@ class CreditDistribution(models.Model):
     year = models.PositiveSmallIntegerField()
     semester = models.PositiveSmallIntegerField()
     credit = models.PositiveSmallIntegerField(help_text='可获得学分的人数的最大值')
+    closed = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ("society", "year", "semester")
@@ -16,5 +17,5 @@ class CreditDistribution(models.Model):
         return self.society.name
 
     @property
-    def count(self):
+    def receivers_count(self):
         return self.receivers.count()
