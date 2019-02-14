@@ -72,12 +72,13 @@ class CreditDistributionMiniSerializer(serializers.ModelSerializer):
     class Meta:
         model = CreditDistribution
         fields = ('id', 'society', 'credit', 'year', 'semester', 'receivers_count', 'closed')
+        read_only_fields = ('society', 'year', 'semester')
 
 
-# class CreditReceiversSerializer(serializers.ModelSerializer):
-#     receivers = StudentMiniSerializer(many=True, read_only=True)
-#     society = SocietyMiniSerializer(read_only=True)
-#
-#     class Meta:
-#         model = CreditReceivers
-#         fields = '__all__'
+class CreditDistributionSerializer(serializers.ModelSerializer):
+    receivers = StudentMiniSerializer(many=True, read_only=True)
+    society = SocietyMiniSerializer(read_only=True)
+
+    class Meta:
+        model = CreditDistribution
+        fields = '__all__'

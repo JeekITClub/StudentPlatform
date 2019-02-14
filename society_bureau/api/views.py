@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from rest_framework.mixins import ListModelMixin, UpdateModelMixin, RetrieveModelMixin, DestroyModelMixin
+from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, DestroyModelMixin
 
 from society_bureau.api.services import SettingsService
 from society.models import Society
@@ -9,8 +9,9 @@ from society_manage.models import CreditDistribution
 from society_bureau.api.serializers import (
     SocietySerializer,
     SocietyMiniSerializer,
-    ConfirmSocietySerializer,
-    CreditDistributionMiniSerializer
+    CreditDistributionMiniSerializer,
+    CreditDistributionSerializer,
+    ConfirmSocietySerializer
 )
 from utils.permissions import (
     IsSocietyBureau,
@@ -113,10 +114,9 @@ class CreditManageViewSet(
     filter_backends = []
 
     def get_serializer_class(self):
-        if self.action == 'create':
-            return CreditDistributionMiniSerializer
-        elif self.action == 'retrieve':
-            return None
+        if self.action == 'retrieve':
+            return CreditDistributionSerializer
+        return CreditDistributionMiniSerializer
 
     def get_queryset(self):
         return CreditDistribution.objects.filter(
@@ -124,3 +124,16 @@ class CreditManageViewSet(
             year=SettingsService.get('year')
         )
 
+    def list(self, request, *args, **kwargs):
+        if self.get_queryset().exists():
+            super(CreditManageViewSet, self).list(self, request, *args, **kwargs)
+        credit_distribution_sets = []
+        for society in Society.objects.filter(status=SocietyStatus.WAITING):
+            queryset = CreditDistribution.objects.create(
+                society=society,
+                semester=SettingsService.get('semester'),
+                year=SettingsService.get('year')
+            )
+            credit_distribution_sets.append(queryset)
+        serializer = self.get_serializer(credit_distribution_sets, many=True)
+        return Response(serializer.data)

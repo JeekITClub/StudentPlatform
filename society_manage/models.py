@@ -7,7 +7,7 @@ class CreditDistribution(models.Model):
     receivers = models.ManyToManyField(Student, blank=True, related_name='receive_credit_from', default=None)
     year = models.PositiveSmallIntegerField()
     semester = models.PositiveSmallIntegerField()
-    credit = models.PositiveSmallIntegerField(help_text='可获得学分的人数的最大值')
+    credit = models.PositiveSmallIntegerField(help_text='可获得学分的人数的最大值', default=1)
     closed = models.BooleanField(default=False)
 
     class Meta:
