@@ -57,6 +57,8 @@ class CreditReceiversUpdateSerializer(serializers.ModelSerializer):
     # 1. is a member of this society
     # 2. hasn't receive credit this semester
     def validate(self, data):
+        if not self.instance.available:
+            raise serializers.ValidationError("Not available now.")
         for member in data['receivers']:
             if member not in self.instance.society.members.all():
                 raise serializers.ValidationError("Not a member of this society.")
