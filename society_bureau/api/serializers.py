@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from society.models import Society
+from society_bureau.api.services import SettingsService
 from society_bureau.models import SiteSettings
 from society_manage.models import CreditDistribution
 
@@ -82,3 +83,24 @@ class CreditDistributionSerializer(serializers.ModelSerializer):
     class Meta:
         model = CreditDistribution
         fields = '__all__'
+
+
+class CreditDistributionManualCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CreditDistribution
+        fields = ('society_id', 'credit')
+
+    def validate_society_id(self, society_id):
+        if Society.objects.filter(society_id=society_id).exists():
+            return True
+        raise serializers.ValidationError("No such society with society_id {society_id}".format(
+            society_id=society_id
+        ))
+
+    def create(self, validated_data):
+        return CreditDistribution.objects.create(
+            society=Society.objects.get(society_id=validated_data['society_id']),
+            credit=self.validated_data['credit'],
+            semester=SettingsService.get('semester'),
+            year=SettingsService.get('year')
+        )

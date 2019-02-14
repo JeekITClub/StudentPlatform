@@ -11,7 +11,8 @@ from society_bureau.api.serializers import (
     SocietyMiniSerializer,
     CreditDistributionMiniSerializer,
     CreditDistributionSerializer,
-    ConfirmSocietySerializer
+    ConfirmSocietySerializer,
+    CreditDistributionManualCreateSerializer
 )
 from utils.permissions import (
     IsSocietyBureau,
@@ -116,6 +117,8 @@ class CreditManageViewSet(
     def get_serializer_class(self):
         if self.action == 'retrieve':
             return CreditDistributionSerializer
+        elif self.action == 'create':
+            return CreditDistributionManualCreateSerializer
         return CreditDistributionMiniSerializer
 
     def get_queryset(self):
@@ -126,7 +129,8 @@ class CreditManageViewSet(
 
     def list(self, request, *args, **kwargs):
         if self.get_queryset().exists():
-            super(CreditManageViewSet, self).list(self, request, *args, **kwargs)
+            serializer = self.get_serializer(self.get_queryset(), many=True)
+            return Response(serializer.data)
         credit_distribution_sets = []
         for society in Society.objects.filter(status=SocietyStatus.WAITING):
             queryset = CreditDistribution.objects.create(
