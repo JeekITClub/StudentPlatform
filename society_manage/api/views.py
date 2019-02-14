@@ -141,5 +141,11 @@ class SocietyCreditReceiversViewSet(
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return response.Response(serializer.data)
-        return response.Response(status=status.HTTP_400_BAD_REQUEST)
+            return response.Response(status=status.HTTP_202_ACCEPTED)
+        return response.Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data={
+                'detail': '表单填写错误',
+                'error': str(serializer.errors['non_field_errors'][0])
+            }
+        )
