@@ -1,14 +1,22 @@
 import React from 'react';
-import {
-    Form, Icon, Input, Button,
-    // Checkbox,
-} from 'antd';
+import {Form, Icon, Input, Button, notification} from 'antd';
 import Provider from '../../../utils/provider';
 import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
+import AccountStore from '../../../shared/stores/AccountStore';
 
 @withRouter
 class LoginForm extends React.Component {
+
+    redirectWithUserType = () => {
+        if (AccountStore.is_student) {
+            this.props.history.push('/')
+        } else if (AccountStore.is_society) {
+            this.props.history.push('/admin_society')
+        } else if (AccountStore.is_society_bureau) {
+            this.props.history.push('/manage')
+        }
+    };
 
     handleSubmit = (e) => {
         e.preventDefault();
@@ -19,14 +27,25 @@ class LoginForm extends React.Component {
                     password: values.password
                 }).then((res) => {
                     if (res.status === 200) {
-                        this.props.history.push('/')
+                        AccountStore.fetch();
+                        this.redirectWithUserType()
                     }
                 }).catch((err) => {
+                    notification.error({
+                        message: '登录失败',
+                        description: '用户名或密码错误'
+                    });
                     console.log(err)
                 })
             }
         });
     };
+
+    componentDidMount() {
+        if (AccountStore.authenticated) {
+            this.redirectWithUserType()
+        }
+    }
 
     render() {
         const {getFieldDecorator} = this.props.form;
@@ -37,7 +56,7 @@ class LoginForm extends React.Component {
                         rules: [{required: true, message: '请输入用户名'}],
                     })(
                         <Input size="large" prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
-                               placeholder="学号"/>
+                               placeholder="学号（形如20150xxx，非班级学号）"/>
                     )}
                 </Form.Item>
                 <Form.Item>
@@ -50,12 +69,6 @@ class LoginForm extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item>
-                    {/*{getFieldDecorator('remember', {*/}
-                    {/*valuePropName: 'checked',*/}
-                    {/*initialValue: true,*/}
-                    {/*})(*/}
-                    {/*<Checkbox>记住我</Checkbox>*/}
-                    {/*)}*/}
                     <Button size="large" type="primary" htmlType="submit" style={{width: '100%'}}>
                         登录
                     </Button>
