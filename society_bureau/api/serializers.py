@@ -1,8 +1,9 @@
 from rest_framework import serializers
 
 from society.models import Society
+from society_bureau.api.services import SettingsService
 from society_bureau.models import SiteSettings
-from society_manage.models import CreditReceivers
+from society_manage.models import CreditDistribution
 
 from student.api.serializers import StudentMiniSerializer
 
@@ -66,18 +67,47 @@ class SocietyCreditSerializer(serializers.ModelSerializer):
         return data
 
 
-class CreditReceiversMiniSerializer(serializers.ModelSerializer):
+class CreditDistributionMiniSerializer(serializers.ModelSerializer):
     society = SocietyMiniSerializer(read_only=True)
 
     class Meta:
-        model = CreditReceivers
-        fields = ('id', 'society', 'year', 'semester', 'count')
+        model = CreditDistribution
+        fields = ('id', 'society', 'credit', 'year', 'semester', 'receivers_count', 'closed')
+        read_only_fields = ('society', 'year', 'semester')
 
 
-class CreditReceiversSerializer(serializers.ModelSerializer):
+class CreditDistributionSerializer(serializers.ModelSerializer):
     receivers = StudentMiniSerializer(many=True, read_only=True)
     society = SocietyMiniSerializer(read_only=True)
 
     class Meta:
-        model = CreditReceivers
+        model = CreditDistribution
         fields = '__all__'
+
+
+class CreditDistributionManualCreateSerializer(serializers.Serializer):
+    society_id = serializers.IntegerField()
+    credit = serializers.IntegerField()
+
+    class Meta:
+        fields = ('society_id', 'credit')
+
+    def validate_society_id(self, society_id):
+        if Society.objects.filter(society_id=society_id).exists():
+            return society_id
+        raise serializers.ValidationError("No such society with society_id {society_id}".format(
+            society_id=society_id
+        ))
+
+    def validate_credit(self, credit):
+        if credit < 0:
+            raise serializers.ValidationError("Credit must be bigger than zero")
+        return credit
+
+    def create(self, validated_data):
+        return CreditDistribution.objects.create(
+            society=Society.objects.get(society_id=validated_data['society_id']),
+            credit=self.validated_data['credit'],
+            semester=SettingsService.get('semester'),
+            year=SettingsService.get('year')
+        )
