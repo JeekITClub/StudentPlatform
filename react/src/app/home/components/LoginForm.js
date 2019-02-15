@@ -29,6 +29,7 @@ class LoginForm extends React.Component {
                     if (res.status === 200) {
                         AccountStore.fetch().then(() => {
                             this.redirectWithUserType();
+                            // TODO: 判断密码是否改过
                             if (true) {
                                 Modal.confirm({
                                     title: '温馨提示',
