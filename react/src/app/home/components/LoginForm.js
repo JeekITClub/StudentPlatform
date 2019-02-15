@@ -34,8 +34,8 @@ class LoginForm extends React.Component {
                                 Modal.confirm({
                                     title: '温馨提示',
                                     content: '您还未修改过默认密码，账号有被盗用的风险，建议您尽快修改密码！',
-                                    okText: '改密码',
-                                    cancelText: '取消',
+                                    okText: '去修改',
+                                    cancelText: '算了',
                                     onOk: () => {
                                         this.props.history.push('/password');
                                     }
