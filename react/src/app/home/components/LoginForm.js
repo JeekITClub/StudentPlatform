@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, Icon, Input, Button, notification} from 'antd';
+import {Form, Icon, Input, Button, notification, Modal} from 'antd';
 import Provider from '../../../utils/provider';
 import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
@@ -27,8 +27,20 @@ class LoginForm extends React.Component {
                     password: values.password
                 }).then((res) => {
                     if (res.status === 200) {
-                        AccountStore.fetch();
-                        this.redirectWithUserType()
+                        AccountStore.fetch().then(() => {
+                            this.redirectWithUserType();
+                            if (true) {
+                                Modal.confirm({
+                                    title: '温馨提示',
+                                    content: '您还未修改过默认密码，账号有被盗用的风险，建议您尽快修改密码！',
+                                    okText: '改密码',
+                                    cancelText: '取消',
+                                    onOk: () => {
+                                        this.props.history.push('/password');
+                                    }
+                                });
+                            }
+                        });
                     }
                 }).catch((err) => {
                     notification.error({
