@@ -1,10 +1,12 @@
 import React from 'react';
-import {Table, Button} from 'antd';
+import {Table, Button, Input} from 'antd';
+import Provider from "../../../../utils/provider";
 
 class CreditDistributionList extends React.Component {
     state = {
         data: [
             {
+                id: 1,
                 society: {
                     society_id: 101,
                     name: 'jeek'
@@ -24,6 +26,19 @@ class CreditDistributionList extends React.Component {
         )
     };
 
+    updateCredit = (cb_id, credit, index) => {
+        let data = this.state.data;
+        data[index].credit = credit;
+        this.setState({data: data});
+        Provider.patch('/api/manage/credit')
+            .then((res) => {
+                console.log(res)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    };
+
     render() {
         const columns = [
             {
@@ -39,7 +54,12 @@ class CreditDistributionList extends React.Component {
             {
                 title: '可获得学分的成员人数最大值',
                 key: 'credit',
-                dataIndex: 'credit'
+                dataIndex: 'credit',
+                render: (credit, record, index) => {
+                    return (
+                        <Input value={credit} onChange={(e) => this.updateCredit(record.id, e.target.value, index)}/>
+                    )
+                }
             },
             {
                 title: '已分配数量',
@@ -52,8 +72,14 @@ class CreditDistributionList extends React.Component {
                 render: () => this.renderCheckReceiversDetail()
             }
         ];
+
         return (
-            <Table columns={columns} dataSource={this.state.data}/>
+            <Table
+                className="mt-2"
+                columns={columns}
+                dataSource={this.state.data}
+                rowKey="id"
+            />
         )
     }
 }
