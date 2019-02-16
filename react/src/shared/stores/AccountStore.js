@@ -23,7 +23,7 @@ class AccountStore {
     }
 
     @action fetch () {
-        Provider.get('/api/account/identity/')
+        return Provider.get('/api/account/identity/')
             .then((res) => {
                 this.authenticated = true;
                 this.identity = res.data['identity'];
