@@ -1,7 +1,7 @@
 from rest_framework.test import APIClient
 
 from testing.testcases import TestCase
-
+from society_manage.models import CreditDistribution
 
 class StudentTests(TestCase):
     def test_get_student(self):
@@ -58,3 +58,50 @@ class StudentTests(TestCase):
         self.assertEqual(student.name, '上科大龙田酱')
         response = self.client.patch(url, data=data, decode=True)
         self.assertEqual(response.status_code, 403)
+
+
+class StudentCreditTests(TestCase):
+    def setUp(self):
+        self.user1 = self.createUser('jw')
+        self.student1 = self.createStudent(self.user1)
+
+    def test_get_credit_distribution(self):
+        url = '/api/student/credit/'
+
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(self.user1)
+
+        res = client.get(url, decode=True)
+        self.assertEqual(res.status_code, 200)
+
+        society_user = self.createUser('society')
+        society = self.createSociety(society_user, members=None)
+        credit_distribution = CreditDistribution.objects.create(
+            society=society,
+            year=2019,
+            semester=1
+        )
+        credit_distribution.receivers.add(self.student1)
+
+        credit_distribution2 = CreditDistribution.objects.create(
+            society=society,
+            year=2019,
+            semester=2
+        )
+        credit_distribution2.receivers.add(self.student1)
+
+        res = client.get(url, decode=True)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.data[0]['society']['name'], society.name)
+        self.assertEqual(res.data[0]['semester'], credit_distribution.semester)
+        self.assertEqual(res.data[0]['year'], credit_distribution.year)
+
+        self.assertEqual(res.data[1]['year'], credit_distribution2.year)
+
+        # test is_authenticated permission
+        res = self.client.get(url)
+        self.assertEqual(res.status_code, 403)
+
+        client.force_authenticate(society_user)
+        res = client.get(url)
+        self.assertEqual(res.status_code, 403)
