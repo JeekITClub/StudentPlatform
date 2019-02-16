@@ -1,35 +1,45 @@
 import React from 'react';
 
-import {Table, Button} from 'antd'
+import {Table, Button, Popconfirm, notification} from 'antd'
 
 import Provider from '../../../../utils/provider'
 
 class MemberList extends React.Component {
     state = {
-        members: [{name: '2', grade: 1, class_num: 1, student_id: 233}]
+        members: []
     };
 
-    componentDidMount() {
-        Provider.get('/api/society_manage/member/')
-            .then((res) => {
-                this.setState({members: res.data})
-            })
-            .catch((err) => {
-              console.log(err)
-            })
-    }
+    getSocietyMembers = (pageNum, pageSize) => {
+        Provider.get('/api/society_manage/member/', {
+            params: {
+                page: pageNum,
+                page_size: pageSize
+            }
+        }).then((res) => {
+            this.setState({members: res.data['results']})
+        }).catch((err) => {
+            console.log(err)
+        })
+    };
+
 
     handleKickMember = (member_id) => {
         Provider.post('/api/society_manage/member/kick', {
             member_id: member_id
+        }).then((res) => {
+            console.log(res.status)
+        }).catch((err) => {
+            console.log(err)
         })
-            .then((res) => {
-                console.log(res.status)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
     };
+
+    onPaginationChange = (pagination) => {
+        this.getSocietyMembers(pagination.current, pagination.pageSize);
+    };
+
+    componentDidMount() {
+        this.getSocietyMembers(1, 10)
+    }
 
     renderMemberList = () => {
         const columns = [
@@ -56,14 +66,26 @@ class MemberList extends React.Component {
                 title: '操作',
                 key: 'operation',
                 dataIndex: 'id',
-                render: (text) => {
-                    return (<Button onClick={() => this.handleKickMember(text)}>踢出成员</Button>)
+                render: (text, record) => {
+                    return (
+                        <Popconfirm placement="topRight"
+                                    title={'确认移除该成员？'}
+                                    onConfirm={() => this.handleKickMember(record.id)}
+                                    okText="Yes"
+                                    cancelText="No">
+                            <Button type="danger">踢出成员</Button>
+                        </Popconfirm>
+                    )
                 }
             }
         ];
 
         return (
-            <Table dataSource={this.state.members} columns={columns} rowKey="student_id"/>
+            <Table dataSource={this.state.members}
+                   columns={columns}
+                   pagination={{showSizeChanger: true}}
+                   onChange={this.onPaginationChange}
+                   rowKey="id"/>
         )
     };
 

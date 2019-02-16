@@ -13,7 +13,6 @@ from society.constants import (
     SocietyStatus
 )
 from student.constants import (
-    grade_choices,
     class_choices,
 )
 
@@ -30,7 +29,7 @@ class Society(models.Model):
     name = models.CharField(max_length=64)
     introduction = models.TextField(blank=True)
     president_name = models.CharField(max_length=64)
-    president_grade = models.PositiveSmallIntegerField(choices=grade_choices)
+    president_grade = models.PositiveSmallIntegerField()
     president_class = models.PositiveSmallIntegerField(choices=class_choices)
     president_qq = models.CharField(max_length=32, blank=True)
     achievements = models.TextField(blank=True)
