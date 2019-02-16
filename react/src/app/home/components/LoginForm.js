@@ -37,7 +37,13 @@ class LoginForm extends React.Component {
                                     okText: '去修改',
                                     cancelText: '算了',
                                     onOk: () => {
-                                        this.props.history.push('/password');
+                                        if (AccountStore.is_student) {
+                                            this.props.history.push('/password')
+                                        } else if (AccountStore.is_society) {
+                                            this.props.history.push('/admin_society/password')
+                                        } else if (AccountStore.is_society_bureau) {
+                                            this.props.history.push('/manage/password')
+                                        }
                                     }
                                 });
                             }
