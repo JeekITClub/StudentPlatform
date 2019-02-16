@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
 from student.models import Student
+from society.api.serializers import SocietyMiniSerializer
+from society_manage.models import CreditDistribution
 
 
 class StudentSerializer(serializers.ModelSerializer):
@@ -21,6 +23,9 @@ class StudentUpdateProfileSerializer(serializers.ModelSerializer):
         fields = ('name', 'grade', 'class_num', 'qq')
 
 
-class StudentChangePasswordSerializer(serializers.Serializer):
-    old_password = serializers.CharField()
-    new_password = serializers.CharField()
+class StudentInspectCreditSerializer(serializers.ModelSerializer):
+    society = SocietyMiniSerializer(read_only=True)
+
+    class Meta:
+        model = CreditDistribution
+        fields = ('society', 'semester', 'year',)
