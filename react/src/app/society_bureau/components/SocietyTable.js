@@ -6,7 +6,7 @@ import SocietyDetailModal from "./SocietyDetailModal";
 
 class SocietyTable extends React.Component {
     state = {
-        societies: [{'society_id': 303, 'name': 'jeek', 'president_name': 'ncj'}],
+        societies: [],
         editingSocietyId: 0,
         modalVisible: false
     };
@@ -14,11 +14,11 @@ class SocietyTable extends React.Component {
     getSocieties = (pageNum, pageSize) => {
         Provider.get('/api/manage/society/', {
             params: {
-                pageNum: pageNum,
-                pageSize: pageSize
+                page: pageNum,
+                page_size: pageSize
             }
         }).then((res) => {
-            this.setState({societies: res.data})
+            this.setState({societies: res.data['results']});
         }).catch((err) => {
             console.log(err)
         })
@@ -84,11 +84,11 @@ class SocietyTable extends React.Component {
 
         return (
             <div>
-                <Table rowKey="society_id"
-                       columns={columns}
+                <Table columns={columns}
                        dataSource={this.state.societies}
                        pagination={{showSizeChanger: true}}
-                       onChange={this.onPaginationChange}/>
+                       onChange={this.onPaginationChange}
+                       rowKey="id"/>
                 {
                     this.state.modalVisible &&
                     <SocietyDetailModal society_id={this.state.editingSocietyId}

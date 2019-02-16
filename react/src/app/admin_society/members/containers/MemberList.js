@@ -12,11 +12,11 @@ class MemberList extends React.Component {
     getSocietyMembers = (pageNum, pageSize) => {
         Provider.get('/api/society_manage/member/', {
             params: {
-                pageNum: pageNum,
-                pageSize: pageSize
+                page: pageNum,
+                page_size: pageSize
             }
         }).then((res) => {
-            this.setState({members: res.data})
+            this.setState({members: res.data['results']})
         }).catch((err) => {
             console.log(err)
         })
@@ -70,7 +70,7 @@ class MemberList extends React.Component {
                     return (
                         <Popconfirm placement="topRight"
                                     title={'确认移除该成员？'}
-                                    onConfirm={() => this.handleKickMember(record.student_id)}
+                                    onConfirm={() => this.handleKickMember(record.id)}
                                     okText="Yes"
                                     cancelText="No">
                             <Button type="danger">踢出成员</Button>
@@ -85,7 +85,7 @@ class MemberList extends React.Component {
                    columns={columns}
                    pagination={{showSizeChanger: true}}
                    onChange={this.onPaginationChange}
-                   rowKey="student_id"/>
+                   rowKey="id"/>
         )
     };
 
