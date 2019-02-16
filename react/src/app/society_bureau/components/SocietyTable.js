@@ -11,15 +11,19 @@ class SocietyTable extends React.Component {
         modalVisible: false
     };
 
-    componentDidMount() {
-        Provider.get('/api/manage/society/')
-            .then((res) => {
-                this.setState({societies: res.data})
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }
+    getSocieties = (pageNum, pageSize) => {
+        Provider.get('/api/manage/society/', {
+            params: {
+                page: pageNum,
+                page_size: pageSize
+            }
+        }).then((res) => {
+            this.setState({societies: res.data['results']});
+        }).catch((err) => {
+            console.log(err)
+        })
+    };
+
 
     handleInspectButtonClick = (row) => {
         this.setState({modalVisible: true, editingSocietyId: row.society_id});
@@ -43,6 +47,14 @@ class SocietyTable extends React.Component {
             <Button type="primary" onClick={() => this.handleInspectButtonClick(index)} htmlType="button">查看</Button>
         )
     };
+
+    onPaginationChange = (pagination) => {
+        this.getSocieties(pagination.current, pagination.pageSize);
+    };
+
+    componentDidMount() {
+        this.getSocieties(1, 10)
+    }
 
     render() {
         const columns = [
@@ -72,10 +84,15 @@ class SocietyTable extends React.Component {
 
         return (
             <div>
-                <Table rowKey="society_id" columns={columns} dataSource={this.state.societies}/>
+                <Table columns={columns}
+                       dataSource={this.state.societies}
+                       pagination={{showSizeChanger: true}}
+                       onChange={this.onPaginationChange}
+                       rowKey="id"/>
                 {
                     this.state.modalVisible &&
-                    <SocietyDetailModal society_id={this.state.editingSocietyId} closeModal={() => this.handleCloseModal()}/>
+                    <SocietyDetailModal society_id={this.state.editingSocietyId}
+                                        closeModal={() => this.handleCloseModal()}/>
                 }
             </div>
         )

@@ -86,22 +86,22 @@ class SocietyManageJoinRequestTests(TestCase):
         client = APIClient(enforce_csrf_checks=True)
         client.force_authenticate(self.society_user)
         response = client.get(url, decode=True)
-        self.assertEqual(response.data[0]['member']['name'], self.student1.name)
-        self.assertEqual(response.data[1]['member']['class_num'], self.student2.class_num)
+        self.assertEqual(response.data['results'][0]['member']['name'], self.student1.name)
+        self.assertEqual(response.data['results'][1]['member']['class_num'], self.student2.class_num)
 
         data = {
             'status': JoinSocietyRequestStatus.ACCEPTED
         }
         response = client.get(url, data=data, decode=True)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['member']['grade'], self.student1.grade)
+        self.assertEqual(len(response.data['results']), 1)
+        self.assertEqual(response.data['results'][0]['member']['grade'], self.student1.grade)
 
         data = {
             'status': JoinSocietyRequestStatus.WAITING
         }
         response = client.get(url, data=data, decode=True)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['member']['grade'], self.student2.grade)
+        self.assertEqual(len(response.data['results']), 1)
+        self.assertEqual(response.data['results'][0]['member']['grade'], self.student2.grade)
 
         response = self.client.get(url)
         self.assertEqual(response.status_code, 403)
@@ -169,23 +169,23 @@ class SocietyManageActivityTests(TestCase):
         client.force_authenticate(self.society_user)
         response = client.get(url, decode=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data[0]['title'], 'keep calm')
-        self.assertEqual(response.data[1]['title'], 'make epic shit')
-        self.assertEqual(response.data[0]['status'], ActivityRequestStatus.WAITING)
+        self.assertEqual(response.data['results'][0]['title'], 'keep calm')
+        self.assertEqual(response.data['results'][1]['title'], 'make epic shit')
+        self.assertEqual(response.data['results'][0]['status'], ActivityRequestStatus.WAITING)
 
         data = {
             'status': ActivityRequestStatus.ACCEPTED
         }
         response = client.get(url, data=data, decode=True)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['title'], 'make epic shit')
+        self.assertEqual(len(response.data['results']), 1)
+        self.assertEqual(response.data['results'][0]['title'], 'make epic shit')
 
         data = {
             'status': ActivityRequestStatus.WAITING
         }
         response = client.get(url, data=data, decode=True)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['title'], 'keep calm')
+        self.assertEqual(len(response.data['results']), 1)
+        self.assertEqual(response.data['results'][0]['title'], 'keep calm')
 
     def test_update_activity_requests(self):
         url = '/api/society_manage/activity/{}/'.format(self.ar1.pk)

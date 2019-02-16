@@ -1,11 +1,14 @@
 import React from 'react';
 
+import AdminContentWrapper from '../../../shared/admin_content_wrapper/AdminContentWrapper';
 import SocietyTable from '../components/SocietyTable'
 
 class SocietyListContainer extends React.Component {
-    render () {
+    render() {
         return (
-            <SocietyTable/>
+            <AdminContentWrapper>
+                <SocietyTable/>
+            </AdminContentWrapper>
         )
     }
 }

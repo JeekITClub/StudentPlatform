@@ -12,7 +12,7 @@ import './styles/index.scss'
 import AccountStore from '../../shared/stores/AccountStore'
 import NotAuthorized from "../../shared/NotAuthorized/NotAuthorized";
 
-export default function AdminClub({match}) {
+export default function AdminSociety({match}) {
     return (
         AccountStore.is_society ?
             <div>
