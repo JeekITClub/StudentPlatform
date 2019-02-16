@@ -57,7 +57,7 @@ class MemberList extends React.Component {
                 key: 'operation',
                 dataIndex: 'id',
                 render: (text) => {
-                    return (<Button onClick={() => this.handleKickMember(text)}>踢出成员</Button>)
+                    return (<Button type="danger" onClick={() => this.handleKickMember(text)}>踢出成员</Button>)
                 }
             }
         ];

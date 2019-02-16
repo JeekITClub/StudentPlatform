@@ -27,7 +27,7 @@ class AdminSocietySider extends React.Component {
                     <Icon type="layout"/>
                     <span className="nav-text">社团首页自定义</span>
                 </Menu.Item>
-                <Menu.Item key="members">
+                <Menu.Item key="member">
                     <Icon type="team"/>
                     <span className="nav-text">社团成员</span>
                 </Menu.Item>
