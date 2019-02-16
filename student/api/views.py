@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.generics import RetrieveUpdateAPIView, ListAPIView
+from rest_framework.permissions import IsAuthenticated
 
 from student.models import Student
 from student.api.serializers import (
@@ -28,7 +29,7 @@ class StudentCreditViewSet(
     viewsets.GenericViewSet,
     ListAPIView
 ):
-    permission_classes = [IsStudent, ]
+    permission_classes = [IsAuthenticated, IsStudent]
     serializer_class = StudentInspectCreditSerializer
 
     def get_queryset(self):

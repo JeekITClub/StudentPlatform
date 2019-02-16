@@ -74,8 +74,8 @@ class StudentCreditTests(TestCase):
         res = client.get(url, decode=True)
         self.assertEqual(res.status_code, 200)
 
-        user = self.createUser('society')
-        society = self.createSociety(user, members=None)
+        society_user = self.createUser('society')
+        society = self.createSociety(society_user, members=None)
         credit_distribution = CreditDistribution.objects.create(
             society=society,
             year=2019,
@@ -97,3 +97,11 @@ class StudentCreditTests(TestCase):
         self.assertEqual(res.data[0]['year'], credit_distribution.year)
 
         self.assertEqual(res.data[1]['year'], credit_distribution2.year)
+
+        # test is_authenticated permission
+        res = self.client.get(url)
+        self.assertEqual(res.status_code, 403)
+
+        client.force_authenticate(society_user)
+        res = client.get(url)
+        self.assertEqual(res.status_code, 403)
