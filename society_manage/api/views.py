@@ -11,7 +11,7 @@ from society_manage.api.serializers import (
     KickMemberSerializer,
     ActivityRequestSerializer,
     ActivityRequestMiniSerializer,
-    CreditDistributionSerializer
+    CreditDistributionSerializer,
 )
 from society_manage.models import CreditDistribution
 from student.api.serializers import StudentMiniSerializer
@@ -117,3 +117,13 @@ class SocietyCreditViewSet(
             serializer = self.get_serializer(instance)
             return response.Response(serializer.data)
         return response.Response(status=status.HTTP_404_NOT_FOUND)
+
+    def update(self, request, *args, **kwargs):
+        receiver_id_set = request.data.getlist('receivers', None)
+        if receiver_id_set:
+            for receiver_id in receiver_id_set:
+                student = request.user.society.members.filter(id=int(receiver_id)).first()
+                if student is not None:
+                    self.get_object().receivers.add(student)
+            return response.Response(status=status.HTTP_200_OK)
+        return response.Response(status=status.HTTP_400_BAD_REQUEST)

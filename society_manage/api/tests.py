@@ -304,3 +304,32 @@ class SocietyManageCreditTests(TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(len(res.data['available_receivers']), 1)
 
+    def test_update(self):
+        society1_cd = CreditDistribution.objects.create(
+            society=self.society1,
+            year=SettingsService.get('year'),
+            semester=SettingsService.get('semester')
+        )
+
+        self.society1.members.add(self.student1)
+
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(self.society_user1)
+
+        url = '/api/society_manage/credit/{}/'.format(society1_cd.id)
+        data = {
+            'receivers': [
+                self.student1.id
+            ]
+        }
+        res = client.patch(url, data=data, encode=True)
+        self.assertEqual(res.status_code, 200)
+        society1_cd.refresh_from_db()
+        self.assertEqual(society1_cd.receivers_count, 1)
+        self.assertEqual(society1_cd.receivers.first(), self.student1)
+
+        data = {
+            'receiver': []
+        }
+        res = client.patch(url, data=data, encode=True)
+        self.assertEqual(res.status_code, 400)

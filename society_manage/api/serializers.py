@@ -2,6 +2,7 @@ from rest_framework import serializers
 from student.api.serializers import StudentMiniSerializer
 from society.models import JoinSocietyRequest, ActivityRequest
 from society_manage.models import CreditDistribution
+from student.models import Student
 
 
 class JoinSocietyRequestSerializer(serializers.ModelSerializer):
