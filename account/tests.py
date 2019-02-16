@@ -85,7 +85,7 @@ class AccountTests(TestCase):
         sb_user = self.createUser('ncjnb')
         self.createSocietyBureau(sb_user)
 
-        url = '/api/account/identity/'
+        url = '/api/account/user/'
         client = APIClient(enforce_csrf_checks=True)
         client.force_authenticate(self.user)
         res = client.get(url)
