@@ -64,30 +64,74 @@ class SocietyManageTests(TestCase):
         client.force_authenticate(self.user4)
         response = client.get(url, decode=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 3)
+        self.assertEqual(len(response.data['results']), 3)
 
         data = {
             'name': 'jee'
         }
         response = client.get(url, data=data, decode=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 2)
+        self.assertEqual(len(response.data['results']), 2)
 
         data = {
             'type': SocietyType.LEADERSHIP
         }
         response = client.get(url, data=data, decode=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['name'], 'jtv')
+        self.assertEqual(len(response.data['results']), 1)
+        self.assertEqual(response.data['results'][0]['name'], 'jtv')
 
         data = {
             'status': SocietyStatus.ACTIVE
         }
         response = client.get(url, data=data, decode=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['name'], 'jtv')
+        self.assertEqual(len(response.data['results']), 1)
+        self.assertEqual(response.data['results'][0]['name'], 'jtv')
+
+    def test_list_pagination_societies(self):
+        users = [self.createUser('society{}'.format(i)) for i in range(4, 51)]
+        societies = [
+            self.createSociety(
+                user=user,
+                society_id=user.id - 1,
+                name=user.username,
+                members=None
+            ) for user in users
+        ]
+        url = '/api/manage/society/'
+        data = {
+            'page': 2,
+            'page_size': 20
+        }
+
+        client = APIClient(enforce_csrf_checks=True)
+        response = client.get(url, decode=True)
+        self.assertEqual(response.status_code, 403)
+
+        # default page_size = 10
+        client.force_authenticate(self.user4)
+        response = client.get(url, decode=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data['results']), 10)
+        self.assertEqual(response.data['results'][0]['id'], 1)
+
+        # set page and page_size manually
+        response = client.get(url, data=data, decode=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data['results']), 20)
+        self.assertEqual(response.data['results'][0]['id'], 21)
+
+        # max page_size = 50
+        data = {
+            'page': 1,
+            'page_size': 50
+        }
+        response = client.get(url, data=data, decode=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data['results']), 40)
+        self.assertEqual(response.data['count'], 50)
+        self.assertEqual(response.data['results'][-1]['id'], 40)
 
     def test_confirm_society(self):
         url = '/api/manage/society/{}/confirm/'.format(self.society3.pk)
@@ -192,8 +236,8 @@ class CreditManageTests(TestCase):
         client.force_authenticate(self.user3)
         response = client.get(url, decode=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 2)
-        self.assertEqual(response.data[0]['credit'], 0)
+        self.assertEqual(len(response.data['results']), 2)
+        self.assertEqual(response.data['results'][0]['credit'], 0)
 
     def test_update_society_credit(self):
         url = '/api/manage/credit/{}/'.format(self.society1.pk)
@@ -286,15 +330,15 @@ class CreditReceiversTests(TestCase):
         client.force_authenticate(self.user3)
         response = client.get(url, decode=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 3)
+        self.assertEqual(len(response.data['results']), 3)
 
         response = client.get(url, data={'name': 'jtv'}, decode=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 2)
-        self.assertEqual(response.data[0]['society']['society_id'], 301)
-        self.assertEqual(response.data[1]['society']['society_id'], 301)
-        self.assertEqual(response.data[0]['count'], 1)
-        self.assertEqual(response.data[1]['count'], 0)
+        self.assertEqual(len(response.data['results']), 2)
+        self.assertEqual(response.data['results'][0]['society']['society_id'], 301)
+        self.assertEqual(response.data['results'][1]['society']['society_id'], 301)
+        self.assertEqual(response.data['results'][0]['count'], 1)
+        self.assertEqual(response.data['results'][1]['count'], 0)
 
         data = {
             'year': 2018,
@@ -302,8 +346,8 @@ class CreditReceiversTests(TestCase):
         }
         response = client.get(url, data=data, decode=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['society']['society_id'], 301)
+        self.assertEqual(len(response.data['results']), 1)
+        self.assertEqual(response.data['results'][0]['society']['society_id'], 301)
 
     def test_retrieve_credit_receivers(self):
         url = '/api/manage/credit_receiver/{}/'.format(self.credit_receivers1.pk)

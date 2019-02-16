@@ -52,10 +52,10 @@ class SocietyTestCase(TestCase):
     def test_get_society_list(self):
         url = '/api/society/'
         response = self.client.get(url)
-        self.assertEqual(response.data[0]['name'], self.society1.name)
-        self.assertEqual(response.data[0]['society_id'], self.society1.society_id)
-        self.assertEqual(response.data[1]['name'], self.society2.name)
-        self.assertEqual(response.data[1]['society_id'], self.society2.society_id)
+        self.assertEqual(response.data['results'][0]['name'], self.society1.name)
+        self.assertEqual(response.data['results'][0]['society_id'], self.society1.society_id)
+        self.assertEqual(response.data['results'][1]['name'], self.society2.name)
+        self.assertEqual(response.data['results'][1]['society_id'], self.society2.society_id)
 
     def test_get_society(self):
         url = '/api/society/{}/'.format(self.society1.pk)
@@ -80,9 +80,9 @@ class SocietyTestCase(TestCase):
         }
         response = self.client.get(url, data=params)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 2)
-        self.assertEqual(response.data[0]['name'], self.society1.name)
-        self.assertEqual(response.data[1]['society_id'], self.society2.society_id)
+        self.assertEqual(len(response.data['results']), 2)
+        self.assertEqual(response.data['results'][0]['name'], self.society1.name)
+        self.assertEqual(response.data['results'][1]['society_id'], self.society2.society_id)
 
     def test_join_society(self):
         url = '/api/society/{}/join/'.format(self.society1.pk)
