@@ -6,9 +6,7 @@ import Provider from '../../../../utils/provider'
 
 class MemberList extends React.Component {
     state = {
-        members: Array(200).fill(null).map((item, index) => {
-            return {name: index + 1, grade: 1, class_num: 1, student_id: index + 1}
-        }),
+        members: [],
         pageNum: 1,
         pageSize: 10
     };
