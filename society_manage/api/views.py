@@ -119,6 +119,8 @@ class SocietyCreditViewSet(
         return response.Response(status=status.HTTP_404_NOT_FOUND)
 
     def update(self, request, *args, **kwargs):
+        if self.get_object().closed:
+            return response.Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         receiver_id_set = request.data.getlist('receivers', None)
         if receiver_id_set:
             for receiver_id in receiver_id_set:
