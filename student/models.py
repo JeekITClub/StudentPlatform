@@ -25,5 +25,5 @@ class Student(models.Model):
             semester=semester
         )
         if receive_credit_from.exists():
-            return receive_credit_from.first().society.name
+            return receive_credit_from.first().society.id
         return None

@@ -23,13 +23,13 @@ class CreditDistribution(models.Model):
         return self.receivers.count()
 
     @property
-    def available_receivers(self):
+    def get_available_receivers(self):
         available_receivers = []
         members = self.society.members.all()
         year = SettingsService.get('year')
         semester = SettingsService.get('semester')
         for member in members:
             has_receiver_credit = member.has_receive_credit(year, semester)
-            if has_receiver_credit == self.society.name or has_receiver_credit is None:
+            if has_receiver_credit == self.society.id or has_receiver_credit is None:
                 available_receivers.append(member)
         return available_receivers

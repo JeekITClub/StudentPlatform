@@ -1,6 +1,6 @@
 from rest_framework import viewsets, response, status
 from rest_framework.decorators import action
-from rest_framework.generics import UpdateAPIView, RetrieveAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import UpdateAPIView, ListAPIView
 from rest_framework.mixins import ListModelMixin
 
 from utils.permissions import IsSociety, SocietyActivityEditable
@@ -15,7 +15,11 @@ from society_manage.api.serializers import (
 )
 from society_manage.models import CreditDistribution
 from student.api.serializers import StudentMiniSerializer
-from utils.filters import StatusFilterBackend
+from utils.filters import (
+    StatusFilterBackend,
+    YearFilterBackend,
+    SemesterFilterBackend
+)
 
 
 class SocietyMemberViewSet(viewsets.GenericViewSet, ListModelMixin):
@@ -95,12 +99,21 @@ class ActivityRequestViewSet(viewsets.ModelViewSet):
 
 class SocietyCreditViewSet(
     viewsets.GenericViewSet,
-    RetrieveUpdateAPIView,
+    UpdateAPIView,
+    ListAPIView
 ):
     permission_classes = (IsSociety,)
+    filter_backends = [YearFilterBackend, SemesterFilterBackend]
 
     def get_serializer_class(self):
         return CreditDistributionSerializer
 
     def get_queryset(self):
         return CreditDistribution.objects.filter(society=self.request.user.society)
+
+    def list(self, request, *args, **kwargs):
+        instance = self.filter_queryset(self.get_queryset()).first()
+        if instance:
+            serializer = self.get_serializer(instance)
+            return response.Response(serializer.data)
+        return response.Response(status=status.HTTP_404_NOT_FOUND)

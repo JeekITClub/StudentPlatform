@@ -1,10 +1,11 @@
 from rest_framework.test import APIClient
+from django.utils import timezone
 from testing.testcases import TestCase
 
 from society.constants import SocietyType, JoinSocietyRequestStatus, ActivityRequestStatus
 from society.models import JoinSocietyRequest, ActivityRequest
-
-from django.utils import timezone
+from society_manage.models import CreditDistribution
+from society_bureau.api.services import SettingsService
 
 
 class SocietyManageMemberTests(TestCase):
@@ -256,3 +257,50 @@ class SocietyManageCreditTests(TestCase):
         self.society_user2 = self.createUser('su2')
         self.society1 = self.createSociety(self.society_user1, members=None)
         self.society2 = self.createSociety(self.society_user2, members=None)
+        self.student_user1 = self.createUser('stu1')
+        self.student_user2 = self.createUser('stu2')
+        self.student1 = self.createStudent(self.student_user1)
+        self.student2 = self.createStudent(self.student_user2)
+
+    def test_retrieve(self):
+        url = '/api/society_manage/credit/'
+
+        society1_cd = CreditDistribution.objects.create(
+            society=self.society1,
+            year=SettingsService.get('year'),
+            semester=SettingsService.get('semester')
+        )
+        self.society1.members.set([self.student1, self.student2])
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(self.society_user1)
+
+        params = {
+            'year': SettingsService.get('year'),
+            'semester': SettingsService.get('semester')
+        }
+        res = client.get(url, data=params, encode=True)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.data['year'], 2019)
+        self.assertEqual(res.data['semester'], 1)
+        self.assertEqual(len(res.data['available_receivers']), 2)
+        self.assertEqual(res.data['available_receivers'][0]['name'], self.student1.name)
+
+        society1_cd.receivers.add(self.student1)
+        society1_cd.refresh_from_db()
+        res = client.get(url, data=params, encode=True)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(len(res.data['available_receivers']), 2)
+        self.assertEqual(len(res.data['receivers']), 1)
+
+        society2_cd = CreditDistribution.objects.create(
+            society=self.society2,
+            year=SettingsService.get('year'),
+            semester=SettingsService.get('semester')
+        )
+        self.society2.members.set([self.student1, self.student2])
+
+        client.force_authenticate(self.society_user2)
+        res = client.get(url, data=params, encode=True)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(len(res.data['available_receivers']), 1)
+
