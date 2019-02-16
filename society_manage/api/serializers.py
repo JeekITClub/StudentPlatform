@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from student.api.serializers import StudentMiniSerializer
 from society.models import JoinSocietyRequest, ActivityRequest
+from society_manage.models import CreditDistribution
+from student.models import Student
 
 
 class JoinSocietyRequestSerializer(serializers.ModelSerializer):
@@ -36,3 +38,12 @@ class ActivityRequestMiniSerializer(serializers.ModelSerializer):
         model = ActivityRequest
         fields = ('title', 'status', 'place', 'start_time')
         read_only_fields = ('status',)
+
+
+class CreditDistributionSerializer(serializers.ModelSerializer):
+    available_receivers = StudentMiniSerializer(many=True, source='get_available_receivers')
+    receivers = StudentMiniSerializer(many=True)
+
+    class Meta:
+        model = CreditDistribution
+        fields = ('id', 'year', 'semester', 'receivers', 'available_receivers', 'closed')

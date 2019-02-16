@@ -1,6 +1,6 @@
 from rest_framework import viewsets, response, status
 from rest_framework.decorators import action
-from rest_framework.generics import UpdateAPIView
+from rest_framework.generics import UpdateAPIView, ListAPIView
 from rest_framework.mixins import ListModelMixin
 
 from utils.filters import StatusFilterBackend
@@ -11,10 +11,16 @@ from society_manage.api.serializers import (
     ReviewJoinSocietyRequestSerializer,
     KickMemberSerializer,
     ActivityRequestSerializer,
-    ActivityRequestMiniSerializer
+    ActivityRequestMiniSerializer,
+    CreditDistributionSerializer,
 )
+from society_manage.models import CreditDistribution
 from student.api.serializers import StudentMiniSerializer
-from utils.filters import StatusFilterBackend
+from utils.filters import (
+    StatusFilterBackend,
+    YearFilterBackend,
+    SemesterFilterBackend
+)
 
 
 class SocietyMemberViewSet(viewsets.GenericViewSet, ListModelMixin):
@@ -91,3 +97,37 @@ class ActivityRequestViewSet(viewsets.ModelViewSet):
         if self.action == 'list':
             return ActivityRequestMiniSerializer
         return ActivityRequestSerializer
+
+
+class SocietyCreditViewSet(
+    viewsets.GenericViewSet,
+    UpdateAPIView,
+    ListAPIView
+):
+    permission_classes = (IsSociety,)
+    filter_backends = [YearFilterBackend, SemesterFilterBackend]
+
+    def get_serializer_class(self):
+        return CreditDistributionSerializer
+
+    def get_queryset(self):
+        return CreditDistribution.objects.filter(society=self.request.user.society)
+
+    def list(self, request, *args, **kwargs):
+        instance = self.filter_queryset(self.get_queryset()).first()
+        if instance:
+            serializer = self.get_serializer(instance)
+            return response.Response(serializer.data)
+        return response.Response(status=status.HTTP_404_NOT_FOUND)
+
+    def update(self, request, *args, **kwargs):
+        if self.get_object().closed:
+            return response.Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        receiver_id_set = request.data.getlist('receivers', None)
+        if receiver_id_set:
+            for receiver_id in receiver_id_set:
+                student = request.user.society.members.filter(id=int(receiver_id)).first()
+                if student is not None:
+                    self.get_object().receivers.add(student)
+            return response.Response(status=status.HTTP_200_OK)
+        return response.Response(status=status.HTTP_400_BAD_REQUEST)

@@ -1,5 +1,7 @@
 from django.db import models
+
 from society.models import Society, Student
+from society_bureau.api.services import SettingsService
 
 
 class CreditDistribution(models.Model):
@@ -19,3 +21,15 @@ class CreditDistribution(models.Model):
     @property
     def receivers_count(self):
         return self.receivers.count()
+
+    @property
+    def get_available_receivers(self):
+        available_receivers = []
+        members = self.society.members.all()
+        year = SettingsService.get('year')
+        semester = SettingsService.get('semester')
+        for member in members:
+            has_receiver_credit = member.has_receive_credit(year, semester)
+            if has_receiver_credit == self.society.id or has_receiver_credit is None:
+                available_receivers.append(member)
+        return available_receivers

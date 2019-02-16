@@ -1,10 +1,11 @@
 from rest_framework.test import APIClient
+from django.utils import timezone
 from testing.testcases import TestCase
 
 from society.constants import SocietyType, JoinSocietyRequestStatus, ActivityRequestStatus
 from society.models import JoinSocietyRequest, ActivityRequest
-
-from django.utils import timezone
+from society_manage.models import CreditDistribution
+from society_bureau.api.services import SettingsService
 
 
 class SocietyManageMemberTests(TestCase):
@@ -248,3 +249,106 @@ class SocietyManageActivityTests(TestCase):
         response = client.delete(url, decode=True)
         self.assertEqual(response.status_code, 204)
         self.assertIsNone(ActivityRequest.objects.filter(pk=self.ar1.pk).first())
+
+
+class SocietyManageCreditTests(TestCase):
+    def setUp(self):
+        self.society_user1 = self.createUser('su1')
+        self.society_user2 = self.createUser('su2')
+        self.society1 = self.createSociety(self.society_user1, members=None)
+        self.society2 = self.createSociety(self.society_user2, members=None)
+        self.student_user1 = self.createUser('stu1')
+        self.student_user2 = self.createUser('stu2')
+        self.student1 = self.createStudent(self.student_user1)
+        self.student2 = self.createStudent(self.student_user2)
+
+    def test_retrieve(self):
+        url = '/api/society_manage/credit/'
+
+        society1_cd = CreditDistribution.objects.create(
+            society=self.society1,
+            year=SettingsService.get('year'),
+            semester=SettingsService.get('semester')
+        )
+        self.society1.members.set([self.student1, self.student2])
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(self.society_user1)
+
+        params = {
+            'year': SettingsService.get('year'),
+            'semester': SettingsService.get('semester')
+        }
+        res = client.get(url, data=params, encode=True)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.data['year'], 2019)
+        self.assertEqual(res.data['semester'], 1)
+        self.assertEqual(len(res.data['available_receivers']), 2)
+        self.assertEqual(res.data['available_receivers'][0]['name'], self.student1.name)
+        self.assertEqual(res.data['closed'], False)
+
+        society1_cd.receivers.add(self.student1)
+        society1_cd.refresh_from_db()
+        res = client.get(url, data=params, encode=True)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(len(res.data['available_receivers']), 2)
+        self.assertEqual(len(res.data['receivers']), 1)
+
+        society2_cd = CreditDistribution.objects.create(
+            society=self.society2,
+            year=SettingsService.get('year'),
+            semester=SettingsService.get('semester')
+        )
+        self.society2.members.set([self.student1, self.student2])
+
+        client.force_authenticate(self.society_user2)
+        res = client.get(url, data=params, encode=True)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(len(res.data['available_receivers']), 1)
+
+        # test 404
+        params = {
+            'year': 1111,
+            'semester': 11
+        }
+        res = client.get(url, data=params, encode=True)
+        self.assertEqual(res.status_code, 404)
+
+    def test_update(self):
+        society1_cd = CreditDistribution.objects.create(
+            society=self.society1,
+            year=SettingsService.get('year'),
+            semester=SettingsService.get('semester')
+        )
+
+        self.society1.members.add(self.student1)
+
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(self.society_user1)
+
+        url = '/api/society_manage/credit/{}/'.format(society1_cd.id)
+        data = {
+            'receivers': [
+                self.student1.id
+            ]
+        }
+        res = client.patch(url, data=data, encode=True)
+        self.assertEqual(res.status_code, 200)
+        society1_cd.refresh_from_db()
+        self.assertEqual(society1_cd.receivers_count, 1)
+        self.assertEqual(society1_cd.receivers.first(), self.student1)
+
+        data = {
+            'receiver': []
+        }
+        res = client.patch(url, data=data, encode=True)
+        self.assertEqual(res.status_code, 400)
+
+        society1_cd.closed = True
+        society1_cd.save()
+        data = {
+            'receivers': [
+                self.student1.id
+            ]
+        }
+        res = client.patch(url, data=data, encode=True)
+        self.assertEqual(res.status_code, 406)
