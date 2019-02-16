@@ -18,3 +18,12 @@ class Student(models.Model):
 
     def __str__(self):
         return self.name
+
+    def has_receive_credit(self, year, semester):
+        receive_credit_from = self.receive_credit_from.filter(
+            year=year,
+            semester=semester
+        )
+        if receive_credit_from.exists():
+            return receive_credit_from.first().society.name
+        return None

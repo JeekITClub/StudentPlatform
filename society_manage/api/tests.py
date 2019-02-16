@@ -248,3 +248,11 @@ class SocietyManageActivityTests(TestCase):
         response = client.delete(url, decode=True)
         self.assertEqual(response.status_code, 204)
         self.assertIsNone(ActivityRequest.objects.filter(pk=self.ar1.pk).first())
+
+
+class SocietyManageCreditTests(TestCase):
+    def setUp(self):
+        self.society_user1 = self.createUser('su1')
+        self.society_user2 = self.createUser('su2')
+        self.society1 = self.createSociety(self.society_user1, members=None)
+        self.society2 = self.createSociety(self.society_user2, members=None)

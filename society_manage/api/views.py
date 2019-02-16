@@ -1,6 +1,6 @@
 from rest_framework import viewsets, response, status
 from rest_framework.decorators import action
-from rest_framework.generics import UpdateAPIView
+from rest_framework.generics import UpdateAPIView, RetrieveAPIView, RetrieveUpdateAPIView
 from rest_framework.mixins import ListModelMixin
 
 from utils.permissions import IsSociety, SocietyActivityEditable
@@ -10,8 +10,10 @@ from society_manage.api.serializers import (
     ReviewJoinSocietyRequestSerializer,
     KickMemberSerializer,
     ActivityRequestSerializer,
-    ActivityRequestMiniSerializer
+    ActivityRequestMiniSerializer,
+    CreditDistributionSerializer
 )
+from society_manage.models import CreditDistribution
 from student.api.serializers import StudentMiniSerializer
 from utils.filters import StatusFilterBackend
 
@@ -89,3 +91,16 @@ class ActivityRequestViewSet(viewsets.ModelViewSet):
         if self.action == 'list':
             return ActivityRequestMiniSerializer
         return ActivityRequestSerializer
+
+
+class SocietyCreditViewSet(
+    viewsets.GenericViewSet,
+    RetrieveUpdateAPIView,
+):
+    permission_classes = (IsSociety,)
+
+    def get_serializer_class(self):
+        return CreditDistributionSerializer
+
+    def get_queryset(self):
+        return CreditDistribution.objects.filter(society=self.request.user.society)
