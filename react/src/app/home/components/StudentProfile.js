@@ -34,6 +34,14 @@ class StudentProfile extends React.Component {
         })
     };
 
+    renderGradeChoices = () => {
+        const year = new Date().getFullYear();
+        return Array(9)
+            .fill(null)
+            .map((item, index) => year + index - 7)
+            .map((item) => <Option value={item} key={item}>{item}级</Option>);
+    };
+
     render() {
         const {getFieldDecorator} = this.props.form;
         return (
@@ -48,17 +56,15 @@ class StudentProfile extends React.Component {
                         <Input placeholder="请输入你的真实姓名"/>
                     )}
                 </Item>
-                <Item label="年纪">
+                <Item label="年级">
                     {getFieldDecorator('grade', {
                         rules: [{
                             required: true,
                             message: '请选择年级',
                         }],
                     })(
-                        <Select placeholder="请选择年级">
-                            <Option value={1}>高一</Option>
-                            <Option value={2}>高二</Option>
-                            <Option value={3}>高三</Option>
+                        <Select placeholder="请选择年级（入学年份）">
+                            {this.renderGradeChoices()}
                         </Select>
                     )}
                 </Item>
