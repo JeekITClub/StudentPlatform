@@ -304,6 +304,14 @@ class SocietyManageCreditTests(TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(len(res.data['available_receivers']), 1)
 
+        # test 404
+        params = {
+            'year': 1111,
+            'semester': 11
+        }
+        res = client.get(url, data=params, encode=True)
+        self.assertEqual(res.status_code, 404)
+
     def test_update(self):
         society1_cd = CreditDistribution.objects.create(
             society=self.society1,
