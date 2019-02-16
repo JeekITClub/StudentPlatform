@@ -6,40 +6,40 @@ import Provider from '../../../../utils/provider'
 
 class MemberList extends React.Component {
     state = {
-        members: [],
-        pageNum: 1,
-        pageSize: 10
+        members: []
     };
 
-    componentDidMount() {
+    getSocietyMembers = (pageNum, pageSize) => {
         Provider.get('/api/society_manage/member/', {
             params: {
-                pageNum: this.state.pageNum,
-                pageSize: this.state.pageSize
+                pageNum: pageNum,
+                pageSize: pageSize
             }
         }).then((res) => {
             this.setState({members: res.data})
         }).catch((err) => {
             console.log(err)
         })
-    }
+    };
+
 
     handleKickMember = (member_id) => {
         Provider.post('/api/society_manage/member/kick', {
             member_id: member_id
+        }).then((res) => {
+            console.log(res.status)
+        }).catch((err) => {
+            console.log(err)
         })
-            .then((res) => {
-                console.log(res.status)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
     };
 
     onPaginationChange = (pagination) => {
-        console.log('current', pagination.current);
-        console.log('pageSize', pagination.pageSize);
+        this.getSocietyMembers(pagination.current, pagination.pageSize);
     };
+
+    componentDidMount() {
+        this.getSocietyMembers(1, 10)
+    }
 
     renderMemberList = () => {
         const columns = [
@@ -84,7 +84,8 @@ class MemberList extends React.Component {
             <Table dataSource={this.state.members}
                    columns={columns}
                    pagination={{showSizeChanger: true}}
-                   onChange={this.onPaginationChange} rowKey="student_id"/>
+                   onChange={this.onPaginationChange}
+                   rowKey="student_id"/>
         )
     };
 
