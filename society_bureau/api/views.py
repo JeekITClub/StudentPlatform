@@ -1,17 +1,17 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, mixins, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from rest_framework.mixins import ListModelMixin, UpdateModelMixin, RetrieveModelMixin, DestroyModelMixin
 
+from society_bureau.api.services import SettingsService
 from society.models import Society
-from society_manage.models import CreditReceivers
+from society_manage.models import CreditDistribution
 from society_bureau.api.serializers import (
     SocietySerializer,
     SocietyMiniSerializer,
+    CreditDistributionMiniSerializer,
+    CreditDistributionSerializer,
     ConfirmSocietySerializer,
-    SocietyCreditSerializer,
-    CreditReceiversSerializer,
-    CreditReceiversMiniSerializer
+    CreditDistributionManualCreateSerializer
 )
 from utils.permissions import (
     IsSocietyBureau,
@@ -43,9 +43,9 @@ class DashboardViewSet(viewsets.GenericViewSet):
 
 class SocietyManageViewSet(
     viewsets.GenericViewSet,
-    ListModelMixin,
-    RetrieveModelMixin,
-    DestroyModelMixin
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.DestroyModelMixin
 ):
     filter_backends = [NameFilterBackend, TypeFilterBackend, StatusFilterBackend]
 
@@ -109,46 +109,35 @@ class SocietyManageViewSet(
 
 class CreditManageViewSet(
     viewsets.GenericViewSet,
-    ListModelMixin,
-    UpdateModelMixin
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    generics.UpdateAPIView,
+    mixins.ListModelMixin,
 ):
     permission_classes = (IsSocietyBureau,)
-    serializer_class = SocietyCreditSerializer
-    filter_backends = []
-
-    def get_queryset(self):
-        return Society.objects.filter(status=SocietyStatus.ACTIVE)
-
-    def filter_queryset(self, queryset):
-        tmp_queryset = queryset
-        if 'type' in self.request.query_params:
-            tmp_queryset = tmp_queryset.filter(type=self.request.query_params['type'])
-        if 'name' in self.request.query_params:
-            tmp_queryset = tmp_queryset.filter(name__icontains=self.request.query_params['name'])
-        return tmp_queryset
-
-    @action(detail=False, methods=['post'])
-    def set_all(self, request):
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            self.get_queryset().update(credit=serializer.data.get('credit'))
-            return Response(status=status.HTTP_202_ACCEPTED)
-        return Response(
-            status=status.HTTP_400_BAD_REQUEST,
-            data={'detail': '表单填写错误'}
-        )
-
-
-class CreditReceiversViewSet(
-    viewsets.GenericViewSet,
-    ListModelMixin,
-    RetrieveModelMixin
-):
-    permission_classes = (IsSocietyBureau,)
-    queryset = CreditReceivers.objects.all()
-    filter_backends = [CreditNameFilterBackend, YearFilterBackend, SemesterFilterBackend]
+    filter_backends = [YearFilterBackend, SemesterFilterBackend]
 
     def get_serializer_class(self):
-        if self.action == 'list':
-            return CreditReceiversMiniSerializer
-        return CreditReceiversSerializer
+        if self.action == 'retrieve':
+            return CreditDistributionSerializer
+        elif self.action == 'create':
+            return CreditDistributionManualCreateSerializer
+        return CreditDistributionMiniSerializer
+
+    def get_queryset(self):
+        return CreditDistribution.objects.all()
+
+    def list(self, request, *args, **kwargs):
+        if self.get_queryset().exists():
+            serializer = self.get_serializer(self.get_queryset(), many=True)
+            return Response(serializer.data)
+        credit_distribution_sets = []
+        for society in Society.objects.filter(status=SocietyStatus.WAITING):
+            queryset = CreditDistribution.objects.create(
+                society=society,
+                semester=SettingsService.get('semester'),
+                year=SettingsService.get('year')
+            )
+            credit_distribution_sets.append(queryset)
+        serializer = self.get_serializer(credit_distribution_sets, many=True)
+        return Response(serializer.data)

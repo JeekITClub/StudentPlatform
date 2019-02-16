@@ -41,9 +41,6 @@ class Society(models.Model):
     recruit_qq_group = models.CharField(max_length=32, blank=True)
     established_time = models.DateTimeField(blank=True, null=True)
     password_changed = models.BooleanField(default=False)
-    # The credit field is equal to the maximum number of people to receive credits,
-    # no matter how many credits one could receive at last.
-    credit = models.PositiveSmallIntegerField(default=0, help_text='The maximum count of credit receivers(not maximum credits).')
     tags = models.ManyToManyField(SocietyTag, blank=True)
 
     class Meta:
