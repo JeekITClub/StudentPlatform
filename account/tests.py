@@ -77,7 +77,7 @@ class AccountTests(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data['detail'], '表单填写错误')
 
-    def test_retrieve_identity(self):
+    def test_retrieve_user_identity(self):
         student_user = self.createUser('smsnb')
         self.createStudent(student_user)
         society_user = self.createUser('tjwnb')
@@ -105,3 +105,23 @@ class AccountTests(TestCase):
 
         res = self.client.get(url)
         self.assertEqual(res.status_code, 403)
+
+    def test_password_changed(self):
+        url = '/api/account/user/'
+
+        user1 = self.createUser('123')
+        user1.set_password('123456')
+        user1.save()
+
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(user1)
+        response = client.get(url, encode=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['password_changed'], False)
+
+        user1.set_password('ncjxjj')
+        user1.save()
+
+        response = client.get(url, encode=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['password_changed'], True)
