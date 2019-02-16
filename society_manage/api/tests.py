@@ -284,6 +284,7 @@ class SocietyManageCreditTests(TestCase):
         self.assertEqual(res.data['semester'], 1)
         self.assertEqual(len(res.data['available_receivers']), 2)
         self.assertEqual(res.data['available_receivers'][0]['name'], self.student1.name)
+        self.assertEqual(res.data['closed'], False)
 
         society1_cd.receivers.add(self.student1)
         society1_cd.refresh_from_db()
@@ -341,3 +342,13 @@ class SocietyManageCreditTests(TestCase):
         }
         res = client.patch(url, data=data, encode=True)
         self.assertEqual(res.status_code, 400)
+
+        society1_cd.closed = True
+        society1_cd.save()
+        data = {
+            'receivers': [
+                self.student1.id
+            ]
+        }
+        res = client.patch(url, data=data, encode=True)
+        self.assertEqual(res.status_code, 406)

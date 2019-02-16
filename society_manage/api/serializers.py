@@ -46,4 +46,4 @@ class CreditDistributionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CreditDistribution
-        fields = ('id', 'year', 'semester', 'receivers', 'available_receivers')
+        fields = ('id', 'year', 'semester', 'receivers', 'available_receivers', 'closed')
