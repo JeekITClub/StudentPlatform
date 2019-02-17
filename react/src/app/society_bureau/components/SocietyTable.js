@@ -1,5 +1,5 @@
 import React from 'react';
-import {Table, Tooltip, Button, Modal} from 'antd';
+import {Table, Tooltip, Button} from 'antd';
 
 import Provider from '../../../utils/provider'
 import SocietyDetailModal from "./SocietyDetailModal";
@@ -24,9 +24,8 @@ class SocietyTable extends React.Component {
         })
     };
 
-
     handleInspectButtonClick = (row) => {
-        this.setState({modalVisible: true, editingSocietyId: row.society_id});
+        this.setState({modalVisible: true, editingSocietyId: row.id});
     };
 
     handleCloseModal = () => {
@@ -36,7 +35,7 @@ class SocietyTable extends React.Component {
     renderPresidentTooltip = (president_name, index) => {
         const row = this.state.societies[index];
         return (
-            <Tooltip title={`${row.president_grade}${row.president_class}${row.president_name}`}>
+            <Tooltip title={`${row.president_grade}级 ${row.president_class}班 ${row.president_name}`}>
                 {president_name}
             </Tooltip>
         )
@@ -81,7 +80,6 @@ class SocietyTable extends React.Component {
             }
         ];
 
-
         return (
             <div>
                 <Table columns={columns}
@@ -91,7 +89,7 @@ class SocietyTable extends React.Component {
                        rowKey="id"/>
                 {
                     this.state.modalVisible &&
-                    <SocietyDetailModal society_id={this.state.editingSocietyId}
+                    <SocietyDetailModal societyId={this.state.editingSocietyId}
                                         closeModal={() => this.handleCloseModal()}/>
                 }
             </div>
