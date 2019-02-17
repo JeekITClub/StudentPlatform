@@ -1,9 +1,11 @@
+from django.contrib.auth.models import User
+from datetime import datetime, timedelta
 from rest_framework import viewsets, status, mixins, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
 from society_bureau.api.services import SettingsService
-from society.models import Society
+from society.models import Society, ActivityRequest
 from society_manage.models import CreditDistribution
 from society_bureau.api.serializers import (
     SocietySerializer,
@@ -27,7 +29,7 @@ from utils.filters import (
     SemesterFilterBackend,
     StatusFilterBackend
 )
-from society.constants import SocietyStatus
+from society.constants import SocietyStatus, ActivityRequestStatus
 
 
 class DashboardViewSet(viewsets.GenericViewSet):
@@ -38,7 +40,16 @@ class DashboardViewSet(viewsets.GenericViewSet):
         methods=['GET']
     )
     def statistic(self, request):
-        pass
+        now = datetime.now()
+        recent = now - timedelta(days=60)
+        data = {
+            'active_user_count': User.objects.filter(last_login__range=(recent, now)).count(),
+            'waiting_society_count': Society.objects.filter(status=SocietyStatus.WAITING).count(),
+            'society_count': Society.objects.exclude(status=SocietyStatus.WAITING).count(),
+            'waiting_activity_count': ActivityRequest.objects.filter(status=ActivityRequestStatus.WAITING).count(),
+            'activity_count': ActivityRequest.objects.exclude(status=ActivityRequestStatus.WAITING).count()
+        }
+        return Response(data=data, status=status.HTTP_200_OK)
 
 
 class SocietyManageViewSet(
