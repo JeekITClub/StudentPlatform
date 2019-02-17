@@ -1,5 +1,5 @@
 import React from 'react';
-import {Table, Tooltip, Button} from 'antd';
+import {Table, Tooltip, Button, notification} from 'antd';
 
 import Provider from '../../../utils/provider'
 import SocietyDetailModal from "./SocietyDetailModal";
@@ -20,7 +20,11 @@ class SocietyTable extends React.Component {
         }).then((res) => {
             this.setState({societies: res.data['results']});
         }).catch((err) => {
-            console.log(err)
+            console.log(err);
+            notification.error({
+                message: 'Oops...',
+                description: '获取社团列表失败了，请检查你的网络',
+            });
         })
     };
 

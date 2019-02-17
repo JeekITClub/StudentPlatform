@@ -1,5 +1,14 @@
 import React from 'react';
-import {Modal, Spin, Form, Input, Divider, Col, Switch} from 'antd';
+import {
+    Modal,
+    Spin,
+    Form,
+    Input,
+    Divider,
+    Col,
+    Switch,
+    notification
+} from 'antd';
 import PropTypes from 'prop-types';
 
 import Provider from '../../../utils/provider'
@@ -19,12 +28,15 @@ class SocietyDetailModal extends React.Component {
         this.setState({loading: true});
         Provider.get(`/api/manage/society/${this.props.societyId}/`)
             .then((res) => {
-                console.log(res.data);
                 this.setState({loading: false, society: res.data});
             })
             .catch((e) => {
                 this.setState({loading: false});
-                console.log(e)
+                console.log(e);
+                notification.error({
+                    message: 'Oops...',
+                    description: '获取社团信息失败了，请检查你的网络',
+                });
             })
     }
 
@@ -35,6 +47,7 @@ class SocietyDetailModal extends React.Component {
             <Modal
                 title="社团详情"
                 visible={true}
+                width={700}
                 onCancel={() => this.props.closeModal()}
             >
                 {
