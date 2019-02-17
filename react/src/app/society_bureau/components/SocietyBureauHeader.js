@@ -1,7 +1,7 @@
 import React from 'react';
 import {Row, Col} from 'antd';
 
-import LocationBreadcrumb from '../../../shared/location_breadcrumb/LocationBreadcrumb';
+import LocationBreadcrumb from '../../../shared/LocationBreadcrumb/LocationBreadcrumb';
 import HeaderMenu from './HeaderMenu';
 import '../styles/header.scss'
 
