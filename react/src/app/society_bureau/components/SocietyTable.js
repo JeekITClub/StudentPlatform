@@ -7,6 +7,7 @@ import SocietyDetailModal from "./SocietyDetailModal";
 class SocietyTable extends React.Component {
     state = {
         societies: [],
+        count: 0,
         editingSocietyId: 0,
         modalVisible: false
     };
@@ -18,7 +19,7 @@ class SocietyTable extends React.Component {
                 page_size: pageSize
             }
         }).then((res) => {
-            this.setState({societies: res.data['results']});
+            this.setState({societies: res.data['results'], count: res.data['count']});
         }).catch((err) => {
             notification.error({
                 message: 'Oops...',
@@ -87,7 +88,10 @@ class SocietyTable extends React.Component {
             <div>
                 <Table columns={columns}
                        dataSource={this.state.societies}
-                       pagination={{showSizeChanger: true}}
+                       pagination={{
+                           showSizeChanger: true,
+                           total: this.state.count
+                       }}
                        onChange={this.onPaginationChange}
                        rowKey="id"/>
                 {
