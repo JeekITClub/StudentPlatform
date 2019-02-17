@@ -48,7 +48,10 @@ class SocietyDetailModal extends React.Component {
                 title="社团详情"
                 visible={true}
                 width={700}
+                cancelText="取消"
+                okText="确定"
                 onCancel={() => this.props.closeModal()}
+                onOk={() => this.props.closeModal()}
             >
                 {
                     this.state.loading
