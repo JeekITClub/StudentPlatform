@@ -13,12 +13,12 @@ class NotAuthorized extends React.Component {
                         <p className="not-authorized-text">你可没有权限呢</p>
                     </Col>
                     <Col span={12}>
-                        <h4 className="not-authorized-link">
+                        <h4 className="text-center">
                             <Link to={'/'}>回首页</Link>
                         </h4>
                     </Col>
                     <Col span={12}>
-                        <h4 className="not-authorized-link">
+                        <h4 className="text-center">
                             <Link to={'/login'}>去登录</Link>
                         </h4>
                     </Col>

@@ -13,13 +13,15 @@ class NotLogin extends React.Component {
                         <p className="not-login-text">你还没有登录</p>
                     </Col>
                     <Col span={12}>
-                        <h4 className="not-login-link">
+                        <h4 className="text-center">
                             <Link to={'/'}>回首页</Link>
                         </h4>
                     </Col>
                     <Col span={12}>
-                        <h4 className="not-login-link">
-                            <Link to={'/login'}>去登录</Link>
+                        <h4 className="text-center">
+                            <Link to={'/login'}>
+                                去登录
+                            </Link>
                         </h4>
                     </Col>
                 </Row>
