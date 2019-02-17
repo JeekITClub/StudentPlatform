@@ -1,13 +1,29 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
+import {Row, Col} from 'antd';
 
-import './NotAuthorized.scss'
+import './NotAuthorized.scss';
 
 class NotAuthorized extends React.Component {
-    render () {
+    render() {
         return (
-            <div className="not-authorized-container">
-                <p className="not-authorized-text">你可没有权限呢</p>
-            </div>
+            <Row type="flex" align="middle" justify="center" className="not-authorized-container">
+                <Row>
+                    <Col span={24}>
+                        <p className="not-authorized-text">你可没有权限呢</p>
+                    </Col>
+                    <Col span={12}>
+                        <h4 className="not-authorized-link">
+                            <Link to={'/'}>回首页</Link>
+                        </h4>
+                    </Col>
+                    <Col span={12}>
+                        <h4 className="not-authorized-link">
+                            <Link to={'/login'}>去登录</Link>
+                        </h4>
+                    </Col>
+                </Row>
+            </Row>
         )
     }
 }
