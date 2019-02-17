@@ -1,5 +1,5 @@
 import React from 'react';
-import {Table, Tooltip, Button, Modal} from 'antd';
+import {Table, Tooltip, Button, notification} from 'antd';
 
 import Provider from '../../../utils/provider'
 import SocietyDetailModal from "./SocietyDetailModal";
@@ -7,6 +7,7 @@ import SocietyDetailModal from "./SocietyDetailModal";
 class SocietyTable extends React.Component {
     state = {
         societies: [],
+        count: 0,
         editingSocietyId: 0,
         modalVisible: false
     };
@@ -18,15 +19,17 @@ class SocietyTable extends React.Component {
                 page_size: pageSize
             }
         }).then((res) => {
-            this.setState({societies: res.data['results']});
+            this.setState({societies: res.data['results'], count: res.data['count']});
         }).catch((err) => {
-            console.log(err)
+            notification.error({
+                message: 'Oops...',
+                description: '获取社团列表失败了，请检查你的网络',
+            });
         })
     };
 
-
     handleInspectButtonClick = (row) => {
-        this.setState({modalVisible: true, editingSocietyId: row.society_id});
+        this.setState({modalVisible: true, editingSocietyId: row.id});
     };
 
     handleCloseModal = () => {
@@ -36,7 +39,7 @@ class SocietyTable extends React.Component {
     renderPresidentTooltip = (president_name, index) => {
         const row = this.state.societies[index];
         return (
-            <Tooltip title={`${row.president_grade}${row.president_class}${row.president_name}`}>
+            <Tooltip title={`${row.president_grade}级 ${row.president_class}班 ${row.president_name}`}>
                 {president_name}
             </Tooltip>
         )
@@ -81,17 +84,19 @@ class SocietyTable extends React.Component {
             }
         ];
 
-
         return (
             <div>
                 <Table columns={columns}
                        dataSource={this.state.societies}
-                       pagination={{showSizeChanger: true}}
+                       pagination={{
+                           showSizeChanger: true,
+                           total: this.state.count
+                       }}
                        onChange={this.onPaginationChange}
                        rowKey="id"/>
                 {
                     this.state.modalVisible &&
-                    <SocietyDetailModal society_id={this.state.editingSocietyId}
+                    <SocietyDetailModal societyId={this.state.editingSocietyId}
                                         closeModal={() => this.handleCloseModal()}/>
                 }
             </div>
