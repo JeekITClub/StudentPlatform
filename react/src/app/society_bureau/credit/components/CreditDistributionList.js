@@ -91,7 +91,7 @@ class CreditDistributionList extends React.Component {
             {
                 title: '获得学分者',
                 key: 'receivers',
-                render: () => this.renderCheckReceiversDetail()
+                render: (record) => this.renderCheckReceiversDetail(record.id)
             }
         ];
 
@@ -104,9 +104,10 @@ class CreditDistributionList extends React.Component {
                     rowKey="id"
                 />
                 <Modal visible={this.state.setCreditModalVisible}
+                       okText="更新！"
+                       cancelText="算了吧"
                        onCancel={() => this.setState({setCreditModalVisible: false})}
-                       onOk={() => this.updateCredit()}
-                >
+                       onOk={() => this.updateCredit()}>
                     <Form>
                         <Form.Item label="分配学分人数上限">
                             <InputNumber
@@ -117,7 +118,6 @@ class CreditDistributionList extends React.Component {
                     </Form>
                 </Modal>
             </div>
-
         )
     }
 }
