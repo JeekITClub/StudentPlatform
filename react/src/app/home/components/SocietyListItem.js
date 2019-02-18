@@ -74,16 +74,6 @@ class SocietyListItem extends React.Component {
                     title={this.renderSocietyLink()}
                     description={this.renderPresidentInfo()}
                 />
-            </List.Item>
-        );
-        return (
-            <div>
-                {
-                    society.status === SocietyStatus.ACTIVE ? listItem
-                        : <Popover content={<p>该社团已解散，当前退出不会造成任何影响。</p>} title="提示">
-                            {listItem}
-                        </Popover>
-                }
                 <Modal
                     title="确认要退出该社团吗？"
                     visible={this.state.modalVisible}
@@ -95,7 +85,13 @@ class SocietyListItem extends React.Component {
                     <p>若退出，当前学期你将无法从该社获得学分，已获得的学分不会受到影响。</p>
                     <p>仅社长会收到你的退出消息。</p>
                 </Modal>
-            </div>
+            </List.Item>
+        );
+        return (
+            society.status === SocietyStatus.ACTIVE ? listItem
+                : <Popover content={<p>该社团已解散，当前退出不会造成任何影响。</p>} title="提示">
+                    {listItem}
+                </Popover>
         )
     }
 }
