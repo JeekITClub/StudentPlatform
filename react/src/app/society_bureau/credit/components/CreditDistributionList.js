@@ -1,9 +1,18 @@
 import React from 'react';
-import {Table, Button, Input} from 'antd';
+import {Form, Table, Button, InputNumber, Icon, Tooltip, Modal} from 'antd';
+
 import Provider from "../../../../utils/provider";
+import '../styles/credit.scss'
+
 
 class CreditDistributionList extends React.Component {
     state = {
+        setCreditModalVisible: false,
+        setCredit: 0,
+        editing: {
+            id: 0,
+            index: 0
+        },
         data: [
             {
                 id: 1,
@@ -26,12 +35,20 @@ class CreditDistributionList extends React.Component {
         )
     };
 
-    updateCredit = (cb_id, credit, index) => {
-        let data = this.state.data;
-        data[index].credit = credit;
-        this.setState({data: data});
-        Provider.patch('/api/manage/credit')
+    showSetCreditModal = (id, index) => {
+        this.setState({setCreditModalVisible: true, editing: {id: id, index: index}});
+    };
+
+    handleSetCreditChange = (value) => {
+        this.setState({setCredit: value})
+    };
+
+    updateCredit = () => {
+        Provider.patch(`/api/manage/credit/${this.state.editing.id}`,)
             .then((res) => {
+                let data = this.state.data;
+                data[this.state.editing.index].credit = credit;
+                this.setState({data: data});
                 console.log(res)
             })
             .catch((err) => {
@@ -57,7 +74,12 @@ class CreditDistributionList extends React.Component {
                 dataIndex: 'credit',
                 render: (credit, record, index) => {
                     return (
-                        <Input value={credit} onChange={(e) => this.updateCredit(record.id, e.target.value, index)}/>
+                        <div>
+                            {credit}
+                            <Tooltip title="点击编辑按钮修改该社团分配学分人数上限">
+                                <Icon type="edit" className="edit-icon" onClick={() => this.showSetCreditModal(record.id, index)}/>
+                            </Tooltip>
+                        </div>
                     )
                 }
             },
@@ -74,12 +96,28 @@ class CreditDistributionList extends React.Component {
         ];
 
         return (
-            <Table
-                className="mt-2"
-                columns={columns}
-                dataSource={this.state.data}
-                rowKey="id"
-            />
+            <div>
+                <Table
+                    className="mt-2"
+                    columns={columns}
+                    dataSource={this.state.data}
+                    rowKey="id"
+                />
+                <Modal visible={this.state.setCreditModalVisible}
+                       onCancel={() => this.setState({setCreditModalVisible: false})}
+                       onOk={() => this.updateCredit()}
+                >
+                    <Form>
+                        <Form.Item label="分配学分人数上限">
+                            <InputNumber
+                                value={this.state.setCredit}
+                                onChange={(value) => this.handleSetCreditChange(value)}
+                            />
+                        </Form.Item>
+                    </Form>
+                </Modal>
+            </div>
+
         )
     }
 }
