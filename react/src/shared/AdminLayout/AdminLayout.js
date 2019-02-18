@@ -6,6 +6,7 @@ import {withRouter} from "react-router-dom";
 import LocationBreadcrumb from '../LocationBreadcrumb/LocationBreadcrumb'
 
 import './AdminLayout.scss'
+import AccountStore from "../stores/AccountStore";
 
 @withRouter
 class AdminLayout extends React.Component {
@@ -20,7 +21,7 @@ class AdminLayout extends React.Component {
                 <Row className="admin-layout-top">
                     <Col xs={0} sm={0} md={0} lg={4} xl={3} className="admin-layout-sider">
                         <h2 className="admin-layout-brand">JPSP</h2>
-                        <Menu mode="inline" onClick={this.handleSiderMenuClick}>
+                        <Menu mode="inline" theme="dark" onClick={this.handleSiderMenuClick}>
                             {this.props.siderMenu.map((item) => {
                                 return (
                                     <Menu.Item key={item.key}><Icon type={item.iconType}/>{item.title}</Menu.Item>
@@ -35,9 +36,9 @@ class AdminLayout extends React.Component {
                             </Col>
                             <Col>
                                 <Menu mode="horizontal">
-                                    <Menu.SubMenu title="用户名">
+                                    <Menu.SubMenu title={AccountStore.user.username}>
                                         <Menu.Item>
-
+                                            注销
                                         </Menu.Item>
                                     </Menu.SubMenu>
                                 </Menu>
@@ -62,7 +63,6 @@ AdminLayout.propTypes = {
     baseUrl: PropTypes.string.isRequired,
     siderMenu: PropTypes.array.isRequired,
     breadcrumbNameMap: PropTypes.object.isRequired,
-    header: PropTypes.node.isRequired,
     footer: PropTypes.node.isRequired,
     router: PropTypes.node.isRequired,
     drawMenu: PropTypes.node.isRequired

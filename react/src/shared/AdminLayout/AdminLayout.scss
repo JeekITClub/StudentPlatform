@@ -1,14 +1,10 @@
-$bg-dark: #001529;
-$bg-light: #fff;
-$color-dark: rgba(255,255,255,0.65);
-$color-light: rgba(0,0,0,0.65);
-
 .admin-layout-top {
   height: 100vh;
 }
 
 .admin-layout-sider {
   height: 100vh;
+  background-color: #001529;
   .admin-layout-brand {
     text-align: center;
     padding-top: 2px;
@@ -30,13 +26,7 @@ $color-light: rgba(0,0,0,0.65);
   }
   .admin-layout-content {
     padding: 1% 1%;
+    background-color: #f2f2f2;
+    height: calc(100vh - 54.86px)
   }
-}
-
-.dark-mode {
-
-}
-
-.light-mode {
-
 }

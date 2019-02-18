@@ -28,7 +28,7 @@ export default function AdminSociety({match}) {
             title: '社团主页'
         },
         {
-            key: 'member',
+            key: 'members',
             iconType: 'team',
             title: '社团成员'
         },
@@ -53,12 +53,11 @@ export default function AdminSociety({match}) {
     };
 
     return (
-        AccountStore.is_society ?
+        AccountStore.is_society  ?
             <AdminLayout
                 baseUrl="/admin_society"
                 siderMenu={siderMenu}
                 breadcrumbNameMap={breadcrumbNameMap}
-                header={<h1>1</h1>}
                 footer={<h1>hello</h1>}
                 router={<AdminSocietyRouter match={match}/>}
                 drawMenu={<AdminSocietyDrawerMenu/>}
