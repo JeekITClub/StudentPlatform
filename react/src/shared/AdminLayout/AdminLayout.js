@@ -14,6 +14,10 @@ class AdminLayout extends React.Component {
         this.props.history.push(`${this.props.baseUrl}/${e.key}/`);
     };
 
+    handleHeaderMenuClick = (e) => {
+        this.props.history.push(e.key);
+    };
+
     render() {
         return (
             <div>
@@ -35,9 +39,9 @@ class AdminLayout extends React.Component {
                                 <LocationBreadcrumb breadcrumbNameMap={this.props.breadcrumbNameMap}/>
                             </Col>
                             <Col>
-                                <Menu mode="horizontal">
+                                <Menu mode="horizontal" onClick={this.handleHeaderMenuClick}>
                                     <Menu.SubMenu title={AccountStore.user.username}>
-                                        <Menu.Item>
+                                        <Menu.Item key='/logout'>
                                             注销
                                         </Menu.Item>
                                     </Menu.SubMenu>
