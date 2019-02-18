@@ -1,19 +1,30 @@
 import React from 'react';
-import {List, Badge, Button, Modal, notification, Divider, Popover} from "antd";
+import {List, Badge, Button, Divider, Popover, Modal, notification} from "antd";
 import {Link} from "react-router-dom";
 
-import Provider from "../../../utils/provider";
 import {SocietyStatus} from '../../../shared/constants';
+import Provider from "../../../utils/provider";
 
-const confirm = Modal.confirm;
 
 class SocietyListItem extends React.Component {
     state = {
-        society: this.props.society
+        modalVisible: false,
+    };
+
+    showModal = () => {
+        this.setState({
+            modalVisible: true,
+        });
+    };
+
+    hideModal = () => {
+        this.setState({
+            modalVisible: false,
+        });
     };
 
     renderStatusBadge = () => {
-        if (this.state.society.status === SocietyStatus.ACTIVE) {
+        if (this.props.society.status === SocietyStatus.ACTIVE) {
             return <Badge status="success"/>
         } else {
             return <Badge status="error"/>
@@ -21,7 +32,7 @@ class SocietyListItem extends React.Component {
     };
 
     renderPresidentInfo = () => {
-        const society = this.state.society;
+        const society = this.props.society;
         return (
             <div>
                 <span>社长</span>
@@ -35,9 +46,14 @@ class SocietyListItem extends React.Component {
         )
     };
 
+    renderSocietyLink = () => {
+        const society = this.props.society;
+        return <Link to={`society/${society.id}/`}>{society.society_id} {society.name}</Link>;
+    };
+
     quitSociety = () => {
         // TODO
-        return Provider.post('/api/student/society/quit/')
+        return Provider.post(`/api/student/society/${this.props.society.id}/quit/`)
             .then((res) => {
                 console.log(res);
             }).catch((err) => {
@@ -48,36 +64,37 @@ class SocietyListItem extends React.Component {
             })
     };
 
-    showConfirm = (quitSociety) => {
-        confirm({
-            title: '确认要退出该社团吗？',
-            content: '若退出，当前学期你将无法从该社获得学分，已获得的学分不会受到影响。仅社长会收到你的退出消息。',
-            okText: '确认',
-            cancelText: '算了',
-            onOk() {
-                return quitSociety()
-            },
-            onCancel() {
-            },
-        });
-    };
-
     render() {
-        const society = this.state.society;
+        const society = this.props.society;
         const listItem = (
-            <List.Item actions={[<Button type="danger" onClick={() => this.showConfirm(this.quitSociety)}>退出</Button>]}>
+            <List.Item actions={[<Button type="danger" onClick={this.showModal}>退出</Button>]}>
                 <List.Item.Meta
                     avatar={this.renderStatusBadge()}
-                    title={<Link to={`society/${society.id}/`}>{society.society_id} {society.name}</Link>}
+                    title={this.renderSocietyLink()}
                     description={this.renderPresidentInfo()}
                 />
             </List.Item>
         );
         return (
-            society.status === SocietyStatus.ACTIVE ? listItem
-                : <Popover content={<p>该社团已解散，当前退出不会造成任何影响。</p>} title="提示">
-                    {listItem}
-                </Popover>
+            <div>
+                {
+                    society.status === SocietyStatus.ACTIVE ? listItem
+                        : <Popover content={<p>该社团已解散，当前退出不会造成任何影响。</p>} title="提示">
+                            {listItem}
+                        </Popover>
+                }
+                <Modal
+                    title="确认要退出该社团吗？"
+                    visible={this.state.modalVisible}
+                    onOk={this.quitSociety}
+                    onCancel={this.hideModal}
+                    okText="确认"
+                    cancelText="取消">
+                    <p>确定要退出<strong>{society.society_id}-{society.name}</strong>?</p>
+                    <p>若退出，当前学期你将无法从该社获得学分，已获得的学分不会受到影响。</p>
+                    <p>仅社长会收到你的退出消息。</p>
+                </Modal>
+            </div>
         )
     }
 }
