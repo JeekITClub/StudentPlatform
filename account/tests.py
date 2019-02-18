@@ -89,19 +89,19 @@ class AccountTests(TestCase):
         client = APIClient(enforce_csrf_checks=True)
         client.force_authenticate(self.user)
         res = client.get(url)
-        self.assertEqual(res.data['identity']['identity'], 'who are u?')
+        self.assertEqual(res.data['identity'], 'who are u?')
 
         client.force_authenticate(student_user)
         res = client.get(url)
-        self.assertEqual(res.data['identity']['identity'], 'student')
+        self.assertEqual(res.data['identity'], 'student')
 
         client.force_authenticate(society_user)
         res = client.get(url)
-        self.assertEqual(res.data['identity']['identity'], 'society')
+        self.assertEqual(res.data['identity'], 'society')
 
         client.force_authenticate(sb_user)
         res = client.get(url)
-        self.assertEqual(res.data['identity']['identity'], 'society_bureau')
+        self.assertEqual(res.data['identity'], 'society_bureau')
 
         res = self.client.get(url)
         self.assertEqual(res.status_code, 403)
