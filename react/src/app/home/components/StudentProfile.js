@@ -46,7 +46,7 @@ class StudentProfile extends React.Component {
         const {getFieldDecorator} = this.props.form;
         return (
             <Row type="flex" justify="center">
-                <Col xl={14}>
+                <Col xs={24} sm={20} md={18} lg={18} xl={16}>
                     <Form onSubmit={this.handleSubmit}>
                         <Item label="姓名">
                             {getFieldDecorator('name', {

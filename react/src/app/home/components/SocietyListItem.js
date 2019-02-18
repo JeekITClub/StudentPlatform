@@ -67,7 +67,8 @@ class SocietyListItem extends React.Component {
     render() {
         const society = this.props.society;
         const listItem = (
-            <List.Item actions={[<Button type="danger" onClick={this.showModal}>退出</Button>]}>
+            <List.Item key={this.props.society.id}
+                       actions={[<Button type="danger" onClick={this.showModal}>退出</Button>]}>
                 <List.Item.Meta
                     avatar={this.renderStatusBadge()}
                     title={this.renderSocietyLink()}

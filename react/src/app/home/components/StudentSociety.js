@@ -37,10 +37,11 @@ class StudentSociety extends React.Component {
         if (societies.length !== 0) {
             return (
                 <List
+                    bordered={true}
                     itemLayout="horizontal"
                     dataSource={societies}
                     renderItem={society => (
-                        <SocietyListItem society={society} key={society.id}/>
+                        <SocietyListItem society={society}/>
                     )}
                 />
             )
@@ -50,8 +51,8 @@ class StudentSociety extends React.Component {
 
     render() {
         return (
-            <Row className="ml-5">
-                <Col span={18}>
+            <Row>
+                <Col>
                     {this.renderSocietyList()}
                 </Col>
             </Row>

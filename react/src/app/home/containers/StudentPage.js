@@ -13,13 +13,11 @@ class StudentPage extends React.Component {
     render() {
         return (
             AccountStore.is_student ?
-                <Row className="mt-5">
-                    <Col span={20}>
+                <Row type="flex" justify="center" align="middle">
+                    <Col xs={24} sm={20} md={18} lg={18} xl={16}>
                         <Tabs
                             defaultActiveKey="1"
-                            tabPosition="left"
-                             className="ml-4"
-                        >
+                            type="card">
                             <TabPane tab="个人信息" key="1">
                                 <StudentProfile/>
                             </TabPane>
