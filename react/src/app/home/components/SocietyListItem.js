@@ -1,7 +1,9 @@
 import React from 'react';
 import {List, Badge, Button, Modal, notification, Divider, Popover} from "antd";
 import {Link} from "react-router-dom";
+
 import Provider from "../../../utils/provider";
+import {SocietyStatus} from '../../../shared/constants';
 
 const confirm = Modal.confirm;
 
@@ -11,7 +13,7 @@ class SocietyListItem extends React.Component {
     };
 
     renderStatusBadge = () => {
-        if (this.state.society.status === 1) {
+        if (this.state.society.status === SocietyStatus.ACTIVE) {
             return <Badge status="success"/>
         } else {
             return <Badge status="error"/>
@@ -72,7 +74,7 @@ class SocietyListItem extends React.Component {
             </List.Item>
         );
         return (
-            society.status === 1 ? listItem
+            society.status === SocietyStatus.ACTIVE ? listItem
                 : <Popover content={<p>该社团已解散，当前退出不会造成任何影响。</p>} title="提示">
                     {listItem}
                 </Popover>
