@@ -1,11 +1,49 @@
+from django.contrib.auth.models import User
+from datetime import datetime, timedelta
 from rest_framework import serializers
 
-from society.models import Society
+from society.models import Society, ActivityRequest
 from society_bureau.api.services import SettingsService
 from society_bureau.models import SiteSettings
 from society_manage.models import CreditDistribution
 
 from student.api.serializers import StudentMiniSerializer
+
+from society.constants import SocietyStatus, ActivityRequestStatus
+
+
+class DashboardSerializer(serializers.ModelSerializer):
+    active_user_count = serializers.SerializerMethodField()
+    waiting_society_count = serializers.SerializerMethodField()
+    society_count = serializers.SerializerMethodField()
+    waiting_activity_count = serializers.SerializerMethodField()
+    activity_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = (
+            'active_user_count',
+            'waiting_society_count',
+            'society_count',
+            'waiting_activity_count',
+            'activity_count'
+        )
+
+    def get_active_user_count(self, obj):
+        recent = datetime.now() - timedelta(days=60)
+        return User.objects.filter(last_login__gte=recent).count()
+
+    def get_waiting_society_count(self, obj):
+        return Society.objects.filter(status=SocietyStatus.WAITING).count()
+
+    def get_society_count(self, obj):
+        return Society.objects.exclude(status=SocietyStatus.WAITING).count()
+
+    def get_waiting_activity_count(self, obj):
+        return ActivityRequest.objects.filter(status=ActivityRequestStatus.WAITING).count()
+
+    def get_activity_count(self, obj):
+        return ActivityRequest.objects.exclude(status=ActivityRequestStatus.WAITING).count()
 
 
 class SocietySerializer(serializers.ModelSerializer):
