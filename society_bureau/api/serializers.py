@@ -8,6 +8,7 @@ from society_bureau.models import SiteSettings
 from society_manage.models import CreditDistribution
 
 from student.api.serializers import StudentMiniSerializer
+from society.api.serializers import SocietyMiniSerializer
 
 from society.constants import SocietyStatus, ActivityRequestStatus
 
@@ -44,26 +45,6 @@ class DashboardSerializer(serializers.ModelSerializer):
 
     def get_activity_count(self, obj):
         return ActivityRequest.objects.exclude(status=ActivityRequestStatus.WAITING).count()
-
-
-class SocietySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Society
-        fields = '__all__'
-
-
-class SocietyMiniSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Society
-        fields = (
-            'id',
-            'society_id',
-            'name',
-            'type',
-            'president_name',
-            'president_class',
-            'president_grade'
-        )
 
 
 class ConfirmSocietySerializer(serializers.ModelSerializer):

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Form, Input, Select} from 'antd';
+import {Button, Col, Form, Input, Row, Select} from 'antd';
 
 import Provider from '../../../utils/provider'
 
@@ -45,52 +45,56 @@ class StudentProfile extends React.Component {
     render() {
         const {getFieldDecorator} = this.props.form;
         return (
-            <Form onSubmit={this.handleSubmit}>
-                <Item label="姓名">
-                    {getFieldDecorator('name', {
-                        rules: [{
-                            required: true,
-                            message: '请输入你的真实姓名',
-                        }],
-                    })(
-                        <Input placeholder="请输入你的真实姓名"/>
-                    )}
-                </Item>
-                <Item label="年级">
-                    {getFieldDecorator('grade', {
-                        rules: [{
-                            required: true,
-                            message: '请选择年级',
-                        }],
-                    })(
-                        <Select placeholder="请选择年级（入学年份）">
-                            {this.renderGradeChoices()}
-                        </Select>
-                    )}
-                </Item>
-                <Item label="班级">
-                    {getFieldDecorator('class_num', {
-                        rules: [{
-                            required: true,
-                            message: '请选择班级',
-                        }],
-                    })(
-                        <Select placeholder="请选择班级">
-                            {
-                                classNums.map((classNum) => {
-                                    return <Option value={classNum} key={classNum}>({classNum})班</Option>
-                                })
-                            }
-                        </Select>
-                    )}
-                </Item>
-                <Item label="QQ号">
-                    {getFieldDecorator('qq')(
-                        <Input placeholder="请输入你的QQ号"/>
-                    )}
-                </Item>
-                <Button htmlType="submit" size="large" type="primary" style={{width: '100%'}}>提交更改</Button>
-            </Form>
+            <Row type="flex" justify="center">
+                <Col xs={24} sm={20} md={18} lg={18} xl={16}>
+                    <Form onSubmit={this.handleSubmit}>
+                        <Item label="姓名">
+                            {getFieldDecorator('name', {
+                                rules: [{
+                                    required: true,
+                                    message: '请输入你的真实姓名',
+                                }],
+                            })(
+                                <Input placeholder="请输入你的真实姓名"/>
+                            )}
+                        </Item>
+                        <Item label="年级">
+                            {getFieldDecorator('grade', {
+                                rules: [{
+                                    required: true,
+                                    message: '请选择年级',
+                                }],
+                            })(
+                                <Select placeholder="请选择年级（入学年份）">
+                                    {this.renderGradeChoices()}
+                                </Select>
+                            )}
+                        </Item>
+                        <Item label="班级">
+                            {getFieldDecorator('class_num', {
+                                rules: [{
+                                    required: true,
+                                    message: '请选择班级',
+                                }],
+                            })(
+                                <Select placeholder="请选择班级">
+                                    {
+                                        classNums.map((classNum) => {
+                                            return <Option value={classNum} key={classNum}>({classNum})班</Option>
+                                        })
+                                    }
+                                </Select>
+                            )}
+                        </Item>
+                        <Item label="QQ号">
+                            {getFieldDecorator('qq')(
+                                <Input placeholder="请输入你的QQ号"/>
+                            )}
+                        </Item>
+                        <Button htmlType="submit" size="large" type="primary" style={{width: '100%'}}>提交更改</Button>
+                    </Form>
+                </Col>
+            </Row>
         )
 
     }

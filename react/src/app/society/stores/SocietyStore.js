@@ -1,5 +1,6 @@
 import {observable, action} from "mobx";
 import Provider from '../../../utils/provider';
+import {notification} from 'antd';
 
 class SocietyStore {
     @observable loading = false;
@@ -23,25 +24,31 @@ class SocietyStore {
         this.changeLoading();
         Provider.get('/api/society/')
             .then((res) => {
+                this.updateSociety(res.data['results']);
                 this.changeLoading();
-                this.updateSociety(res.data)
             })
             .catch((err) => {
                 this.changeLoading();
-                console.log(err)
+                notification.error({
+                    message: 'Oops...',
+                    description: '获取社团信息失败了，请检查你的网络',
+                })
             })
     };
 
     @action search = () => {
         this.changeLoading();
-        Provider.get('/api/society/', {params: {'name': this.query}})
+        Provider.get('/api/society/', {params: {name: this.query}})
             .then((res) => {
+                this.updateSociety(res.data['results']);
                 this.changeLoading();
-                this.updateSociety(res.data)
             })
             .catch((err) => {
                 this.changeLoading();
-                console.log(err)
+                notification.error({
+                    message: 'Oops...',
+                    description: '获取社团信息失败了，请检查你的网络',
+                })
             })
     }
 }

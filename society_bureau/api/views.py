@@ -5,9 +5,11 @@ from rest_framework.decorators import action
 from society_bureau.api.services import SettingsService
 from society.models import Society
 from society_manage.models import CreditDistribution
-from society_bureau.api.serializers import (
+from society.api.serializers import (
     SocietySerializer,
-    SocietyMiniSerializer,
+    SocietyMiniSerializer
+)
+from society_bureau.api.serializers import (
     CreditDistributionMiniSerializer,
     CreditDistributionSerializer,
     ConfirmSocietySerializer,
