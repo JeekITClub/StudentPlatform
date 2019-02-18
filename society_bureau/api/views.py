@@ -13,7 +13,8 @@ from society_bureau.api.serializers import (
     CreditDistributionMiniSerializer,
     CreditDistributionSerializer,
     ConfirmSocietySerializer,
-    CreditDistributionManualCreateSerializer
+    CreditDistributionManualCreateSerializer,
+    DashboardSerializer
 )
 from utils.permissions import (
     IsSocietyBureau,
@@ -34,13 +35,15 @@ from society.constants import SocietyStatus
 
 class DashboardViewSet(viewsets.GenericViewSet):
     permission_classes = (IsSocietyBureau,)
+    serializer_class = DashboardSerializer
 
     @action(
         detail=False,
         methods=['GET']
     )
     def statistic(self, request):
-        pass
+        serializer = self.get_serializer(instance=request.user)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
 class SocietyManageViewSet(
