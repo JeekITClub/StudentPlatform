@@ -7,8 +7,10 @@ from student.api.serializers import (
     StudentUpdateProfileSerializer,
     StudentInspectCreditSerializer,
 )
+from society.api.serializers import SocietyMiniSerializer
 
 from utils.permissions import IsStudentSelf, IsStudent
+from society.constants import SocietyStatus
 
 
 class StudentViewSet(
@@ -28,8 +30,15 @@ class StudentCreditViewSet(
     viewsets.GenericViewSet,
     ListAPIView
 ):
-    permission_classes = [IsStudent,]
+    permission_classes = [IsStudent, ]
     serializer_class = StudentInspectCreditSerializer
 
     def get_queryset(self):
         return self.request.user.student.receive_credit_from.all()
+
+
+class StudentSocietyViewSet(viewsets.GenericViewSet, ListAPIView):
+    serializer_class = SocietyMiniSerializer
+
+    def get_queryset(self):
+        return self.request.user.student.society_set.exclude(status=SocietyStatus.WAITING)

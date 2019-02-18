@@ -6,26 +6,7 @@ from society_bureau.models import SiteSettings
 from society_manage.models import CreditDistribution
 
 from student.api.serializers import StudentMiniSerializer
-
-
-class SocietySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Society
-        fields = '__all__'
-
-
-class SocietyMiniSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Society
-        fields = (
-            'id',
-            'society_id',
-            'name',
-            'type',
-            'president_name',
-            'president_class',
-            'president_grade'
-        )
+from society.api.serializers import SocietyMiniSerializer
 
 
 class ConfirmSocietySerializer(serializers.ModelSerializer):
