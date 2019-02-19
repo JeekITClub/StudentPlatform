@@ -118,9 +118,8 @@ class SocietyCreditViewSet(
     def list(self, request, *args, **kwargs):
         year = request.query_params.get('year', SettingsService.get('year'))
         semester = request.query_params.get('semester', SettingsService.get('semester'))
-        self.queryset = self.get_queryset().filter(year=year)
-        self.queryset = self.get_queryset().filter(semester=semester)
-        instance = self.get_queryset().first()
+        self.queryset = self.get_queryset().filter(year=year).filter(semester=semester)
+        instance = self.queryset.first()
         if instance:
             serializer = self.get_serializer(instance)
             return response.Response(serializer.data)
