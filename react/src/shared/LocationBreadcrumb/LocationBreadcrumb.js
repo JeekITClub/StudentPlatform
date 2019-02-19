@@ -1,7 +1,7 @@
 import React from 'react';
-import {Breadcrumb, Row, Col} from 'antd';
+import {Breadcrumb} from 'antd';
 import {withRouter, Link} from "react-router-dom";
-import PropTypes from 'prop-types';
+import * as PropTypes from 'prop-types';
 
 @withRouter
 class LocationBreadcrumb extends React.Component {
@@ -22,13 +22,9 @@ class LocationBreadcrumb extends React.Component {
         const breadcrumbItems = [].concat(extraBreadcrumbItems);
 
         return (
-            <Row>
-                <Col xs={0} sm={0} md={24} lg={24} xl={24}>
-                    <Breadcrumb>
-                        {breadcrumbItems}
-                    </Breadcrumb>
-                </Col>
-            </Row>
+            <Breadcrumb>
+                {breadcrumbItems}
+            </Breadcrumb>
         )
     }
 }

@@ -5,8 +5,10 @@ import Provider from '../../utils/provider'
 class AccountStore {
     @observable loading = false;
 
-    @observable identity = 'society_bureau';
-    @observable user = {};
+    @observable identity = 'society';
+    @observable user = {
+        'username': '1'
+    };
 
     @observable authenticated = true;
     @observable password_changed = true;
@@ -24,13 +26,16 @@ class AccountStore {
     }
 
     @action fetch() {
-        return Provider.get('/api/account/user/')
+        this.loading = true;
+        Provider.get('/api/account/user/')
             .then((res) => {
+                this.loading = false;
                 this.authenticated = true;
                 this.identity = res.data['identity'];
                 this.password_changed = res.data['password_changed'];
             })
             .catch((e) => {
+                this.loading = false;
                 console.log(e)
             })
     }
