@@ -19,19 +19,28 @@ class DistributeCredit extends React.Component {
     render() {
         return (
             <div className="distribute-credit">
-                    <Transfer
-                        height={800}
-                        dataSource={CreditStore.available_receivers}
-                        showSearch
-                        rowKey={record => record.username}
-                        operations={['授予学分', '取消授予学分']}
-                        targetKeys={CreditStore.chosenIds}
-                        locale={{itemUnit: '人', itemsUnit: '人', notFoundContent: '列表为空', searchPlaceholder: '请输入搜索内容'}}
-                        onChange={this.handleChange}
-                        render={member => `${member.grade}级(${member.class_num})班-${member.name}`}
-                    />
-                    <Button htmlType="button" onClick={CreditStore.submit} type="primary" size="large"
-                            className="mt-5" style={{width: '100%'}}>提交</Button>
+                <Transfer
+                    height={800}
+                    dataSource={CreditStore.available_receivers}
+                    disabled={CreditStore.closed}
+                    showSearch
+                    rowKey={record => record.id}
+                    operations={['授予学分', '取消授予学分']}
+                    targetKeys={CreditStore.chosenIds}
+                    locale={{ itemUnit: '人', itemsUnit: '人', notFoundContent: '列表为空', searchPlaceholder: '请输入搜索内容' }}
+                    onChange={this.handleChange}
+                    render={member => `${member.grade}级(${member.class_num})班-${member.name}`}
+                />
+                <Button htmlType="button"
+                        onClick={() => CreditStore.submit()}
+                        type="primary"
+                        size="large"
+                        className="mt-5"
+                        style={{ width: '100%' }}
+                        disabled={CreditStore.closed}
+                >
+                    提交
+                </Button>
             </div>
         )
     }

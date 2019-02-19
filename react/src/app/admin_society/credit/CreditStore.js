@@ -4,12 +4,10 @@ import Provider from '../../../utils/provider'
 import {notification} from "antd";
 
 class CreditStore {
+    @observable id = 0;
     @observable credit = 0;
 
-    @observable available_receivers = [
-        { name: 'ncjxjj', class_num: 0, grade: 0, username: 123 },
-        { name: 'ncjdjj', class_num: 2, grade: 3, username: 124 }
-    ];
+    @observable available_receivers = [];
 
     @observable chosenIds = [];
 
@@ -22,12 +20,15 @@ class CreditStore {
     };
 
     @action fetch = () => {
-        Provider.get('/api/society_manage/credit', data={
-            year: 2018,
-            semester: 1
-        }).then((res) => {
+        const year = 2018;
+        const semester = 1;
+        Provider.get(`/api/society_manage/credit?year=${year}&semester=${semester}`)
+            .then((res) => {
+                this.credit = res.data['credit'];
                 this.available_receivers = res.data['available_receivers'];
-                this.chosenIds = res.data['receivers']
+                this.chosenIds = res.data['receivers'];
+                this.closed = res.data['closed'];
+                this.id = res.data['id']
             })
             .catch((err) => {
                 notification.error({
@@ -38,8 +39,8 @@ class CreditStore {
             })
     };
 
-    @action submit = () => {
-        Provider.patch('/api/society_manage/credit/', data = {
+    @action submit()  {
+        Provider.patch(`/api/society_manage/credit/${this.id}/`, {
             receivers: this.chosenIds
         })
             .then((res) => {
