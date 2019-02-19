@@ -2,15 +2,17 @@ from rest_framework import viewsets
 from rest_framework.generics import RetrieveUpdateAPIView, ListAPIView
 
 from student.models import Student
+from society.models import Society, ActivityRequest
 from student.api.serializers import (
     StudentSerializer,
     StudentUpdateProfileSerializer,
     StudentInspectCreditSerializer,
+    StudentActivityMiniSerializer
 )
 from society.api.serializers import SocietyMiniSerializer
 
 from utils.permissions import IsStudentSelf, IsStudent
-from society.constants import SocietyStatus
+from society.constants import SocietyStatus, ActivityRequestStatus
 
 
 class StudentViewSet(
@@ -42,3 +44,8 @@ class StudentSocietyViewSet(viewsets.GenericViewSet, ListAPIView):
 
     def get_queryset(self):
         return self.request.user.student.society_set.exclude(status=SocietyStatus.WAITING)
+
+
+class StudentActivityViewSet(viewsets.GenericViewSet, ListAPIView):
+    queryset = ActivityRequest.objects.filter(status=ActivityRequestStatus.ACCEPTED).order_by('-start_time')
+    serializer_class = StudentActivityMiniSerializer
