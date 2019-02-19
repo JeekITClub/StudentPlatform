@@ -11,7 +11,7 @@ import {
 } from 'antd';
 import PropTypes from 'prop-types';
 
-import Provider from '../../../utils/provider'
+import Provider from '../../../../utils/provider'
 
 const {Item} = Form;
 const {TextArea} = Input;

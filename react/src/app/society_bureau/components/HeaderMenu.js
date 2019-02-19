@@ -36,7 +36,7 @@ class HeaderMenu extends React.Component {
         );
 
         return (
-            <Row type="flex" align="middle" gutter={20}>
+            <Row type="flex" align="middle">
                 <Col>
                     <Menu
                         selectedKeys={[this.state.current]}
