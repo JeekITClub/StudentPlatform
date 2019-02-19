@@ -22,8 +22,10 @@ class CreditStore {
     };
 
     @action fetch = () => {
-        Provider.post('/api/society_manage/credit/')
-            .then((res) => {
+        Provider.get('/api/society_manage/credit', data={
+            year: 2018,
+            semester: 1
+        }).then((res) => {
                 this.available_receivers = res.data['available_receivers'];
                 this.chosenIds = res.data['receivers']
             })
