@@ -2,6 +2,7 @@ import React from 'react';
 import {List, Divider, Badge, Row, Col} from "antd";
 
 import Provider from "../../../utils/provider";
+import {Link} from "react-router-dom";
 
 
 class ActivityListItem extends React.Component {
@@ -14,7 +15,6 @@ class ActivityListItem extends React.Component {
     renderStatusBadge = () => {
         const now = new Date();
         let startTime = new Date(this.props.activity.start_time);
-        console.log((now - startTime) / 86400000);
         if (startTime > now) {
             return <span><Badge status="processing"/>即将到来</span>
         }
@@ -31,12 +31,8 @@ class ActivityListItem extends React.Component {
 
         return <List.Item key={activity.id}>
             <List.Item.Meta
-                title={activity.title}
-                description={
-                    <div>
-                        <p>{this.renderStartTime()}</p>
-                    </div>
-                }
+                title={<Link to={`/activity/${activity.id}/`}>{activity.title}</Link>}
+                description={this.renderStartTime()}
             />
             <Row type="flex" justify="end" align="middle" className="w-100 text-right mr-2">
                 <Col xl={10} lg={12} md={15} sm={20} xs={24}>

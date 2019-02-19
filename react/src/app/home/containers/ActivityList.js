@@ -23,7 +23,6 @@ class ActivityList extends React.Component {
                 page_size: pageSize
             }
         }).then((res) => {
-            console.log(res.data['results']);
             this.setState({activities: res.data['results'], count: res.data['count']});
         }).catch((err) => {
             notification.error({
@@ -31,6 +30,10 @@ class ActivityList extends React.Component {
                 description: '获取活动列表失败了，请检查你的网络',
             });
         })
+    };
+
+    onPageChange = (page, pageSize) => {
+        this.getActivities(page, pageSize)
     };
 
     renderActivityList = () => {
@@ -41,9 +44,9 @@ class ActivityList extends React.Component {
                     itemLayout="horizontal"
                     dataSource={activities}
                     pagination={{
-                           showSizeChanger: true,
-                           total: this.state.count
-                       }}
+                        total: this.state.count,
+                        onChange: this.onPageChange,
+                    }}
                     renderItem={activity => (
                         <ActivityListItem activity={activity}/>
                     )}
