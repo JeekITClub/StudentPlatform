@@ -41,7 +41,7 @@ class StudentSociety extends React.Component {
                     itemLayout="horizontal"
                     dataSource={societies}
                     renderItem={society => (
-                        <SocietyListItem society={society}/>
+                        <SocietyListItem society={society} refresh={this.getSocieties}/>
                     )}
                 />
             )
