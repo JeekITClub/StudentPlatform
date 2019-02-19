@@ -36,10 +36,6 @@ class AdminLayout extends React.Component {
         })
     };
 
-    componentWillMount() {
-        this.toggleDrawerMenu()
-    }
-
     render() {
         return (
             <div>
