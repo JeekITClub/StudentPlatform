@@ -13,7 +13,16 @@ class SocietySerializer(serializers.ModelSerializer):
 class SocietyMiniSerializer(serializers.ModelSerializer):
     class Meta:
         model = Society
-        fields = ('name', 'society_id')
+        fields = (
+            'id',
+            'society_id',
+            'name',
+            'status',
+            'type',
+            'president_name',
+            'president_class',
+            'president_grade'
+        )
 
 
 class JoinSocietyRequestSerializer(serializers.ModelSerializer):
