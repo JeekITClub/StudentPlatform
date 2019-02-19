@@ -35,4 +35,4 @@ class StudentInspectCreditSerializer(serializers.ModelSerializer):
 class StudentActivityMiniSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActivityRequest
-        fields = ('title', 'place', 'start_time')
+        fields = ('id', 'title', 'place', 'start_time')
