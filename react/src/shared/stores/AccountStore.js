@@ -43,6 +43,7 @@ class AccountStore {
             .catch((e) => {
                 this.loading = false;
                 throw e
+            })
     }
 }
 
