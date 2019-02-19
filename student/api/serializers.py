@@ -32,7 +32,19 @@ class StudentInspectCreditSerializer(serializers.ModelSerializer):
         fields = ('society', 'semester', 'year',)
 
 
-class StudentActivityMiniSerializer(serializers.ModelSerializer):
+class StudentActivitySerializer(serializers.ModelSerializer):
+    society = SocietyMiniSerializer(read_only=True)
+
     class Meta:
         model = ActivityRequest
-        fields = ('id', 'title', 'place', 'start_time')
+        fields = '__all__'
+        read_only_fields = ('status',)
+
+
+class StudentActivityMiniSerializer(serializers.ModelSerializer):
+    society = serializers.StringRelatedField()
+
+    class Meta:
+        model = ActivityRequest
+        fields = ('id', 'title', 'place', 'start_time', 'society')
+        read_only_fields = ('status',)
