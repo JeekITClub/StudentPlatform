@@ -21,6 +21,7 @@ from utils.filters import (
     YearFilterBackend,
     SemesterFilterBackend
 )
+from society_bureau.api.services import SettingsService
 
 
 class SocietyMemberViewSet(viewsets.GenericViewSet, ListModelMixin):
@@ -124,10 +125,15 @@ class SocietyCreditViewSet(
         if self.get_object().closed:
             return response.Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         receiver_id_set = request.data.get('receivers', None)
-        if receiver_id_set:
+
+        # receiver_id_set can be '[]'
+        if receiver_id_set is not None:
+            valid_student_set = []
             for receiver_id in receiver_id_set:
                 student = request.user.society.members.filter(id=int(receiver_id)).first()
-                if student is not None:
-                    self.get_object().receivers.add(student)
+                credit_id = student.has_receive_credit(self.get_object().year, self.get_object().semester)
+                if student is not None and (credit_id == request.user.society.id or credit_id is None):
+                    valid_student_set.append(student)
+            self.get_object().receivers.set(valid_student_set)
             return response.Response(status=status.HTTP_200_OK)
         return response.Response(status=status.HTTP_400_BAD_REQUEST)

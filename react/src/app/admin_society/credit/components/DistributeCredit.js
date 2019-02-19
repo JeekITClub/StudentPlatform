@@ -25,7 +25,7 @@ class DistributeCredit extends React.Component {
                     disabled={CreditStore.closed}
                     showSearch
                     rowKey={record => record.id}
-                    operations={['授予学分', '取消授予学分']}
+                    operations={['授予学分', '取消授予']}
                     targetKeys={CreditStore.chosenIds}
                     locale={{ itemUnit: '人', itemsUnit: '人', notFoundContent: '列表为空', searchPlaceholder: '请输入搜索内容' }}
                     onChange={this.handleChange}
