@@ -49,7 +49,4 @@ class CreditDistributionSerializer(serializers.ModelSerializer):
         fields = ('credit', 'id', 'year', 'semester', 'receivers', 'available_receivers', 'closed')
 
     def get_receivers(self, obj):
-        id_set = []
-        for receiver in obj.receivers.all():
-            id_set.append(receiver.id)
-        return id_set
+        return [receiver.id for receiver in obj.receivers.all()]
