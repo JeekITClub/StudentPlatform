@@ -170,9 +170,9 @@ class SocietyManageActivityTests(TestCase):
         client.force_authenticate(self.society_user)
         response = client.get(url, decode=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['results'][0]['title'], 'keep calm')
-        self.assertEqual(response.data['results'][1]['title'], 'make epic shit')
-        self.assertEqual(response.data['results'][0]['status'], ActivityRequestStatus.WAITING)
+        self.assertEqual(response.data['results'][0]['title'], 'make epic shit')
+        self.assertEqual(response.data['results'][1]['title'], 'keep calm')
+        self.assertEqual(response.data['results'][0]['status'], ActivityRequestStatus.ACCEPTED)
 
         data = {
             'status': ActivityRequestStatus.ACCEPTED

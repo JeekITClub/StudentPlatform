@@ -73,13 +73,13 @@ class JoinSocietyRequestViewSet(
         return JoinSocietyRequestSerializer
 
     def get_queryset(self):
-        return JoinSocietyRequest.objects.filter(society__user=self.request.user)
+        return JoinSocietyRequest.objects.filter(society__user=self.request.user).order_by('created_at')
 
 
 class ActivityRequestViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
-        return ActivityRequest.objects.filter(society__user=self.request.user)
+        return ActivityRequest.objects.filter(society__user=self.request.user).order_by('-updated_at')
 
     def filter_queryset(self, queryset):
         if 'status' in self.request.query_params:
@@ -111,7 +111,7 @@ class SocietyCreditViewSet(
         return CreditDistributionSerializer
 
     def get_queryset(self):
-        return CreditDistribution.objects.filter(society=self.request.user.society)
+        return CreditDistribution.objects.filter(society=self.request.user.society).order_by('-year', '-semester')
 
     def list(self, request, *args, **kwargs):
         instance = self.filter_queryset(self.get_queryset()).first()
