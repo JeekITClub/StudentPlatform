@@ -34,7 +34,7 @@ class StudentCreditViewSet(
     serializer_class = StudentInspectCreditSerializer
 
     def get_queryset(self):
-        return self.request.user.student.receive_credit_from.all()
+        return self.request.user.student.receive_credit_from.all().order_by('-year', '-semester')
 
 
 class StudentSocietyViewSet(viewsets.GenericViewSet, ListAPIView):

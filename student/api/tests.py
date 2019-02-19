@@ -95,10 +95,10 @@ class StudentCreditTests(TestCase):
         res = client.get(url, decode=True)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(res.data['results'][0]['society']['name'], society.name)
-        self.assertEqual(res.data['results'][0]['semester'], credit_distribution.semester)
-        self.assertEqual(res.data['results'][0]['year'], credit_distribution.year)
+        self.assertEqual(res.data['results'][0]['semester'], credit_distribution2.semester)
+        self.assertEqual(res.data['results'][0]['year'], credit_distribution2.year)
 
-        self.assertEqual(res.data['results'][1]['year'], credit_distribution2.year)
+        self.assertEqual(res.data['results'][1]['year'], credit_distribution.year)
 
         # test is_authenticated permission
         res = self.client.get(url)

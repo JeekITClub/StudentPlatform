@@ -130,7 +130,7 @@ class CreditManageViewSet(
         return CreditDistributionMiniSerializer
 
     def get_queryset(self):
-        return CreditDistribution.objects.all()
+        return CreditDistribution.objects.all().order_by('-year', '-semester', 'society__society_id')
 
     def list(self, request, *args, **kwargs):
         if self.get_queryset().exists():
