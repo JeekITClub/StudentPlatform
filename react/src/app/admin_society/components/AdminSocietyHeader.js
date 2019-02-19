@@ -1,7 +1,7 @@
 import React from 'react';
 import {Menu, Row, Col, Icon} from 'antd';
 
-import LocationBreadcrumb from '../../../shared/location_breadcrumb/LocationBreadcrumb';
+import LocationBreadcrumb from '../../../shared/LocationBreadcrumb/LocationBreadcrumb';
 import '../styles/header.scss'
 
 const {SubMenu, Item, Divider} = Menu;

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Table, Tooltip, Button, notification} from 'antd';
 
-import Provider from '../../../utils/provider'
+import Provider from '../../../../utils/provider'
 import SocietyDetailModal from "./SocietyDetailModal";
 
 class SocietyTable extends React.Component {

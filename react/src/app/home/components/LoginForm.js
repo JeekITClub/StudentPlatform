@@ -28,9 +28,9 @@ class LoginForm extends React.Component {
                 }).then((res) => {
                     if (res.status === 200) {
                         AccountStore.fetch().then(() => {
+                            console.table(AccountStore.user);
                             this.redirectWithUserType();
-                            // TODO: 判断密码是否改过
-                            if (true) {
+                            if (!AccountStore.user.password_changed) {
                                 Modal.confirm({
                                     title: '温馨提示',
                                     content: '您还未修改过默认密码，账号有被盗用的风险，建议您尽快修改密码！',
@@ -75,7 +75,7 @@ class LoginForm extends React.Component {
                         rules: [{required: true, message: '请输入用户名'}],
                     })(
                         <Input size="large" prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
-                               placeholder="学号（形如20150xxx，非班级学号）"/>
+                               placeholder="请输入用户名"/>
                     )}
                 </Form.Item>
                 <Form.Item>
