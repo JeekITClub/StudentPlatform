@@ -26,7 +26,7 @@ class CreditContainer extends React.Component {
                         credit={this.state.setAllCredit}
                         onChange={(value) => this.setState({setAllCredit: value})}
                         onCancel={() => this.setState({setAllModalVisible: false})}
-                        onOk={this.submitSetAllCredit()}
+                        onOk={() => this.submitSetAllCredit()}
                     />
                 }
             </div>
