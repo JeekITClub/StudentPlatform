@@ -8,7 +8,7 @@ import CreditStore from '../CreditStore'
 class DistributeCredit extends React.Component {
 
     handleChange = (targetKeys, direction, moveKeys) => {
-        if (direction === 'right' && CreditStore.availableCredit - moveKeys < 0) {
+        if (direction === 'right' && CreditStore.availableCredit - moveKeys.length < 0) {
             message.error('已达到学分分配人数上限', 5);
         } else {
             CreditStore.updateChosenIds(targetKeys);

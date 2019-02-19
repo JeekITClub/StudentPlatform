@@ -123,7 +123,7 @@ class SocietyCreditViewSet(
     def update(self, request, *args, **kwargs):
         if self.get_object().closed:
             return response.Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-        receiver_id_set = request.data.getlist('receivers', None)
+        receiver_id_set = request.data.get('receivers', None)
         if receiver_id_set:
             for receiver_id in receiver_id_set:
                 student = request.user.society.members.filter(id=int(receiver_id)).first()
