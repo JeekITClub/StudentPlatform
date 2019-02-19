@@ -44,7 +44,7 @@ class CreditDistributionList extends React.Component {
     };
 
     updateCredit = () => {
-        Provider.patch(`/api/manage/credit/${this.state.editing.id}`,)
+        Provider.patch(`/api/manage/credit/${this.state.editing.id}/`,)
             .then((res) => {
                 let data = this.state.data;
                 data[this.state.editing.index].credit = credit;
