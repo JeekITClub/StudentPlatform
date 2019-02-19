@@ -1,13 +1,14 @@
 import {observable, computed, action} from "mobx";
 
 import Provider from '../../../utils/provider'
+import {notification} from "antd";
 
 class CreditStore {
     @observable credit = 0;
 
     @observable available_receivers = [
-        {name: 'ncjxjj', class_num: 0, grade: 0, username: 123},
-        {name: 'ncjdjj', class_num: 2, grade: 3, username: 124}
+        { name: 'ncjxjj', class_num: 0, grade: 0, username: 123 },
+        { name: 'ncjdjj', class_num: 2, grade: 3, username: 124 }
     ];
 
     @observable chosenIds = [];
@@ -27,17 +28,32 @@ class CreditStore {
                 this.chosenIds = res.data['receivers']
             })
             .catch((err) => {
-                console.log(err)
+                notification.error({
+                    message: 'Oops..',
+                    description: '获取分配学分信息失败'
+                });
+                throw err
             })
     };
 
     @action submit = () => {
-        Provider.post('/api/society_manage/credit/receiver/')
+        Provider.patch('/api/society_manage/credit/', data = {
+            receivers: this.chosenIds
+        })
             .then((res) => {
-                console.log(res)
+                if (res.status === 200) {
+                    notification.success({
+                        message: '成功',
+                        description: '登记本社团学分分配成功'
+                    });
+                }
             })
             .catch((err) => {
-                console.log(err)
+                notification.error({
+                    message: 'Oops..',
+                    description: '登记本社团学分分配失败'
+                });
+                throw err;
             })
     }
 }

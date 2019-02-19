@@ -28,10 +28,10 @@ class DistributeCredit extends React.Component {
                         targetKeys={CreditStore.chosenIds}
                         locale={{itemUnit: '人', itemsUnit: '人', notFoundContent: '列表为空', searchPlaceholder: '请输入搜索内容'}}
                         onChange={this.handleChange}
-                        render={member => `${member.grade}-${member.class_num}-${member.name}`}
+                        render={member => `${member.grade}级(${member.class_num})班-${member.name}`}
                     />
                     <Button htmlType="button" onClick={CreditStore.submit} type="primary" size="large"
-                            className="mt-3">提交</Button>
+                            className="mt-5" style={{width: '100%'}}>提交</Button>
             </div>
         )
     }

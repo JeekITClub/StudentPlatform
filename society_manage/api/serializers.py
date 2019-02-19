@@ -40,9 +40,15 @@ class ActivityRequestMiniSerializer(serializers.ModelSerializer):
         read_only_fields = ('status',)
 
 
+class StudentOnlyIdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = ('id',)
+
+
 class CreditDistributionSerializer(serializers.ModelSerializer):
     available_receivers = StudentMiniSerializer(many=True, source='get_available_receivers')
-    receivers = StudentMiniSerializer(many=True)
+    receivers = StudentOnlyIdSerializer(many=True)
 
     class Meta:
         model = CreditDistribution
