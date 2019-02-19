@@ -55,6 +55,7 @@ export default function AdminSociety({match}) {
     return (
         AccountStore.is_society  ?
             <AdminLayout
+                drawMenuTitle="社团管理"
                 baseUrl="/admin_society"
                 siderMenu={siderMenu}
                 breadcrumbNameMap={breadcrumbNameMap}
