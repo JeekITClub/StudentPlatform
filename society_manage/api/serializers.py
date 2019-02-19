@@ -42,8 +42,14 @@ class ActivityRequestMiniSerializer(serializers.ModelSerializer):
 
 class CreditDistributionSerializer(serializers.ModelSerializer):
     available_receivers = StudentMiniSerializer(many=True, source='get_available_receivers')
-    receivers = StudentMiniSerializer(many=True)
+    receivers = serializers.SerializerMethodField()
 
     class Meta:
         model = CreditDistribution
-        fields = ('id', 'year', 'semester', 'receivers', 'available_receivers', 'closed')
+        fields = ('credit', 'id', 'year', 'semester', 'receivers', 'available_receivers', 'closed')
+
+    def get_receivers(self, obj):
+        id_set = []
+        for receiver in obj.receivers.all():
+            id_set.append(receiver.id)
+        return id_set
