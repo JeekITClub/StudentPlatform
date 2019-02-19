@@ -2,7 +2,6 @@ import React from 'react';
 import {Row, Col} from 'antd';
 
 import WrappedLoginForm from '../components/LoginForm';
-import GenericHeader from "../components/GenericHeader";
 
 class Login extends React.Component {
     render() {

@@ -3,6 +3,7 @@ import {Route, HashRouter, Switch} from 'react-router-dom';
 import Loadable from 'react-loadable';
 import Loading from './shared/Loading';
 import {LoginRequiredRoute} from "./shared/route";
+import AccountStore from "./shared/stores/AccountStore";
 
 const Home = Loadable({
     loader: () => import(/* webpackChunkName: "home" */'./app/home/index.js'),
@@ -25,6 +26,10 @@ const SocietyBureau = Loadable({
 const MyRouter = HashRouter;
 
 class AppRouter extends React.Component {
+    componentWillMount() {
+        AccountStore.fetch()
+    }
+
     render() {
         return (
             <MyRouter>
