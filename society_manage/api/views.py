@@ -132,12 +132,12 @@ class SocietyCreditViewSet(
 
         # receiver_id_set can be '[]'
         if receiver_id_set is not None:
-            valid_student_set = []
+            valid_receiver_set = []
             for receiver_id in receiver_id_set:
                 student = request.user.society.members.filter(id=int(receiver_id)).first()
                 credit_id = student.has_receive_credit(self.get_object().year, self.get_object().semester)
                 if student is not None and (credit_id == request.user.society.id or credit_id is None):
-                    valid_student_set.append(student)
-            self.get_object().receivers.set(valid_student_set)
+                    valid_receiver_set.append(student)
+            self.get_object().receivers.set(valid_receiver_set)
             return response.Response(status=status.HTTP_200_OK)
         return response.Response(status=status.HTTP_400_BAD_REQUEST)
