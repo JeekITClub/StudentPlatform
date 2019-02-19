@@ -3,6 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.generics import UpdateAPIView, ListAPIView
 from rest_framework.mixins import ListModelMixin
 
+from society_bureau.api.services import SettingsService
 from utils.filters import StatusFilterBackend
 from utils.permissions import IsSociety, SocietyActivityEditable
 from society.models import Society, JoinSocietyRequest, ActivityRequest
@@ -21,6 +22,7 @@ from utils.filters import (
     YearFilterBackend,
     SemesterFilterBackend
 )
+from society_bureau.api.services import SettingsService
 
 
 class SocietyMemberViewSet(viewsets.GenericViewSet, ListModelMixin):
@@ -77,6 +79,7 @@ class JoinSocietyRequestViewSet(
 
 
 class ActivityRequestViewSet(viewsets.ModelViewSet):
+    filter_backends = [StatusFilterBackend, ]
 
     def get_queryset(self):
         return ActivityRequest.objects.filter(society__user=self.request.user).order_by('-updated_at')
@@ -105,7 +108,6 @@ class SocietyCreditViewSet(
     ListAPIView
 ):
     permission_classes = (IsSociety,)
-    filter_backends = [YearFilterBackend, SemesterFilterBackend]
 
     def get_serializer_class(self):
         return CreditDistributionSerializer
@@ -114,7 +116,10 @@ class SocietyCreditViewSet(
         return CreditDistribution.objects.filter(society=self.request.user.society).order_by('-year', '-semester')
 
     def list(self, request, *args, **kwargs):
-        instance = self.filter_queryset(self.get_queryset()).first()
+        year = request.query_params.get('year', SettingsService.get('year'))
+        semester = request.query_params.get('semester', SettingsService.get('semester'))
+        self.queryset = self.get_queryset().filter(year=year).filter(semester=semester)
+        instance = self.queryset.first()
         if instance:
             serializer = self.get_serializer(instance)
             return response.Response(serializer.data)
@@ -123,11 +128,16 @@ class SocietyCreditViewSet(
     def update(self, request, *args, **kwargs):
         if self.get_object().closed:
             return response.Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-        receiver_id_set = request.data.getlist('receivers', None)
-        if receiver_id_set:
+        receiver_id_set = request.data.get('receivers', None)
+
+        # receiver_id_set can be '[]'
+        if receiver_id_set is not None:
+            valid_receiver_set = []
             for receiver_id in receiver_id_set:
                 student = request.user.society.members.filter(id=int(receiver_id)).first()
-                if student is not None:
-                    self.get_object().receivers.add(student)
+                credit_id = student.has_receive_credit(self.get_object().year, self.get_object().semester)
+                if student is not None and (credit_id == request.user.society.id or credit_id is None):
+                    valid_receiver_set.append(student)
+            self.get_object().receivers.set(valid_receiver_set)
             return response.Response(status=status.HTTP_200_OK)
         return response.Response(status=status.HTTP_400_BAD_REQUEST)

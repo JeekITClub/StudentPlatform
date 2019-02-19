@@ -8,3 +8,5 @@ collectstatic/
 static/
 templates/react/index.html
 *.DS_Store
+
+db.sqlite3
