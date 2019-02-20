@@ -1,7 +1,6 @@
 import React from 'react';
-import {List, Divider, Badge, Row, Col} from "antd";
+import {List, Badge, Row, Col} from "antd";
 
-import Provider from "../../../utils/provider";
 import {Link} from "react-router-dom";
 
 
@@ -22,8 +21,6 @@ class ActivityListItem extends React.Component {
             return <span><Badge status="success"/>一周内</span>
         }
         return <span><Badge status="default"/>很久以前</span>
-        // dif =
-        // if (now.getDate() - startTime.getDate()
     };
 
     render() {

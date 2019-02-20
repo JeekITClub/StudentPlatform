@@ -3,7 +3,7 @@ import {Row, Col, notification, Empty, List} from 'antd';
 
 import ActivityListItem from "../components/ActivityListItem";
 
-import Provider from "../../../utils/provider";
+import Provider from "../../../../utils/provider";
 
 
 class ActivityList extends React.Component {

@@ -17,7 +17,7 @@ const Society = Loadable({
 });
 
 const Activity = Loadable({
-    loader: () => import(/* webpackChunkName: "activity" */'./containers/ActivityList'),
+    loader: () => import(/* webpackChunkName: "activity" */'./activity/index.js'),
     loading: Loading,
 });
 
