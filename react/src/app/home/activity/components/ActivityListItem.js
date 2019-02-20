@@ -34,12 +34,12 @@ class ActivityListItem extends React.Component {
             <Row type="flex" justify="end" align="middle" className="w-100 text-right mr-2">
                 <Col xl={10} lg={12} md={15} sm={20} xs={24}>
                     <Row type="flex" justify="end">
-                        <Col xs={8} md={7} span={6} className="text-left"><strong>举办者</strong></Col>
-                        <Col xs={16} span={12} className="text-right">{activity.society}</Col>
+                        <Col xs={0} md={8} span={6} className="text-left"><strong>举办者</strong></Col>
+                        <Col xs={22} md={16} span={12} className="text-right">{activity.society}</Col>
                     </Row>
                     <Row type="flex" justify="end">
-                        <Col xs={8} md={7} span={6} className="text-left"><strong>地点</strong></Col>
-                        <Col xs={16} span={12} className="text-right">{activity.place}</Col>
+                        <Col xs={0} md={8} span={6} className="text-left"><strong>地点</strong></Col>
+                        <Col xs={22} md={16} span={12} className="text-right">{activity.place}</Col>
                     </Row>
                 </Col>
                 <Col xl={8} lg={8} md={9} sm={24} xs={24}>
