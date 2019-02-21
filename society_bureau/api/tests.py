@@ -4,6 +4,7 @@ from testing.testcases import TestCase
 from society.constants import SocietyType, SocietyStatus
 from society_manage.models import CreditDistribution
 from society.models import Society
+from society_bureau.api.services import SettingsService
 
 
 class DashboardTests(TestCase):
@@ -166,6 +167,17 @@ class SocietyManageTests(TestCase):
         self.assertEqual(self.society1.status, SocietyStatus.ACTIVE)
 
     def test_archive_society(self):
+        credit = CreditDistribution.objects.create(
+            society=self.society3,
+            year=SettingsService.get('year'),
+            semester=SettingsService.get('semester'),
+            credit=10,
+            closed=False
+        )
+        student_user = self.createUser('student')
+        student = self.createStudent(user=student_user)
+        credit.receivers.add(student)
+        self.society3.members.add(student)
         url = '/api/manage/society/{}/archive/'.format(self.society1.pk)
 
         client = APIClient(enforce_csrf_checks=True)
@@ -182,8 +194,11 @@ class SocietyManageTests(TestCase):
         response = client.post(url, decode=True)
         self.society3.refresh_from_db()
         self.assertEqual(response.status_code, 202)
+        self.assertIsNone(self.society3.society_id)
         self.assertEqual(self.society3.status, SocietyStatus.ARCHIVED)
         self.assertEqual(self.society3.user.is_active, False)
+        self.assertNotIn(student, self.society3.members.all())
+        self.assertNotIn(student, credit.receivers.all())
 
     def test_destroy_society(self):
         url = '/api/manage/society/{}/'.format(self.society3.pk)

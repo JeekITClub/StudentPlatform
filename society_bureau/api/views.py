@@ -105,10 +105,21 @@ class SocietyManageViewSet(
     @action(detail=True, methods=['post'])
     def archive(self, request, pk=None):
         society = self.get_object()
+        society.society_id = None
         society.status = SocietyStatus.ARCHIVED
+        society.members.clear()
         society.user.is_active = False
         society.user.save()
         society.save()
+
+        credit_distribution = CreditDistribution.objects.filter(
+            society=society,
+            year=SettingsService.get('year'),
+            semester=SettingsService.get('semester'),
+            closed=False
+        )
+        if credit_distribution.exists():
+            credit_distribution.first().receivers.clear()
         return Response(status=status.HTTP_202_ACCEPTED)
 
 
