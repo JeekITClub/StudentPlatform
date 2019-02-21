@@ -6,6 +6,7 @@ from student.api.views import (
     StudentViewSet,
     StudentCreditViewSet,
     StudentSocietyViewSet,
+    StudentActivityViewSet
 )
 from society_manage.api.views import (
     SocietyMemberViewSet,
@@ -23,6 +24,7 @@ router = routers.SimpleRouter()
 
 router.register(r'account', AccountViewSet, base_name='account')
 router.register(r'society', SocietyViewSet, base_name='society')
+router.register(r'activity', StudentActivityViewSet, base_name='activity')
 router.register(r'student/credit', StudentCreditViewSet, base_name='student_credit')
 router.register(r'student/society', StudentSocietyViewSet, base_name='student_society')
 router.register(r'student', StudentViewSet, base_name='student')
