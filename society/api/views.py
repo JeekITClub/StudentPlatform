@@ -4,6 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from society.models import Society
+from society_manage.models import CreditDistribution
 from society.api.serializers import (
     SocietySerializer,
     SocietyMiniSerializer,
@@ -19,6 +20,7 @@ from utils.filters import (
     NameFilterBackend
 )
 from society.constants import SocietyStatus
+from society_bureau.api.services import SettingsService
 
 
 class SocietyViewSet(viewsets.GenericViewSet, RetrieveAPIView, ListAPIView):
@@ -58,7 +60,19 @@ class SocietyViewSet(viewsets.GenericViewSet, RetrieveAPIView, ListAPIView):
     def quit(self, request, pk=None):
         society = self.get_object()
         member = request.user.student
+        year = SettingsService.get('year')
+        semester = SettingsService.get('semester')
+        credit = CreditDistribution.objects.filter(
+            society=society,
+            year=year,
+            semester=semester,
+            closed=False
+        )
 
         society.members.remove(member)
+
+        if credit.exists() and society.status == SocietyStatus.ACTIVE:
+            credit.first().receivers.remove(member)
+
         return Response(data={'detail': '退出成功！'},
                         status=status.HTTP_200_OK)

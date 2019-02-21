@@ -2,6 +2,8 @@ from rest_framework.test import APIClient
 
 from testing.testcases import TestCase
 from society_manage.models import CreditDistribution
+from society.constants import SocietyStatus
+
 
 class StudentTests(TestCase):
     def test_get_student(self):
@@ -93,10 +95,10 @@ class StudentCreditTests(TestCase):
         res = client.get(url, decode=True)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(res.data['results'][0]['society']['name'], society.name)
-        self.assertEqual(res.data['results'][0]['semester'], credit_distribution.semester)
-        self.assertEqual(res.data['results'][0]['year'], credit_distribution.year)
+        self.assertEqual(res.data['results'][0]['semester'], credit_distribution2.semester)
+        self.assertEqual(res.data['results'][0]['year'], credit_distribution2.year)
 
-        self.assertEqual(res.data['results'][1]['year'], credit_distribution2.year)
+        self.assertEqual(res.data['results'][1]['year'], credit_distribution.year)
 
         # test is_authenticated permission
         res = self.client.get(url)
@@ -105,3 +107,25 @@ class StudentCreditTests(TestCase):
         client.force_authenticate(society_user)
         res = client.get(url)
         self.assertEqual(res.status_code, 403)
+
+
+class StudentSocietyTests(TestCase):
+    def setUp(self):
+        self.user1 = self.createUser('jw')
+        self.user2 = self.createUser('society1')
+        self.user3 = self.createUser('society2')
+        self.student1 = self.createStudent(self.user1)
+        self.society1 = self.createSociety(user=self.user2, members=[self.student1], status=SocietyStatus.ACTIVE)
+        self.society2 = self.createSociety(user=self.user3, status=SocietyStatus.ACTIVE)
+
+    def test_student_list_societies(self):
+        url = '/api/student/society/'
+
+        client = APIClient(enforce_csrf_checks=True)
+        res = client.get(url, decode=True)
+        self.assertEqual(res.status_code, 403)
+
+        client.force_authenticate(self.user1)
+        res = client.get(url, decode=True)
+        self.assertEqual(res.data['count'], 1)
+        self.assertEqual(res.data['results'][0]['id'], 1)

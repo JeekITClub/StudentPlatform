@@ -52,15 +52,20 @@ class SocietyListItem extends React.Component {
     };
 
     quitSociety = () => {
-        // TODO
-        return Provider.post(`/api/student/society/${this.props.society.id}/quit/`)
+        return Provider.post(`/api/society/${this.props.society.id}/quit/`)
             .then((res) => {
-                console.log(res);
+                notification.success({
+                    message: '成功',
+                    description: '成功退出该社团，社长将收到你的退社消息！',
+                });
+                this.props.refresh();
+                this.hideModal();
             }).catch((err) => {
                 notification.error({
                     message: 'Oops...',
                     description: '退出社团失败了，请检查你的网络',
                 });
+                this.hideModal();
             })
     };
 

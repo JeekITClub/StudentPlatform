@@ -38,14 +38,15 @@ class StudentCreditViewSet(
     serializer_class = StudentInspectCreditSerializer
 
     def get_queryset(self):
-        return self.request.user.student.receive_credit_from.all()
+        return self.request.user.student.receive_credit_from.all().order_by('-year', '-semester')
 
 
 class StudentSocietyViewSet(viewsets.GenericViewSet, ListAPIView):
+    permission_classes = [IsStudent, ]
     serializer_class = SocietyMiniSerializer
 
     def get_queryset(self):
-        return self.request.user.student.society_set.exclude(status=SocietyStatus.WAITING)
+        return self.request.user.student.society_set.filter(status=SocietyStatus.ACTIVE)
 
 
 class StudentActivityViewSet(
