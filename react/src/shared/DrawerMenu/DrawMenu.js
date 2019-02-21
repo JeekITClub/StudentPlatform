@@ -5,29 +5,14 @@ import PropTypes from 'prop-types';
 import '../styles/DrawerMenu.scss';
 
 class DrawerMenu extends React.Component {
-    state = {drawerVisible: false, handleVisible: true};
-
-    showDrawer = () => {
-        this.setState({
-            drawerVisible: true,
-            handleVisible: false
-        });
-    };
-
-    onClose = () => {
-        this.setState({
-            drawerVisible: false,
-            handleVisible: true
-        });
-    };
-
     render() {
         const drawerHandle = (
             <Row>
                 <Col lg={0} xl={0} xxl={0}>
                     <Affix offsetTop={30} className="drawer-handle">
-                        <div className="drawer-handle-container" onClick={this.showDrawer}><Icon
-                            type="menu-unfold"/></div>
+                        <div className="drawer-handle-container" onClick={() => this.props.toggle()}>
+                            <Icon type="menu-unfold" />
+                        </div>
                     </Affix>
                 </Col>
             </Row>
@@ -38,18 +23,23 @@ class DrawerMenu extends React.Component {
                     title={this.props.title}
                     placement="left"
                     closable={true}
-                    onClose={this.onClose}
-                    visible={this.state.drawerVisible}>
+                    onClose={() => this.props.toggle()}
+                    visible={this.props.drawerMenuVisible}
+                    className={this.props.className}
+                >
                     {this.props.children}
                 </Drawer>
-                {this.state.handleVisible ? drawerHandle : null}
+                {this.props.handleVisible ? drawerHandle : null}
             </div>
         )
     }
 }
 
 DrawerMenu.propTypes = {
-    title: PropTypes.string.isRequired
+    title: PropTypes.string.isRequired,
+    toggle: PropTypes.func.isRequired,
+    drawerMenuVisible: PropTypes.bool.isRequired,
+    handleVisible: PropTypes.bool.isRequired
 };
 
 export default DrawerMenu;
