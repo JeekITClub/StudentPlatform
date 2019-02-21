@@ -10,6 +10,7 @@ import StudentPage from "./containers/StudentPage";
 
 import {LoginRequiredRoute} from "../../shared/route";
 import Loading from "../../shared/Loading";
+import NotFound from "../../shared/NotFound/NotFound";
 import './styles/SocietyHome.scss';
 
 const Society = Loadable({
@@ -28,6 +29,7 @@ export default function withGenericHeader({match}) {
                         <Route path={`${match.url}login`} component={Login}/>
                         <LoginRequiredRoute path={`${match.url}password`} component={WrappedChangePasswordForm}/>
                         <LoginRequiredRoute path={`${match.url}student`} component={StudentPage}/>
+                        <Route component={NotFound}/>
                     </Switch>
                 </Col>
             </Row>
