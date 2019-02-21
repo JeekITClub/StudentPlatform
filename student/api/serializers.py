@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from student.models import Student
+from society.models import ActivityRequest
 from society.api.serializers import SocietyMiniSerializer
 from society_manage.models import CreditDistribution
 
@@ -29,3 +30,21 @@ class StudentInspectCreditSerializer(serializers.ModelSerializer):
     class Meta:
         model = CreditDistribution
         fields = ('society', 'semester', 'year',)
+
+
+class StudentActivitySerializer(serializers.ModelSerializer):
+    society = SocietyMiniSerializer(read_only=True)
+
+    class Meta:
+        model = ActivityRequest
+        fields = '__all__'
+        read_only_fields = ('status',)
+
+
+class StudentActivityMiniSerializer(serializers.ModelSerializer):
+    society = serializers.StringRelatedField()
+
+    class Meta:
+        model = ActivityRequest
+        fields = ('id', 'title', 'place', 'start_time', 'society')
+        read_only_fields = ('status',)
