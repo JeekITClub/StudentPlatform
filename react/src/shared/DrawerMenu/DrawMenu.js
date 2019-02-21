@@ -38,8 +38,8 @@ class DrawerMenu extends React.Component {
 DrawerMenu.propTypes = {
     title: PropTypes.string.isRequired,
     toggle: PropTypes.func.isRequired,
-    drawerMenuVisible: PropTypes.bool,
-    handleVisible: PropTypes.bool
+    drawerMenuVisible: PropTypes.bool.isRequired,
+    handleVisible: PropTypes.bool.isRequired
 };
 
 export default DrawerMenu;
