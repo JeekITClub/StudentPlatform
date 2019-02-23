@@ -1,9 +1,5 @@
 import React from 'react';
-import {Layout, Row, Col} from "antd";
 
-import SocietyBureauHeader from './components/SocietyBureauHeader';
-import SocietyBureauSider from './components/SocietyBureauSider';
-import SBDrawerMenu from "./components/SBDrawerMenu";
 import SBRouter from './router'
 
 import './styles/index.scss';
@@ -13,14 +9,47 @@ import NotAuthorized from "../../shared/NotAuthorized/NotAuthorized";
 
 import AdminLayout from '../../shared/AdminLayout/AdminLayout'
 
-const {
-    Footer
-} = Layout;
+export default function SocietyBureau({ match }) {
+    const siderMenu = [
+        {
+            key: 'dashboard',
+            iconType: 'dashboard',
+            title: '仪表盘'
+        },
+        {
+            key: 'society',
+            iconType: 'team',
+            title: '社团管理'
+        },
+        {
+            key: 'audit',
+            iconType: 'edit',
+            title: '社团审核'
+        },
+        {
+            key: 'credit',
+            iconType: 'star',
+            title: '学分管理'
+        }
+    ];
 
-export default function SocietyBureau({match}) {
+    const breadcrumbNameMap = {
+        '/manage': '主页',
+        '/manage/society': '社团管理',
+        '/manage/audit': '社团审核',
+        '/manage/credit': '学分管理'
+    };
+
     return (
         AccountStore.is_society_bureau ?
-            
+            <AdminLayout
+                drawMenuTitle="社团部管理"
+                baseUrl="/manage"
+                siderMenu={siderMenu}
+                breadcrumbNameMap={breadcrumbNameMap}
+                footer={<h1>footer</h1>}
+                router={<SBRouter match={match}/>}
+            />
             : <NotAuthorized/>
     );
 }
