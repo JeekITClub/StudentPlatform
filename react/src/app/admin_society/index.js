@@ -1,6 +1,5 @@
 import React from 'react';
 
-import AdminSocietyDrawerMenu from "./components/AdminSocietyDrawerMenu";
 import AdminSocietyRouter from './router.js'
 
 import './styles/index.scss'
@@ -61,7 +60,6 @@ export default function AdminSociety({match}) {
                 breadcrumbNameMap={breadcrumbNameMap}
                 footer={<h1>hello</h1>}
                 router={<AdminSocietyRouter match={match}/>}
-                drawMenu={<AdminSocietyDrawerMenu/>}
             />
             : <NotAuthorized/>
     );

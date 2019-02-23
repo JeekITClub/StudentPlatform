@@ -70,7 +70,7 @@ class AdminLayout extends React.Component {
                             <Col xs={0} sm={0} md={4} className="admin-layout-breadcrumb">
                                 <LocationBreadcrumb breadcrumbNameMap={this.props.breadcrumbNameMap}/>
                             </Col>
-                            <Col md={6} lg={0} className="admin-layout-mobile-title">
+                            <Col className="admin-layout-mobile-title">
                                 JPSP
                             </Col>
                             <Col className="admin-layout-header-menu">
@@ -105,7 +105,6 @@ AdminLayout.propTypes = {
     breadcrumbNameMap: PropTypes.object.isRequired,
     footer: PropTypes.node.isRequired,
     router: PropTypes.node.isRequired,
-    drawMenu: PropTypes.node.isRequired
 };
 
 export default AdminLayout;
