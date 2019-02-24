@@ -150,7 +150,14 @@ class CreditManageViewSet(
 
     def list(self, request, *args, **kwargs):
         if self.get_queryset().exists():
-            serializer = self.get_serializer(self.get_queryset(), many=True)
+            queryset = self.filter_queryset(self.get_queryset())
+
+            page = self.paginate_queryset(queryset)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+            serializer = self.get_serializer(queryset, many=True)
             return Response(serializer.data)
         credit_distribution_sets = []
         for society in Society.objects.filter(status=SocietyStatus.WAITING):
@@ -160,8 +167,10 @@ class CreditManageViewSet(
                 year=SettingsService.get('year')
             )
             credit_distribution_sets.append(queryset)
-        serializer = self.get_serializer(credit_distribution_sets, many=True)
-        return Response(serializer.data)
+        page = self.paginate_queryset(credit_distribution_sets)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
 
 
 class SettingsViewSet(

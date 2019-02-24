@@ -254,14 +254,14 @@ class CreditReceiversTests(TestCase):
         client.force_authenticate(self.user3)
         response = client.get(url, decode=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 2)
-        self.assertEqual(response.data[0]['receivers_count'], 0)
-        self.assertEqual(response.data[0]['credit'], 1)
+        self.assertEqual(len(response.data['results']), 2)
+        self.assertEqual(response.data['results'][0]['receivers_count'], 0)
+        self.assertEqual(response.data['results'][0]['credit'], 1)
 
         # now there are credit distributions
         # so response the existing data
         response = client.get(url, decode=True)
-        self.assertEqual(len(response.data), 2)
+        self.assertEqual(len(response.data['results']), 2)
 
         # the following code is just a test
         # we should try our best to avoid this situation
@@ -269,7 +269,7 @@ class CreditReceiversTests(TestCase):
         # response the existing credit distribution
         response = client.get(url, decode=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response.data['results']), 1)
 
     def test_retrieve_credit_distribution(self):
         credit_distribution = CreditDistribution.objects.create(
