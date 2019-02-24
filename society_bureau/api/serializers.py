@@ -126,21 +126,23 @@ class CreditDistributionManualCreateSerializer(serializers.Serializer):
         )
 
 
-class SiteSettingsSerializer(serializers.Serializer):
+class SiteSettingsRetrieveSerializer(serializers.Serializer):
     year = serializers.SerializerMethodField()
     semester = serializers.SerializerMethodField()
 
     class Meta:
-        model = SiteSettings
         fields = ('year', 'semester')
-
-    def update(self, instance, validated_data):
-        SettingsService.set('year', self.data['year'])
-        SettingsService.set('semester', self.data['semester'])
-        return SettingsService.get_instance()
 
     def get_year(self, obj):
         return SettingsService.get('year')
 
     def get_semester(self, obj):
         return SettingsService.get('semester')
+
+
+class SiteSettingsUpdateSerializer(serializers.Serializer):
+    year = serializers.IntegerField()
+    semester = serializers.IntegerField()
+
+    class Meta:
+        fields = ('year', 'semester')

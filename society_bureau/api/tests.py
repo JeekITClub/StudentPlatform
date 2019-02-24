@@ -347,3 +347,6 @@ class SiteSettingsTest(TestCase):
         url = '/api/manage/settings/'
         res = self.client.put(url, data={'year': 2011, 'semester': 2})
         self.assertEqual(res.status_code, 202)
+
+        res = self.client.put(url, data={'yea': 2011, 'semester': 2})
+        self.assertEqual(res.status_code, 400)

@@ -19,7 +19,8 @@ from society_bureau.api.serializers import (
     ConfirmSocietySerializer,
     CreditDistributionManualCreateSerializer,
     DashboardSerializer,
-    SiteSettingsSerializer
+    SiteSettingsRetrieveSerializer,
+    SiteSettingsUpdateSerializer
 )
 from utils.permissions import (
     IsSocietyBureau,
@@ -168,8 +169,12 @@ class SettingsViewSet(
     generics.UpdateAPIView,
     mixins.ListModelMixin
 ):
-    serializer_class = SiteSettingsSerializer
     permission_classes = [IsSocietyBureau, ]
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return SiteSettingsRetrieveSerializer
+        return SiteSettingsUpdateSerializer
 
     def get_queryset(self):
         default_settings = json.dumps({
@@ -182,12 +187,13 @@ class SettingsViewSet(
         return settings
 
     def list(self, request, *args, **kwargs):
-        serializer = SiteSettingsSerializer(instance=self.get_queryset())
+        serializer = self.get_serializer_class()(instance=self.get_queryset())
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     def update(self, request, *args, **kwargs):
-        serializer = SiteSettingsSerializer(self.get_queryset(), data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        serializer = self.get_serializer_class()(data=request.data)
+        if serializer.is_valid():
+            SettingsService.set('year', serializer.validated_data['year'])
+            SettingsService.set('semester', serializer.validated_data['semester'])
+            return Response(status=status.HTTP_202_ACCEPTED)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
