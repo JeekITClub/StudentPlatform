@@ -154,9 +154,9 @@ class SocietyProfileViewSet(viewsets.GenericViewSet, RetrieveUpdateAPIView):
             return UploadAvatarSerializer
         return SocietySerializer
 
-    @action(detail=True, methods=['post'])
+    @action(detail=False, methods=['post'])
     def upload_avatar(self, request, pk=None):
-        serializer = self.get_serializer(instance=self.get_object(), data=request.data)
+        serializer = self.get_serializer(instance=request.user.society, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return response.Response(status=status.HTTP_202_ACCEPTED)

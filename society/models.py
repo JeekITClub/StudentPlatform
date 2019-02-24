@@ -42,7 +42,7 @@ class Society(models.Model):
     established_time = models.DateTimeField(blank=True, null=True)
     password_changed = models.BooleanField(default=False)
     tags = models.ManyToManyField(SocietyTag, blank=True)
-    avatar = models.ImageField(upload_to=avatar_storage_path, height_field=512, width_field=512, null=True, blank=True)
+    avatar = models.ImageField(upload_to=avatar_storage_path, null=True, blank=True)
 
     class Meta:
         ordering = ['-established_time']
