@@ -1,12 +1,11 @@
 from rest_framework import viewsets, response, status
 from rest_framework.decorators import action
-from rest_framework.generics import UpdateAPIView, ListAPIView
+from rest_framework.generics import UpdateAPIView, ListAPIView, RetrieveUpdateAPIView
 from rest_framework.mixins import ListModelMixin
 
-from society_bureau.api.services import SettingsService
-from utils.filters import StatusFilterBackend
 from utils.permissions import IsSociety, SocietyActivityEditable
 from society.models import Society, JoinSocietyRequest, ActivityRequest
+from society.api.serializers import SocietySerializer
 from society_manage.api.serializers import (
     JoinSocietyRequestSerializer,
     ReviewJoinSocietyRequestSerializer,
@@ -14,6 +13,7 @@ from society_manage.api.serializers import (
     ActivityRequestSerializer,
     ActivityRequestMiniSerializer,
     CreditDistributionSerializer,
+    UploadAvatarSerializer
 )
 from society_manage.models import CreditDistribution
 from student.api.serializers import StudentMiniSerializer
@@ -141,3 +141,26 @@ class SocietyCreditViewSet(
             self.get_object().receivers.set(valid_receiver_set)
             return response.Response(status=status.HTTP_200_OK)
         return response.Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class SocietyProfileViewSet(viewsets.GenericViewSet, RetrieveUpdateAPIView):
+    permission_classes = (IsSociety,)
+
+    def get_queryset(self):
+        return Society.objects.filter(society=self.request.user)
+
+    def get_serializer_class(self):
+        if self.action == 'upload_avatar':
+            return UploadAvatarSerializer
+        return SocietySerializer
+
+    @action(detail=True, methods=['post'])
+    def upload_avatar(self, request, pk=None):
+        serializer = self.get_serializer(instance=self.get_object(), data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return response.Response(status=status.HTTP_202_ACCEPTED)
+        return response.Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data={'detail': '表单填写错误'}
+        )

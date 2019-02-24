@@ -1,8 +1,7 @@
 from rest_framework import serializers
 from student.api.serializers import StudentMiniSerializer
-from society.models import JoinSocietyRequest, ActivityRequest
+from society.models import JoinSocietyRequest, ActivityRequest, Society
 from society_manage.models import CreditDistribution
-from student.models import Student
 
 
 class JoinSocietyRequestSerializer(serializers.ModelSerializer):
@@ -50,3 +49,10 @@ class CreditDistributionSerializer(serializers.ModelSerializer):
 
     def get_receivers(self, obj):
         return [receiver.id for receiver in obj.receivers.all()]
+
+
+class UploadAvatarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Society
+        fields = ('id', 'avatar',)
+        read_only_fields = ('id',)

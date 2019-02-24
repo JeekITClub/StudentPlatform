@@ -12,7 +12,8 @@ from society_manage.api.views import (
     SocietyMemberViewSet,
     JoinSocietyRequestViewSet,
     ActivityRequestViewSet,
-    SocietyCreditViewSet
+    SocietyCreditViewSet,
+    SocietyProfileViewSet
 )
 from society_bureau.api.views import (
     DashboardViewSet,
@@ -28,6 +29,7 @@ router.register(r'activity', StudentActivityViewSet, base_name='activity')
 router.register(r'student/credit', StudentCreditViewSet, base_name='student_credit')
 router.register(r'student/society', StudentSocietyViewSet, base_name='student_society')
 router.register(r'student', StudentViewSet, base_name='student')
+router.register(r'society_manage/profile', SocietyProfileViewSet, base_name='society_manage_profile')
 router.register(r'society_manage/member', SocietyMemberViewSet, base_name='society_manage_members')
 router.register(r'society_manage/join_request', JoinSocietyRequestViewSet, base_name='society_manage_join_request')
 router.register(r'society_manage/activity', ActivityRequestViewSet, base_name='society_manage_join_request')
