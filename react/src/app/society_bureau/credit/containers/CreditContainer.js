@@ -4,6 +4,8 @@ import CreditDistributionList from "../components/CreditDistributionList";
 import CreditSetAllModal from '../components/CreditSetAllModal'
 import YearSemesterSelect from '../../../../shared/YearSemesterSelect/YearSemesterSelect'
 
+import Provider from '../../../../utils/provider'
+
 class CreditContainer extends React.Component {
     state = {
         setAllModalVisible: false,
@@ -13,7 +15,7 @@ class CreditContainer extends React.Component {
     };
 
     submitSetAllCredit = () => {
-
+        Provider.post()
     };
 
     render() {

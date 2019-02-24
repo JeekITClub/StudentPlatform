@@ -149,22 +149,20 @@ class CreditManageViewSet(
         return CreditDistribution.objects.all().order_by('-year', '-semester', 'society__society_id')
 
     def list(self, request, *args, **kwargs):
-        if self.get_queryset().exists():
-            queryset = self.filter_queryset(self.get_queryset())
-
+        queryset = self.filter_queryset(self.get_queryset())
+        if queryset.exists():
             page = self.paginate_queryset(queryset)
             if page is not None:
                 serializer = self.get_serializer(page, many=True)
                 return self.get_paginated_response(serializer.data)
-
             serializer = self.get_serializer(queryset, many=True)
             return Response(serializer.data)
         credit_distribution_sets = []
         for society in Society.objects.filter(status=SocietyStatus.WAITING):
             queryset = CreditDistribution.objects.create(
                 society=society,
-                semester=SettingsService.get('semester'),
-                year=SettingsService.get('year')
+                semester=request.query_params['semester'],
+                year=request.query_params['year']
             )
             credit_distribution_sets.append(queryset)
         page = self.paginate_queryset(credit_distribution_sets)

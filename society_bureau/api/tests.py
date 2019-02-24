@@ -242,7 +242,10 @@ class CreditReceiversTests(TestCase):
         self.student = self.createStudent(user=self.user4)
 
     def test_list_credit_distributions(self):
-        url = '/api/manage/credit/'
+        url = '/api/manage/credit/?year={year}&semester={semester}'.format(
+            year=SettingsService.get('year'),
+            semester=SettingsService.get('semester')
+        )
 
         # test permissions
         client = APIClient(enforce_csrf_checks=True)
@@ -257,6 +260,7 @@ class CreditReceiversTests(TestCase):
         self.assertEqual(len(response.data['results']), 2)
         self.assertEqual(response.data['results'][0]['receivers_count'], 0)
         self.assertEqual(response.data['results'][0]['credit'], 1)
+        self.assertEqual(CreditDistribution.objects.count(), 2)
 
         # now there are credit distributions
         # so response the existing data
@@ -270,6 +274,13 @@ class CreditReceiversTests(TestCase):
         response = client.get(url, decode=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data['results']), 1)
+
+        url = '/api/manage/credit/?year={year}&semester={semester}'.format(
+            year=2017,
+            semester=2
+        )
+        client.get(url)
+        self.assertEqual(CreditDistribution.objects.count(), 4)
 
     def test_retrieve_credit_distribution(self):
         credit_distribution = CreditDistribution.objects.create(
