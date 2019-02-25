@@ -17,7 +17,8 @@ from society_manage.api.views import (
 from society_bureau.api.views import (
     DashboardViewSet,
     SocietyManageViewSet,
-    CreditManageViewSet
+    CreditManageViewSet,
+    SettingsViewSet
 )
 
 router = routers.SimpleRouter()
@@ -35,5 +36,6 @@ router.register(r'society_manage/credit', SocietyCreditViewSet, base_name='socie
 router.register(r'manage/dashboard', DashboardViewSet, base_name='society_bureau_dashboard')
 router.register(r'manage/society', SocietyManageViewSet, base_name='society_bureau_society')
 router.register(r'manage/credit', CreditManageViewSet, base_name='society_bureau_credit')
+router.register(r'manage/settings', SettingsViewSet, base_name='society_bureau_settings')
 
 urlpatterns = router.urls

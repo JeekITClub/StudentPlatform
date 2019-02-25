@@ -1,9 +1,13 @@
+import json
+from django.utils import timezone
 from rest_framework import viewsets, status, mixins, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
+from society_bureau.models import SiteSettings
 from society_bureau.api.services import SettingsService
 from society.models import Society
+from society.constants import SocietyStatus
 from society_manage.models import CreditDistribution
 from society.api.serializers import (
     SocietySerializer,
@@ -14,7 +18,9 @@ from society_bureau.api.serializers import (
     CreditDistributionSerializer,
     ConfirmSocietySerializer,
     CreditDistributionManualCreateSerializer,
-    DashboardSerializer
+    DashboardSerializer,
+    SiteSettingsRetrieveSerializer,
+    SiteSettingsUpdateSerializer
 )
 from utils.permissions import (
     IsSocietyBureau,
@@ -30,7 +36,6 @@ from utils.filters import (
     SemesterFilterBackend,
     StatusFilterBackend
 )
-from society.constants import SocietyStatus
 
 
 class DashboardViewSet(viewsets.GenericViewSet):
@@ -157,3 +162,38 @@ class CreditManageViewSet(
             credit_distribution_sets.append(queryset)
         serializer = self.get_serializer(credit_distribution_sets, many=True)
         return Response(serializer.data)
+
+
+class SettingsViewSet(
+    viewsets.GenericViewSet,
+    generics.UpdateAPIView,
+    mixins.ListModelMixin
+):
+    permission_classes = [IsSocietyBureau, ]
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return SiteSettingsRetrieveSerializer
+        return SiteSettingsUpdateSerializer
+
+    def get_queryset(self):
+        default_settings = json.dumps({
+            'year': timezone.datetime.now().year,
+            'semester': 1
+        })
+        settings = SiteSettings.objects.all().first()
+        if settings is None:
+            return SiteSettings.objects.create(settings=default_settings)
+        return settings
+
+    def list(self, request, *args, **kwargs):
+        serializer = self.get_serializer_class()(instance=self.get_queryset())
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    def update(self, request, *args, **kwargs):
+        serializer = self.get_serializer_class()(data=request.data)
+        if serializer.is_valid():
+            SettingsService.set('year', serializer.validated_data['year'])
+            SettingsService.set('semester', serializer.validated_data['semester'])
+            return Response(status=status.HTTP_202_ACCEPTED)
+        return Response(status=status.HTTP_400_BAD_REQUEST)

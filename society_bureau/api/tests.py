@@ -218,30 +218,6 @@ class SocietyManageTests(TestCase):
         self.assertIsNone(Society.objects.filter(pk=self.society2.pk).first())
 
 
-class CreditManageTests(TestCase):
-    def setUp(self):
-        self.user1 = self.createUser('society1')
-        self.user2 = self.createUser('society2')
-        self.user3 = self.createUser('society_bureau')
-        self.society1 = self.createSociety(
-            user=self.user1,
-            society_id=301,
-            name='jeek',
-            members=None,
-            society_type=SocietyType.SCIENTIFIC,
-            status=SocietyStatus.ACTIVE
-        )
-        self.society2 = self.createSociety(
-            user=self.user2,
-            society_id=401,
-            name='jtv',
-            members=None,
-            society_type=SocietyType.HUMANISTIC,
-            status=SocietyStatus.ACTIVE
-        )
-        self.society_bureau = self.createSocietyBureau(user=self.user3, real_name='xxx')
-
-
 class CreditReceiversTests(TestCase):
     def setUp(self):
         self.user1 = self.createUser('society1')
@@ -349,3 +325,28 @@ class CreditReceiversTests(TestCase):
         cd.refresh_from_db()
         self.assertEqual(cd.closed, True)
         self.assertEqual(cd.credit, 10)
+
+
+class SiteSettingsTest(TestCase):
+    def setUp(self):
+        self.user = self.createUser('sb1')
+        self.createSocietyBureau(user=self.user)
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(self.user)
+        self.client = client
+
+    def test_retrieve(self):
+        url = '/api/manage/settings/'
+
+        res = self.client.get(url, encode=True)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.data['year'], SettingsService.get('year'))
+        self.assertEqual(res.data['semester'], SettingsService.get('semester'))
+
+    def test_update(self):
+        url = '/api/manage/settings/'
+        res = self.client.put(url, data={'year': 2011, 'semester': 2})
+        self.assertEqual(res.status_code, 202)
+
+        res = self.client.put(url, data={'yea': 2011, 'semester': 2})
+        self.assertEqual(res.status_code, 400)

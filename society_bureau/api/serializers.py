@@ -53,12 +53,6 @@ class ConfirmSocietySerializer(serializers.ModelSerializer):
         fields = ('id', 'society_id')
 
 
-class SettingsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SiteSettings
-        fields = '__all__'
-
-
 class SocietyCreditSerializer(serializers.ModelSerializer):
     class Meta:
         model = Society
@@ -130,3 +124,25 @@ class CreditDistributionManualCreateSerializer(serializers.Serializer):
             semester=SettingsService.get('semester'),
             year=SettingsService.get('year')
         )
+
+
+class SiteSettingsRetrieveSerializer(serializers.Serializer):
+    year = serializers.SerializerMethodField()
+    semester = serializers.SerializerMethodField()
+
+    class Meta:
+        fields = ('year', 'semester')
+
+    def get_year(self, obj):
+        return SettingsService.get('year')
+
+    def get_semester(self, obj):
+        return SettingsService.get('semester')
+
+
+class SiteSettingsUpdateSerializer(serializers.Serializer):
+    year = serializers.IntegerField()
+    semester = serializers.IntegerField()
+
+    class Meta:
+        fields = ('year', 'semester')
