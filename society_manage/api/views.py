@@ -1,3 +1,7 @@
+from PIL import Image
+import json
+from django.core.files import File
+
 from rest_framework import viewsets, response, status
 from rest_framework.decorators import action
 from rest_framework.generics import UpdateAPIView, ListAPIView, RetrieveUpdateAPIView
@@ -147,7 +151,7 @@ class SocietyProfileViewSet(viewsets.GenericViewSet, RetrieveUpdateAPIView):
     permission_classes = (IsSociety,)
 
     def get_queryset(self):
-        return Society.objects.filter(society=self.request.user)
+        return Society.objects.filter(user=self.request.user)
 
     def get_serializer_class(self):
         if self.action == 'upload_avatar':
@@ -156,10 +160,27 @@ class SocietyProfileViewSet(viewsets.GenericViewSet, RetrieveUpdateAPIView):
 
     @action(detail=False, methods=['post'])
     def upload_avatar(self, request, pk=None):
-        serializer = self.get_serializer(instance=request.user.society, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return response.Response(status=status.HTTP_202_ACCEPTED)
+        file = request.data.get('avatar', None)
+        crop = request.data.get('crop', None)
+
+        if file is None or file.size > 5 * 1024 * 1024 or crop is None:
+            return response.Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={'detail': '表单填写错误'}
+            )
+
+        crop = json.loads(crop)
+        im = Image.open(file)
+        print(crop)
+        im = im.crop((crop['x'], crop['y'], crop['x'] + crop['width'], crop['y'] + crop['height']))
+        im.save('./1.png')
+        with open('./1.png', 'rb') as f:
+            myfile = File(f)
+            serializer = self.get_serializer(instance=request.user.society, data={'avatar': myfile})
+            if serializer.is_valid():
+                serializer.save()
+                return response.Response(status=status.HTTP_202_ACCEPTED)
+            print(serializer.errors)
         return response.Response(
             status=status.HTTP_400_BAD_REQUEST,
             data={'detail': '表单填写错误'}

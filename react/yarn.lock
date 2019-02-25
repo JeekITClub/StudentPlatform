@@ -5721,10 +5721,10 @@ react-hot-loader@^4.6.3:
     shallowequal "^1.0.2"
     source-map "^0.7.3"
 
-react-image-crop@^6.0.13:
-  version "6.0.13"
-  resolved "http://registry.npm.taobao.org/react-image-crop/download/react-image-crop-6.0.13.tgz#350cd0697e7f76f4d9733530bc20163697a996c0"
-  integrity sha1-NQzQaX5/dvTZczUwvCAWNpeplsA=
+react-image-crop@^6.0.14:
+  version "6.0.14"
+  resolved "http://registry.npm.taobao.org/react-image-crop/download/react-image-crop-6.0.14.tgz#e21bd72b44a81087d71410de29d2a517c246968f"
+  integrity sha1-4hvXK0SoEIfXFBDeKdKlF8JGlo8=
   dependencies:
     "@types/react-image-crop" "^3.0.1"
 
