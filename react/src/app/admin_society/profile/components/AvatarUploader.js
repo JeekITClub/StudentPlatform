@@ -1,62 +1,15 @@
 import React from 'react';
-import {Upload, message, Button, Icon, notification} from 'antd';
+import {Upload, message, Button, Modal, notification} from 'antd';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/lib/ReactCrop.scss';
 
 import Provider from '../../../../utils/provider';
-import sampleImage from '../../../../static/sample.png';
 
 const now = new Date();
 let config = {
     headers: {'Content-Type': 'multipart/form-data'}
 };
 
-function beforeUpload(file) {
-    const isJPG = file.type === 'image/jpeg';
-    const isPNG = file.type === 'image/png';
-
-    if (!isJPG && !isPNG) {
-        message.error('只能上传.jpg或者.png文件！');
-        return false;
-    }
-    const isLt5M = file.size / 1024 / 1024 < 5;
-    if (!isLt5M) {
-        message.error('文件大小不能超过5MB！');
-        return false;
-    }
-    return true;
-}
-
-function getCroppedImg(image, pixelCrop, fileName) {
-
-    const canvas = document.getElementById('myCanvas');
-    canvas.width = pixelCrop.width;
-    canvas.height = pixelCrop.height;
-    const ctx = canvas.getContext('2d');
-
-    ctx.drawImage(
-        image,
-        pixelCrop.x,
-        pixelCrop.y,
-        pixelCrop.width,
-        pixelCrop.height,
-        0,
-        0,
-        pixelCrop.width,
-        pixelCrop.height
-    );
-
-    // As Base64 string
-    // const base64Image = canvas.toDataURL('image/jpeg');
-
-    // As a blob
-    return new Promise((resolve, reject) => {
-        canvas.toBlob(blob => {
-            blob.name = fileName;
-            resolve(blob);
-        }, 'image/jpeg');
-    });
-}
 
 class AvatarUploader extends React.Component {
     state = {
@@ -67,10 +20,35 @@ class AvatarUploader extends React.Component {
             y: 25,
             aspect: 1,
             width: 50,
+        },
+        modalVisible: false,
+        confirmLoading: false
+    };
+
+    beforeUpload = (file) => {
+        const isJPG = file.type === 'image/jpeg';
+        const isPNG = file.type === 'image/png';
+
+        if (!isJPG && !isPNG) {
+            message.error('只能上传.jpg或者.png文件！');
+            return false;
         }
+        const isLt5M = file.size / 1024 / 1024 < 5;
+        if (!isLt5M) {
+            message.error('文件大小不能超过5MB！');
+            return false;
+        }
+        this.setState({file: file});
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e) => {
+            this.setState({imgUrl: reader.result, modalVisible: true})
+        };
+        return true;
     };
 
     upload = (params) => {
+        console.log(params);
         const file = params.file;
         let data = new FormData();
         data.append('avatar', file);
@@ -87,8 +65,27 @@ class AvatarUploader extends React.Component {
     };
 
     onChange = (crop, pixelCrop) => {
-        console.log(pixelCrop);
+        console.log(crop);
         this.setState({crop, pixelCrop});
+    };
+
+    handleOk = () => {
+        this.setState({
+            confirmLoading: true,
+        });
+        setTimeout(() => {
+            this.setState({
+                visible: false,
+                confirmLoading: false,
+            });
+        }, 2000);
+    };
+
+    handleCancel = () => {
+        console.log('Clicked cancel button');
+        this.setState({
+            visible: false,
+        });
     };
 
     render() {
@@ -97,7 +94,6 @@ class AvatarUploader extends React.Component {
             customRequest: this.upload,
             showUploadList: false,
             onChange: (info) => {
-                console.log(info.file.status);
                 if (info.file.status === 'uploading') {
                     this.setState({uploading: true});
                 }
@@ -110,23 +106,31 @@ class AvatarUploader extends React.Component {
                     message.error(`${info.file.name} file upload failed.`);
                 }
             },
-            beforeUpload: beforeUpload,
-            disabled: this.state.uploading
+            beforeUpload: this.beforeUpload,
+            disabled: this.state.uploading,
+            onSuccess: () => {console.log('Success!')}
         };
 
         return (
             <div>
-                <h2>{this.state.imgUrl}</h2>
                 <Upload {...upload_props}>
                     <Button loading={this.state.uploading}>
                         上传新头像
                     </Button>
                 </Upload>
-                <ReactCrop src={sampleImage}
-                           onChange={this.onChange}
-                           crop={this.state.crop}
-                           keepSelection={true}/>
-                <canvas id="myCanvas"/>
+                <Modal
+                    title="裁剪头像"
+                    visible={this.state.modalVisible}
+                    onOk={this.handleOk}
+                    confirmLoading={this.state.confirmLoading}
+                    onCancel={this.handleCancel}
+                >
+                    <ReactCrop src={this.state.imgUrl}
+                               onChange={this.onChange}
+                               crop={this.state.crop}
+                               keepSelection={true}/>
+                </Modal>
+
             </div>
         );
     }
