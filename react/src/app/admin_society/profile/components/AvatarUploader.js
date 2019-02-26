@@ -2,6 +2,7 @@ import React from 'react';
 import {Upload, message, Button, Modal, notification} from 'antd';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/lib/ReactCrop.scss';
+import * as PropTypes from 'prop-types';
 
 import Provider from '../../../../utils/provider';
 
@@ -54,6 +55,8 @@ class AvatarUploader extends React.Component {
             .then((res) => {
                 this.setState({modalVisible: false, confirmLoading: false});
                 message.success('上传头像成功！');
+                // TODO
+                // this.props.getProfile();
             })
             .catch((err) => {
                 this.setState({modalVisible: false, confirmLoading: false});
@@ -107,5 +110,10 @@ class AvatarUploader extends React.Component {
         );
     }
 }
+
+// TODO
+// AvatarUploader.propTypes = {
+//     getProfile: PropTypes.func.isRequired
+// };
 
 export default AvatarUploader;
