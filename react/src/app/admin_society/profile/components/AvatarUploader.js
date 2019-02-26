@@ -5,21 +5,19 @@ import 'react-image-crop/lib/ReactCrop.scss';
 
 import Provider from '../../../../utils/provider';
 
-const now = new Date();
 let config = {
     headers: {'Content-Type': 'multipart/form-data'}
 };
-
 
 class AvatarUploader extends React.Component {
     state = {
         uploading: false,
         imgUrl: '',
         crop: {
-            x: 25,
-            y: 25,
+            x: 5,
+            y: 5,
             aspect: 1,
-            width: 50,
+            width: 90,
         },
         modalVisible: false,
         confirmLoading: false
@@ -44,93 +42,67 @@ class AvatarUploader extends React.Component {
         reader.onload = (e) => {
             this.setState({imgUrl: reader.result, modalVisible: true})
         };
-        return true;
+        return false;
     };
 
-    upload = (params) => {
-        console.log(params);
-        const file = params.file;
+    upload = () => {
+        this.setState({confirmLoading: true});
         let data = new FormData();
-        data.append('avatar', file);
+        data.append('avatar', this.state.file);
         data.append('crop', JSON.stringify(this.state.pixelCrop));
         Provider.post('/api/society_manage/profile/upload_avatar/', data, config)
             .then((res) => {
-                this.setState({uploading: false});
-                message.success('上传成功！')
+                this.setState({modalVisible: false, confirmLoading: false});
+                message.success('上传头像成功！');
             })
             .catch((err) => {
-                this.setState({uploading: false});
-                console.log(err)
+                this.setState({modalVisible: false, confirmLoading: false});
+                message.error('上传头像失败！')
             })
     };
 
-    onChange = (crop, pixelCrop) => {
-        console.log(crop);
+    // For the crop component to sync with state
+    onCropChange = (crop, pixelCrop) => {
         this.setState({crop, pixelCrop});
     };
 
-    handleOk = () => {
+    cancelUpload = () => {
         this.setState({
-            confirmLoading: true,
-        });
-        setTimeout(() => {
-            this.setState({
-                visible: false,
-                confirmLoading: false,
-            });
-        }, 2000);
-    };
-
-    handleCancel = () => {
-        console.log('Clicked cancel button');
-        this.setState({
-            visible: false,
+            modalVisible: false,
         });
     };
 
     render() {
-        const upload_props = {
-            name: now.getTime().toString(),
+        // more specific example of customRequest see:
+        // https://github.com/react-component/upload/blob/master/examples/customRequest.js
+        const uploadProps = {
             customRequest: this.upload,
             showUploadList: false,
-            onChange: (info) => {
-                if (info.file.status === 'uploading') {
-                    this.setState({uploading: true});
-                }
-                if (info.file.status !== 'uploading') {
-                    console.log(info.file, info.fileList);
-                }
-                if (info.file.status === 'done') {
-                    message.success(`${info.file.name} file uploaded successfully`);
-                } else if (info.file.status === 'error') {
-                    message.error(`${info.file.name} file upload failed.`);
-                }
-            },
             beforeUpload: this.beforeUpload,
-            disabled: this.state.uploading,
-            onSuccess: () => {console.log('Success!')}
+            disabled: this.state.modalVisible
         };
 
         return (
             <div>
-                <Upload {...upload_props}>
-                    <Button loading={this.state.uploading}>
+                <Upload {...uploadProps}>
+                    <Button>
                         上传新头像
                     </Button>
                 </Upload>
                 <Modal
                     title="裁剪头像"
                     visible={this.state.modalVisible}
-                    onOk={this.handleOk}
+                    onOk={this.upload}
                     confirmLoading={this.state.confirmLoading}
-                    onCancel={this.handleCancel}
+                    onCancel={this.cancelUpload}
+                    okText="上传"
+                    cancelText="取消"
                 >
                     <ReactCrop src={this.state.imgUrl}
-                               onChange={this.onChange}
+                               onChange={this.onCropChange}
                                crop={this.state.crop}
                                keepSelection={true}/>
                 </Modal>
-
             </div>
         );
     }
