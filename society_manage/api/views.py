@@ -162,18 +162,18 @@ class SocietyProfileViewSet(viewsets.GenericViewSet, RetrieveUpdateAPIView):
 
     @action(detail=False, methods=['post'])
     def upload_avatar(self, request, pk=None):
-        file = request.data.get('avatar', None)
+        avatar = request.data.get('avatar', None)
         crop = request.data.get('crop', None)
-        if file is None or file.size > 5 * 1024 * 1024 or crop == 'undefined':
+        if avatar is None or avatar.size > 5 * 1024 * 1024 or crop == 'undefined':
             return response.Response(
                 status=status.HTTP_400_BAD_REQUEST,
                 data={'detail': '表单填写错误'}
             )
 
         crop = json.loads(crop)
-        im = Image.open(file)
+        im = Image.open(avatar)
         im = im.crop((crop['x'], crop['y'], crop['x'] + crop['width'], crop['y'] + crop['height']))
-        tmp_path = os.path.join(MEDIA_ROOT, file.name)
+        tmp_path = os.path.join(MEDIA_ROOT, avatar.name)
         im.save(tmp_path)
         with open(tmp_path, 'rb') as f:
             avatar_file = File(f)
