@@ -1,6 +1,8 @@
 from PIL import Image
-import json
+import json, os
 from django.core.files import File
+from config.settings import MEDIA_ROOT
+from utils.staticmethods import avatar_storage_path
 
 from rest_framework import viewsets, response, status
 from rest_framework.decorators import action
@@ -162,8 +164,7 @@ class SocietyProfileViewSet(viewsets.GenericViewSet, RetrieveUpdateAPIView):
     def upload_avatar(self, request, pk=None):
         file = request.data.get('avatar', None)
         crop = request.data.get('crop', None)
-
-        if file is None or file.size > 5 * 1024 * 1024 or crop is None:
+        if file is None or file.size > 5 * 1024 * 1024 or crop == 'undefined':
             return response.Response(
                 status=status.HTTP_400_BAD_REQUEST,
                 data={'detail': '表单填写错误'}
@@ -171,17 +172,21 @@ class SocietyProfileViewSet(viewsets.GenericViewSet, RetrieveUpdateAPIView):
 
         crop = json.loads(crop)
         im = Image.open(file)
-        print(crop)
         im = im.crop((crop['x'], crop['y'], crop['x'] + crop['width'], crop['y'] + crop['height']))
-        im.save('./1.png')
-        with open('./1.png', 'rb') as f:
-            myfile = File(f)
-            serializer = self.get_serializer(instance=request.user.society, data={'avatar': myfile})
+        tmp_path = os.path.join(MEDIA_ROOT, file.name)
+        im.save(tmp_path)
+        with open(tmp_path, 'rb') as f:
+            avatar_file = File(f)
+            serializer = self.get_serializer(instance=request.user.society, data={'avatar': avatar_file})
             if serializer.is_valid():
                 serializer.save()
+                avatar_file.close()
+                os.remove(tmp_path)
                 return response.Response(status=status.HTTP_202_ACCEPTED)
-            print(serializer.errors)
-        return response.Response(
-            status=status.HTTP_400_BAD_REQUEST,
-            data={'detail': '表单填写错误'}
-        )
+            # Temporary file still need to be deleted if it's invalid.
+            avatar_file.close()
+            os.remove(tmp_path)
+            return response.Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={'detail': '表单填写错误'}
+            )
