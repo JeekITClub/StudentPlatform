@@ -1,16 +1,10 @@
-from PIL import Image
-import json, os
-from django.core.files import File
-from config.settings import MEDIA_ROOT
-
 from rest_framework import viewsets, response, status
 from rest_framework.decorators import action
-from rest_framework.generics import UpdateAPIView, ListAPIView, RetrieveUpdateAPIView
-from rest_framework.mixins import ListModelMixin
+from rest_framework.generics import UpdateAPIView, ListAPIView
+from rest_framework.mixins import ListModelMixin, UpdateModelMixin
 
 from utils.permissions import IsSociety, SocietyActivityEditable
 from society.models import Society, JoinSocietyRequest, ActivityRequest
-from society.api.serializers import SocietySerializer
 from society_manage.api.serializers import (
     JoinSocietyRequestSerializer,
     ReviewJoinSocietyRequestSerializer,
@@ -18,7 +12,8 @@ from society_manage.api.serializers import (
     ActivityRequestSerializer,
     ActivityRequestMiniSerializer,
     CreditDistributionSerializer,
-    UploadAvatarSerializer
+    UploadAvatarSerializer,
+    SocietyProfileSerializer
 )
 from society_manage.models import CreditDistribution
 from student.api.serializers import StudentMiniSerializer
@@ -148,7 +143,11 @@ class SocietyCreditViewSet(
         return response.Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class SocietyProfileViewSet(viewsets.GenericViewSet, RetrieveUpdateAPIView):
+class SocietyProfileViewSet(
+    viewsets.GenericViewSet,
+    ListModelMixin,
+    UpdateModelMixin
+):
     permission_classes = (IsSociety,)
 
     def get_queryset(self):
@@ -157,45 +156,31 @@ class SocietyProfileViewSet(viewsets.GenericViewSet, RetrieveUpdateAPIView):
     def get_serializer_class(self):
         if self.action == 'upload_avatar':
             return UploadAvatarSerializer
-        return SocietySerializer
+        return SocietyProfileSerializer
+
+    # def list(self, request, *args, **kwargs):
+    #     instance = self.get_queryset().first()
+    #     if instance:
+    #         serializer = self.get_serializer(instance)
+    #         return response.Response(serializer.data)
+    #     return response.Response(status=status.HTTP_404_NOT_FOUND)
+    #
+    # def update(self, request, *args, **kwargs):
+    #     instance = self.get_queryset().first()
+    #     if instance:
+    #         serializer = self.get_serializer(instance, data=request.data)
+    #         serializer.is_valid(raise_exception=True)
+    #         self.perform_update(serializer)
+    #         return response.Response(serializer.data)
+    #     return response.Response(status=status.HTTP_404_NOT_FOUND)
 
     @action(detail=False, methods=['post'])
-    def upload_avatar(self, request, pk=None):
-        avatar = request.data.get('avatar', None)
-        crop = request.data.get('crop', None)
-        if avatar is None or avatar.size > 5 * 1024 * 1024 or crop == 'undefined' or crop is None:
-            return response.Response(
-                status=status.HTTP_400_BAD_REQUEST,
-                data={'detail': '表单填写错误'}
-            )
-
-        crop = json.loads(crop)
-        image = Image.open(avatar)
-        try:
-            region = image.crop((crop['x'], crop['y'], crop['x'] + crop['width'], crop['y'] + crop['height']))
-            tmp_path = os.path.join(MEDIA_ROOT, avatar.name)
-            region.save(tmp_path)
-            region.close()
-        except Exception as e:
-            return response.Response(
-                status=status.HTTP_400_BAD_REQUEST,
-                data={'detail': '表单填写错误'}
-            )
-        finally:
-            image.close()
-
-        with open(tmp_path, 'rb') as f:
-            avatar_file = File(f)
-            serializer = self.get_serializer(instance=request.user.society, data={'avatar': avatar_file})
-            if serializer.is_valid():
-                serializer.save()
-                avatar_file.close()
-                os.remove(tmp_path)
-                return response.Response(status=status.HTTP_202_ACCEPTED)
-            # Temporary file still need to be deleted if it's invalid.
-            avatar_file.close()
-            os.remove(tmp_path)
-            return response.Response(
-                status=status.HTTP_400_BAD_REQUEST,
-                data={'detail': '表单填写错误'}
-            )
+    def upload_avatar(self, request):
+        serializer = self.get_serializer(instance=request.user.society, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return response.Response(status=status.HTTP_202_ACCEPTED)
+        return response.Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data={'detail': '表单填写错误'}
+        )

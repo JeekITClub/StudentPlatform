@@ -1,3 +1,6 @@
+import json
+from PIL import Image
+
 from rest_framework import serializers
 from student.api.serializers import StudentMiniSerializer
 from society.models import JoinSocietyRequest, ActivityRequest, Society
@@ -63,3 +66,26 @@ class UploadAvatarSerializer(serializers.ModelSerializer):
         model = Society
         fields = ('id', 'avatar',)
         read_only_fields = ('id',)
+
+    def validate(self, data):
+        avatar = data['avatar']
+        # sometimes frontend will send 'undefined'
+        try:
+            crop = json.loads(self.context['request'].data.get('crop', None))
+        except Exception as e:
+            raise serializers.ValidationError("invalid crop object format")
+
+        if avatar is None or avatar.size > 5 * 1024 * 1024:
+            raise serializers.ValidationError("image file size too large")
+        if crop is None:
+            raise serializers.ValidationError("no crop object provided")
+
+        try:
+            image = Image.open(avatar)
+            region = image.crop((crop['x'], crop['y'], crop['x'] + crop['width'], crop['y'] + crop['height']))
+            data['avatar'].seek(0, 0)
+            region.save(data['avatar'])
+        except Exception as e:
+            raise serializers.ValidationError("cannot crop image")
+
+        return data
