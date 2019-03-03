@@ -10,17 +10,17 @@ class ListStore {
 
     @observable count = 0;
     @observable pageSize = 10;
-    @observable pageNum = 0;
+    @observable pageNum = 1;
 
     url = '';
 
-    @action fetch = (pageNum, pageSize, ...rest) => {
+    @action fetch = ({ pageNum = 1, pageSize = 10, ...params }) => {
         this.loading = true;
         return Provider.get(this.url, {
             params: {
                 page: pageNum,
                 page_size: pageSize,
-                ...rest
+                ...params
             }
         })
             .then((res) => {

@@ -280,7 +280,14 @@ class CreditReceiversTests(TestCase):
             semester=2
         )
         client.get(url)
-        self.assertEqual(CreditDistribution.objects.count(), 3)
+        self.assertEqual(CreditDistribution.objects.count(), 1)
+
+        url = '/api/manage/credit/?year={year}&semester={semester}'.format(
+            year=SettingsService.get('year') + 1110,
+            semester=2
+        )
+        client.get(url)
+        self.assertEqual(CreditDistribution.objects.count(), 0)
 
     def test_retrieve_credit_distribution(self):
         credit_distribution = CreditDistribution.objects.create(

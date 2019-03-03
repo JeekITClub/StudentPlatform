@@ -149,6 +149,11 @@ class CreditManageViewSet(
         return CreditDistribution.objects.all().order_by('-year', '-semester', 'society__society_id')
 
     def list(self, request, *args, **kwargs):
+        year = request.query_params.get('year', None)
+        semester = request.query_params.get('semester', None)
+        if (year and int(year) > SettingsService.get('year')) or (
+                semester and int(semester) > SettingsService.get('semester')):
+            return Response(status=status.HTTP_404_NOT_FOUND)
         queryset = self.filter_queryset(self.get_queryset())
         if queryset.exists():
             page = self.paginate_queryset(queryset)

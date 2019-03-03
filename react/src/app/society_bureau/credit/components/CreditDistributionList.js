@@ -10,7 +10,7 @@ import '../styles/credit.scss'
 @observer
 class CreditDistributionList extends React.Component {
     componentDidMount() {
-        CreditStore.fetch(1, 10)
+        CreditStore.fetch({})
     }
 
     state = {
