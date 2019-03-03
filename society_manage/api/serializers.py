@@ -51,6 +51,13 @@ class CreditDistributionSerializer(serializers.ModelSerializer):
         return [receiver.id for receiver in obj.receivers.all()]
 
 
+class SocietyProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Society
+        fields = '__all__'
+        read_only_fields = ('id', 'society_id', 'avatar')
+
+
 class UploadAvatarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Society

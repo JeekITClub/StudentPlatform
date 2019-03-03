@@ -2,7 +2,6 @@ from PIL import Image
 import json, os
 from django.core.files import File
 from config.settings import MEDIA_ROOT
-from utils.staticmethods import avatar_storage_path
 
 from rest_framework import viewsets, response, status
 from rest_framework.decorators import action
@@ -164,17 +163,27 @@ class SocietyProfileViewSet(viewsets.GenericViewSet, RetrieveUpdateAPIView):
     def upload_avatar(self, request, pk=None):
         avatar = request.data.get('avatar', None)
         crop = request.data.get('crop', None)
-        if avatar is None or avatar.size > 5 * 1024 * 1024 or crop == 'undefined':
+        if avatar is None or avatar.size > 5 * 1024 * 1024 or crop == 'undefined' or crop is None:
             return response.Response(
                 status=status.HTTP_400_BAD_REQUEST,
                 data={'detail': '表单填写错误'}
             )
 
         crop = json.loads(crop)
-        im = Image.open(avatar)
-        im = im.crop((crop['x'], crop['y'], crop['x'] + crop['width'], crop['y'] + crop['height']))
-        tmp_path = os.path.join(MEDIA_ROOT, avatar.name)
-        im.save(tmp_path)
+        image = Image.open(avatar)
+        try:
+            region = image.crop((crop['x'], crop['y'], crop['x'] + crop['width'], crop['y'] + crop['height']))
+            tmp_path = os.path.join(MEDIA_ROOT, avatar.name)
+            region.save(tmp_path)
+            region.close()
+        except Exception as e:
+            return response.Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={'detail': '表单填写错误'}
+            )
+        finally:
+            image.close()
+
         with open(tmp_path, 'rb') as f:
             avatar_file = File(f)
             serializer = self.get_serializer(instance=request.user.society, data={'avatar': avatar_file})
