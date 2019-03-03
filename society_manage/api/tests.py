@@ -4,12 +4,12 @@ from PIL import Image, ImageChops
 from rest_framework.test import APIClient
 from django.utils import timezone
 from testing.testcases import TestCase
-from config.settings import BASE_DIR
 
 from society.constants import SocietyType, JoinSocietyRequestStatus, ActivityRequestStatus
 from society.models import JoinSocietyRequest, ActivityRequest
 from society_manage.models import CreditDistribution
 from society_bureau.api.services import SettingsService
+from society.constants import TEST_FILE_PATH
 
 
 class SocietyManageMemberTests(TestCase):
@@ -373,8 +373,8 @@ class SocietyProfileTests(TestCase):
     def test_upload_avatar(self):
         url = '/api/society_manage/profile/upload_avatar/'
         # use 'rb' to solve encoding issue
-        original_file = open(os.path.join(BASE_DIR, 'static', 'img', 'jeek.jpeg'), 'rb')
-        cropped_file = open(os.path.join(BASE_DIR, 'static', 'img', 'cropped.jpeg'), 'rb')
+        original_file = open(os.path.join(TEST_FILE_PATH, 'jeek.jpeg'), 'rb')
+        cropped_file = open(os.path.join(TEST_FILE_PATH, 'cropped.jpeg'), 'rb')
         crop = {
             'x': 100,
             'y': 100,

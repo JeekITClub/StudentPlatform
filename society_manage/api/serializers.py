@@ -5,7 +5,7 @@ from rest_framework import serializers
 from student.api.serializers import StudentMiniSerializer
 from society.models import JoinSocietyRequest, ActivityRequest, Society
 from society_manage.models import CreditDistribution
-
+from society.constants import AVATAR_MAX_SIZE
 
 class JoinSocietyRequestSerializer(serializers.ModelSerializer):
     member = StudentMiniSerializer()
@@ -75,7 +75,7 @@ class UploadAvatarSerializer(serializers.ModelSerializer):
         except Exception as e:
             raise serializers.ValidationError("invalid crop object format")
 
-        if avatar is None or avatar.size > 5 * 1024 * 1024:
+        if avatar is None or avatar.size > AVATAR_MAX_SIZE:
             raise serializers.ValidationError("image file size too large")
         if crop is None:
             raise serializers.ValidationError("no crop object provided")
