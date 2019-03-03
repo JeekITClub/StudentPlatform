@@ -1,39 +1,25 @@
 import React from 'react';
 import {Form, Table, Button, InputNumber, Icon, Tooltip, Modal, notification} from 'antd';
+import {observer} from 'mobx-react'
 
+import CreditStore from '../stores/CreditStore'
 import Provider from "../../../../utils/provider";
 import '../styles/credit.scss'
 
 
+@observer
 class CreditDistributionList extends React.Component {
     componentDidMount() {
-        this.fetch(1, 10)
+        CreditStore.fetch(1, 10)
     }
-
-    fetch = (pageNum, pageSize) => {
-        Provider.get('/api/manage/credit/', {
-            params: {
-                page: pageNum,
-                page_size: pageSize
-            }
-        })
-            .then((res) => {
-                this.setState({ data: res.data.results, count: res.data.count })
-            })
-            .catch((e) => {
-                throw e;
-            })
-    };
 
     state = {
         setCreditModalVisible: false,
         setCredit: 1,
-        count: 0,
         editing: {
             id: 0,
             index: 0
-        },
-        data: []
+        }
     };
 
     renderCheckReceiversDetail = () => {
@@ -72,7 +58,7 @@ class CreditDistributionList extends React.Component {
     };
 
     onPaginationChange = (pagination) => {
-        this.fetch(pagination.current, pagination.pageSize);
+        CreditStore.fetch(pagination.current, pagination.pageSize);
     };
 
     render() {
@@ -125,7 +111,7 @@ class CreditDistributionList extends React.Component {
                     }}
                     onChange={this.onPaginationChange}
                     columns={columns}
-                    dataSource={this.state.data}
+                    dataSource={CreditStore.data}
                     rowKey="id"
                 />
                 <Modal visible={this.state.setCreditModalVisible}
