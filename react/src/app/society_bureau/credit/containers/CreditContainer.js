@@ -2,11 +2,14 @@ import React from 'react';
 import {Button} from 'antd';
 import CreditDistributionList from "../components/CreditDistributionList";
 import CreditSetAllModal from '../components/CreditSetAllModal'
+import YearSemesterSelect from '../../../../shared/YearSemesterSelect/YearSemesterSelect'
 
 class CreditContainer extends React.Component {
     state = {
         setAllModalVisible: false,
         setAllCredit: 1,
+        year: null,
+        semester: null
     };
 
     submitSetAllCredit = () => {
@@ -15,7 +18,11 @@ class CreditContainer extends React.Component {
 
     render() {
         return (
-            <div>
+            <>
+                <YearSemesterSelect
+                    year={this.state.year}
+                    semester={this.state.semester}
+                />
                 <Button onClick={() => this.setState({setAllModalVisible: true})}>
                     一键全部设置获得学分人数
                 </Button>
@@ -29,7 +36,7 @@ class CreditContainer extends React.Component {
                         onOk={() => this.submitSetAllCredit()}
                     />
                 }
-            </div>
+            </>
         )
     }
 }
