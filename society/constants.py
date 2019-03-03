@@ -1,3 +1,6 @@
+import os
+from config.settings import BASE_DIR
+
 member_confirm_status = (
     (0, '审核中'),
     (1, '通过'),
@@ -49,3 +52,8 @@ class SocietyStatus:
     WAITING = 0
     ACTIVE = 1
     ARCHIVED = 2
+
+
+AVATAR_MAX_SIZE = 5 * 1024 * 1024
+
+TEST_FILE_PATH = os.path.join(BASE_DIR, 'testing', 'files')

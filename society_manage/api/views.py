@@ -1,10 +1,8 @@
 from rest_framework import viewsets, response, status
 from rest_framework.decorators import action
 from rest_framework.generics import UpdateAPIView, ListAPIView
-from rest_framework.mixins import ListModelMixin
+from rest_framework.mixins import ListModelMixin, UpdateModelMixin
 
-from society_bureau.api.services import SettingsService
-from utils.filters import StatusFilterBackend
 from utils.permissions import IsSociety, SocietyActivityEditable
 from society.models import Society, JoinSocietyRequest, ActivityRequest
 from society_manage.api.serializers import (
@@ -14,6 +12,8 @@ from society_manage.api.serializers import (
     ActivityRequestSerializer,
     ActivityRequestMiniSerializer,
     CreditDistributionSerializer,
+    UploadAvatarSerializer,
+    SocietyProfileSerializer
 )
 from society_manage.models import CreditDistribution
 from student.api.serializers import StudentMiniSerializer
@@ -141,3 +141,46 @@ class SocietyCreditViewSet(
             self.get_object().receivers.set(valid_receiver_set)
             return response.Response(status=status.HTTP_200_OK)
         return response.Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class SocietyProfileViewSet(
+    viewsets.GenericViewSet,
+    ListModelMixin,
+    UpdateModelMixin
+):
+    permission_classes = (IsSociety,)
+
+    def get_queryset(self):
+        return Society.objects.filter(user=self.request.user)
+
+    def get_serializer_class(self):
+        if self.action == 'upload_avatar':
+            return UploadAvatarSerializer
+        return SocietyProfileSerializer
+
+    # def list(self, request, *args, **kwargs):
+    #     instance = self.get_queryset().first()
+    #     if instance:
+    #         serializer = self.get_serializer(instance)
+    #         return response.Response(serializer.data)
+    #     return response.Response(status=status.HTTP_404_NOT_FOUND)
+    #
+    # def update(self, request, *args, **kwargs):
+    #     instance = self.get_queryset().first()
+    #     if instance:
+    #         serializer = self.get_serializer(instance, data=request.data)
+    #         serializer.is_valid(raise_exception=True)
+    #         self.perform_update(serializer)
+    #         return response.Response(serializer.data)
+    #     return response.Response(status=status.HTTP_404_NOT_FOUND)
+
+    @action(detail=False, methods=['post'])
+    def upload_avatar(self, request):
+        serializer = self.get_serializer(instance=request.user.society, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return response.Response(status=status.HTTP_202_ACCEPTED)
+        return response.Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data={'detail': '表单填写错误'}
+        )

@@ -1,9 +1,11 @@
+import json
+from PIL import Image
+
 from rest_framework import serializers
 from student.api.serializers import StudentMiniSerializer
-from society.models import JoinSocietyRequest, ActivityRequest
+from society.models import JoinSocietyRequest, ActivityRequest, Society
 from society_manage.models import CreditDistribution
-from student.models import Student
-
+from society.constants import AVATAR_MAX_SIZE
 
 class JoinSocietyRequestSerializer(serializers.ModelSerializer):
     member = StudentMiniSerializer()
@@ -50,3 +52,40 @@ class CreditDistributionSerializer(serializers.ModelSerializer):
 
     def get_receivers(self, obj):
         return [receiver.id for receiver in obj.receivers.all()]
+
+
+class SocietyProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Society
+        fields = '__all__'
+        read_only_fields = ('id', 'society_id', 'avatar')
+
+
+class UploadAvatarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Society
+        fields = ('id', 'avatar',)
+        read_only_fields = ('id',)
+
+    def validate(self, data):
+        avatar = data['avatar']
+        # sometimes frontend will send 'undefined'
+        try:
+            crop = json.loads(self.context['request'].data.get('crop', None))
+        except Exception as e:
+            raise serializers.ValidationError("invalid crop object format")
+
+        if avatar is None or avatar.size > AVATAR_MAX_SIZE:
+            raise serializers.ValidationError("image file size too large")
+        if crop is None:
+            raise serializers.ValidationError("no crop object provided")
+
+        try:
+            image = Image.open(avatar)
+            region = image.crop((crop['x'], crop['y'], crop['x'] + crop['width'], crop['y'] + crop['height']))
+            data['avatar'].seek(0, 0)
+            region.save(data['avatar'])
+        except Exception as e:
+            raise serializers.ValidationError("cannot crop image")
+
+        return data

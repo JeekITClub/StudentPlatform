@@ -1,3 +1,6 @@
+import os, json
+from PIL import Image, ImageChops
+
 from rest_framework.test import APIClient
 from django.utils import timezone
 from testing.testcases import TestCase
@@ -6,6 +9,7 @@ from society.constants import SocietyType, JoinSocietyRequestStatus, ActivityReq
 from society.models import JoinSocietyRequest, ActivityRequest
 from society_manage.models import CreditDistribution
 from society_bureau.api.services import SettingsService
+from society.constants import TEST_FILE_PATH
 
 
 class SocietyManageMemberTests(TestCase):
@@ -352,3 +356,47 @@ class SocietyManageCreditTests(TestCase):
         }
         res = client.patch(url, data=data, encode=True)
         self.assertEqual(res.status_code, 406)
+
+
+class SocietyProfileTests(TestCase):
+    def setUp(self):
+        self.society_user = self.createUser(
+            username='101'
+        )
+        self.society = self.createSociety(
+            user=self.society_user,
+            members=None,
+            society_id=101,
+            society_type=SocietyType.HUMANISTIC
+        )
+
+    def test_upload_avatar(self):
+        url = '/api/society_manage/profile/upload_avatar/'
+        # use 'rb' to solve encoding issue
+        original_file = open(os.path.join(TEST_FILE_PATH, 'jeek.jpeg'), 'rb')
+        cropped_file = open(os.path.join(TEST_FILE_PATH, 'cropped.jpeg'), 'rb')
+        crop = {
+            'x': 100,
+            'y': 100,
+            'width': 200,
+            'height': 200
+        }
+        data = {
+            'avatar': original_file,
+            'crop': json.dumps(crop)
+        }
+
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(self.society_user)
+
+        res = client.post(url, data=data, decode=True)
+        self.assertEqual(res.status_code, 202)
+        self.society.refresh_from_db()
+
+        cropped_img = Image.open(cropped_file)
+        server_img = Image.open(self.society.avatar)
+        diff = ImageChops.difference(cropped_img, server_img)
+
+        self.assertIsNone(diff.getbbox())
+        original_file.close()
+        cropped_file.close()

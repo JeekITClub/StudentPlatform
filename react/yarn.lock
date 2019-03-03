@@ -645,6 +645,13 @@
   dependencies:
     parchment "^1.1.2"
 
+"@types/react-image-crop@^3.0.1":
+  version "3.0.1"
+  resolved "http://registry.npm.taobao.org/@types/react-image-crop/download/@types/react-image-crop-3.0.1.tgz#b9377c469e5586f2253de51af8c999406a9a6da0"
+  integrity sha1-uTd8Rp5VhvIlPeUa+MmZQGqabaA=
+  dependencies:
+    "@types/react" "*"
+
 "@types/react@*":
   version "16.7.20"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.7.20.tgz#13ae752c012710d0fa800985ca809814b51d3b58"
@@ -6250,6 +6257,13 @@ react-hot-loader@^4.6.3:
     react-lifecycles-compat "^3.0.4"
     shallowequal "^1.0.2"
     source-map "^0.7.3"
+
+react-image-crop@^6.0.14:
+  version "6.0.14"
+  resolved "http://registry.npm.taobao.org/react-image-crop/download/react-image-crop-6.0.14.tgz#e21bd72b44a81087d71410de29d2a517c246968f"
+  integrity sha1-4hvXK0SoEIfXFBDeKdKlF8JGlo8=
+  dependencies:
+    "@types/react-image-crop" "^3.0.1"
 
 react-is@^16.7.0:
   version "16.7.0"

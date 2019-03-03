@@ -15,6 +15,7 @@ from society.constants import (
 from student.constants import (
     class_choices,
 )
+from utils.staticmethods import avatar_storage_path
 
 
 class SocietyTag(models.Model):
@@ -41,6 +42,7 @@ class Society(models.Model):
     established_time = models.DateTimeField(blank=True, null=True)
     password_changed = models.BooleanField(default=False)
     tags = models.ManyToManyField(SocietyTag, blank=True)
+    avatar = models.ImageField(upload_to=avatar_storage_path, null=True, blank=True)
 
     class Meta:
         ordering = ['-established_time']
