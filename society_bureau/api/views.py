@@ -18,6 +18,7 @@ from society_bureau.api.serializers import (
     CreditDistributionSerializer,
     ConfirmSocietySerializer,
     CreditDistributionManualCreateSerializer,
+    CreditDistributionBulkCreateSerializer,
     DashboardSerializer,
     SiteSettingsRetrieveSerializer,
     SiteSettingsUpdateSerializer
@@ -148,33 +149,18 @@ class CreditManageViewSet(
     def get_queryset(self):
         return CreditDistribution.objects.all().order_by('-year', '-semester', 'society__society_id')
 
-    def list(self, request, *args, **kwargs):
-        year = request.query_params.get('year', None)
-        semester = request.query_params.get('semester', None)
-        if year and int(year) > SettingsService.get('year'):
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        if year and int(year) == SettingsService.get('year') and (semester and int(semester) > SettingsService.get('semester')):
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        queryset = self.filter_queryset(self.get_queryset())
-        if queryset.exists():
-            page = self.paginate_queryset(queryset)
-            if page is not None:
-                serializer = self.get_serializer(page, many=True)
-                return self.get_paginated_response(serializer.data)
-            serializer = self.get_serializer(queryset, many=True)
-            return Response(serializer.data)
-        credit_distribution_sets = []
-        for society in Society.objects.filter(status=SocietyStatus.WAITING):
-            queryset = CreditDistribution.objects.create(
-                society=society,
-                semester=request.query_params['semester'],
-                year=request.query_params['year']
-            )
-            credit_distribution_sets.append(queryset)
-        page = self.paginate_queryset(credit_distribution_sets)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+    @action(detail=False, methods=['post'])
+    def bulk_create(self, request):
+        serializer = CreditDistributionBulkCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            for society in Society.objects.filter(status=SocietyStatus.WAITING):
+                CreditDistribution.objects.create(
+                    society=society,
+                    semester=request.data['semester'],
+                    year=request.data['year']
+                )
+            return Response(status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class SettingsViewSet(

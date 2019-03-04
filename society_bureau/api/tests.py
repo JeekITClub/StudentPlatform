@@ -252,55 +252,25 @@ class CreditReceiversTests(TestCase):
         response = client.get(url, decode=True)
         self.assertEqual(response.status_code, 403)
 
-        # now there is no credit distribution
-        # so the credit distribution will be generated automatically
         client.force_authenticate(self.user3)
-        response = client.get(url, decode=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data['results']), 2)
-        self.assertEqual(response.data['results'][0]['receivers_count'], 0)
-        self.assertEqual(response.data['results'][0]['credit'], 1)
-        self.assertEqual(CreditDistribution.objects.count(), 2)
+        res = client.get(url, decode=True)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.data['count'], 0)
 
-        # now there are credit distributions
-        # so response the existing data
-        response = client.get(url, decode=True)
-        self.assertEqual(len(response.data['results']), 2)
-
-        # the following code is just a test
-        # we should try our best to avoid this situation
-        CreditDistribution.objects.first().delete()
-        # response the existing credit distribution
-        response = client.get(url, decode=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data['results']), 1)
-
-        url = '/api/manage/credit/?year={year}&semester={semester}'.format(
-            year=SettingsService.get('year') - 1,
-            semester=2
-        )
-        client.get(url)
-        self.assertEqual(CreditDistribution.objects.filter(
-            year=SettingsService.get('year') - 1,
-            semester=2
-        ).count(), 2)
-
-        url = '/api/manage/credit/?year={year}&semester={semester}'.format(
+        CreditDistribution.objects.create(
+            society=self.society1,
             year=SettingsService.get('year'),
-            semester=SettingsService.get('semester') + 1
+            semester=SettingsService.get('semester')
         )
-        res = client.get(url)
-        self.assertEqual(res.status_code, 404)
+        CreditDistribution.objects.create(
+            society=self.society2,
+            year=SettingsService.get('year'),
+            semester=SettingsService.get('semester')
+        )
 
-        url = '/api/manage/credit/?year={year}&semester={semester}'.format(
-            year=SettingsService.get('year') + 1110,
-            semester=2
-        )
-        client.get(url)
-        self.assertEqual(CreditDistribution.objects.filter(
-            year=SettingsService.get('year') + 1110,
-            semester=2
-        ).count(), 0)
+        res = client.get(url, decode=True)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.data['count'], 2)
 
     def test_retrieve_credit_distribution(self):
         credit_distribution = CreditDistribution.objects.create(
@@ -356,6 +326,26 @@ class CreditReceiversTests(TestCase):
         cd.refresh_from_db()
         self.assertEqual(cd.closed, True)
         self.assertEqual(cd.credit, 10)
+
+    def test_bulk_create(self):
+        url = '/api/manage/credit/bulk_create/'
+        data = {
+            'year': SettingsService.get('year'),
+            'semester': 2
+        }
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(self.user3)
+        res = client.post(url, data=data, decode=True)
+        self.assertEqual(res.status_code, 201)
+
+        data = {
+            'yea': 1110,
+            'semester': 2
+        }
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(self.user3)
+        res = client.post(url, data=data, decode=True)
+        self.assertEqual(res.status_code, 400)
 
 
 class SiteSettingsTest(TestCase):
