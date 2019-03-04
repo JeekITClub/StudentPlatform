@@ -154,18 +154,16 @@ class CreditManageViewSet(
         serializer = CreditDistributionBulkCreateSerializer(data=request.data)
         if serializer.is_valid():
             for society in Society.objects.filter(status=SocietyStatus.ACTIVE):
-                if CreditDistribution.objects.filter(
+                if not CreditDistribution.objects.filter(
                     semester=request.data['semester'],
                     year=request.data['year'],
                     society=society
                 ).exists():
-                    pass
-                else:
                     CreditDistribution.objects.create(
                         society=society,
                         semester=request.data['semester'],
                         year=request.data['year']
-                    )
+                    )           
             return Response(status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
