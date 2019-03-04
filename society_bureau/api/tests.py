@@ -231,6 +231,8 @@ class CreditReceiversTests(TestCase):
             members=None,
             society_type=SocietyType.HUMANISTIC
         )
+        self.society1.status = SocietyStatus.ACTIVE
+        self.society1.save()
         self.society2 = self.createSociety(
             user=self.user2,
             society_id=301,
@@ -238,6 +240,8 @@ class CreditReceiversTests(TestCase):
             members=None,
             society_type=SocietyType.SCIENTIFIC
         )
+        self.society2.status = SocietyStatus.ACTIVE
+        self.society2.save()
         self.society_bureau = self.createSocietyBureau(user=self.user3, real_name='xxx')
         self.student = self.createStudent(user=self.user4)
 
