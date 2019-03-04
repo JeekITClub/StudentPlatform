@@ -34,6 +34,7 @@ class YearSemesterSelect extends React.Component {
                 <Select
                     value={this.props.year}
                     className="year-select"
+                    onChange={this.props.yearOnChange}
                 >
                     {
                         this.state.yearOptions.map((option) => (
@@ -44,12 +45,13 @@ class YearSemesterSelect extends React.Component {
                 <Select
                     className="semester-select"
                     value={this.props.semester}
+                    onChange={this.props.semesterOnChange}
                 >
                     <Option value="1" key="1">第一学期</Option>
                     <Option value="2" key="2">第二学期</Option>
                 </Select>
                 <Button
-                    onClick={() => this.props.searchButtonOnClick}
+                    onClick={this.props.searchButtonOnClick}
                     htmlType="button"
                     className="search-button"
                     type="primary"
@@ -64,8 +66,6 @@ class YearSemesterSelect extends React.Component {
 YearSemesterSelect.propTypes = {
     yearOnChange: PropTypes.func,
     semesterOnChange: PropTypes.func,
-    semester: PropTypes.number.isRequired,
-    year: PropTypes.number.isRequired,
     searchButtonOnClick: PropTypes.func.isRequired
 };
 

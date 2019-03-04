@@ -18,6 +18,7 @@ from society_bureau.api.serializers import (
     CreditDistributionSerializer,
     ConfirmSocietySerializer,
     CreditDistributionManualCreateSerializer,
+    CreditDistributionBulkCreateSerializer,
     DashboardSerializer,
     SiteSettingsRetrieveSerializer,
     SiteSettingsUpdateSerializer
@@ -148,20 +149,23 @@ class CreditManageViewSet(
     def get_queryset(self):
         return CreditDistribution.objects.all().order_by('-year', '-semester', 'society__society_id')
 
-    def list(self, request, *args, **kwargs):
-        if self.get_queryset().exists():
-            serializer = self.get_serializer(self.get_queryset(), many=True)
-            return Response(serializer.data)
-        credit_distribution_sets = []
-        for society in Society.objects.filter(status=SocietyStatus.WAITING):
-            queryset = CreditDistribution.objects.create(
-                society=society,
-                semester=SettingsService.get('semester'),
-                year=SettingsService.get('year')
-            )
-            credit_distribution_sets.append(queryset)
-        serializer = self.get_serializer(credit_distribution_sets, many=True)
-        return Response(serializer.data)
+    @action(detail=False, methods=['post'])
+    def bulk_create(self, request):
+        serializer = CreditDistributionBulkCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            for society in Society.objects.filter(status=SocietyStatus.ACTIVE):
+                if not CreditDistribution.objects.filter(
+                    semester=request.data['semester'],
+                    year=request.data['year'],
+                    society=society
+                ).exists():
+                    CreditDistribution.objects.create(
+                        society=society,
+                        semester=request.data['semester'],
+                        year=request.data['year']
+                    )           
+            return Response(status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class SettingsViewSet(

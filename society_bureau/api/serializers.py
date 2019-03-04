@@ -126,6 +126,10 @@ class CreditDistributionManualCreateSerializer(serializers.Serializer):
         )
 
 
+class CreditDistributionBulkCreateSerializer(serializers.Serializer):
+    year = serializers.IntegerField()
+    semester = serializers.IntegerField()
+
 class SiteSettingsRetrieveSerializer(serializers.Serializer):
     year = serializers.SerializerMethodField()
     semester = serializers.SerializerMethodField()

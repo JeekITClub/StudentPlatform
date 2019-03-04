@@ -231,6 +231,8 @@ class CreditReceiversTests(TestCase):
             members=None,
             society_type=SocietyType.HUMANISTIC
         )
+        self.society1.status = SocietyStatus.ACTIVE
+        self.society1.save()
         self.society2 = self.createSociety(
             user=self.user2,
             society_id=301,
@@ -238,38 +240,41 @@ class CreditReceiversTests(TestCase):
             members=None,
             society_type=SocietyType.SCIENTIFIC
         )
+        self.society2.status = SocietyStatus.ACTIVE
+        self.society2.save()
         self.society_bureau = self.createSocietyBureau(user=self.user3, real_name='xxx')
         self.student = self.createStudent(user=self.user4)
 
     def test_list_credit_distributions(self):
-        url = '/api/manage/credit/'
+        url = '/api/manage/credit/?year={year}&semester={semester}'.format(
+            year=SettingsService.get('year'),
+            semester=SettingsService.get('semester')
+        )
 
         # test permissions
         client = APIClient(enforce_csrf_checks=True)
         response = client.get(url, decode=True)
         self.assertEqual(response.status_code, 403)
 
-        # now there is no credit distribution
-        # so the credit distribution will be generated automatically
         client.force_authenticate(self.user3)
-        response = client.get(url, decode=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 2)
-        self.assertEqual(response.data[0]['receivers_count'], 0)
-        self.assertEqual(response.data[0]['credit'], 1)
+        res = client.get(url, decode=True)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.data['count'], 0)
 
-        # now there are credit distributions
-        # so response the existing data
-        response = client.get(url, decode=True)
-        self.assertEqual(len(response.data), 2)
+        CreditDistribution.objects.create(
+            society=self.society1,
+            year=SettingsService.get('year'),
+            semester=SettingsService.get('semester')
+        )
+        CreditDistribution.objects.create(
+            society=self.society2,
+            year=SettingsService.get('year'),
+            semester=SettingsService.get('semester')
+        )
 
-        # the following code is just a test
-        # we should try our best to avoid this situation
-        CreditDistribution.objects.first().delete()
-        # response the existing credit distribution
-        response = client.get(url, decode=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 1)
+        res = client.get(url, decode=True)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.data['count'], 2)
 
     def test_retrieve_credit_distribution(self):
         credit_distribution = CreditDistribution.objects.create(
@@ -325,6 +330,33 @@ class CreditReceiversTests(TestCase):
         cd.refresh_from_db()
         self.assertEqual(cd.closed, True)
         self.assertEqual(cd.credit, 10)
+
+    def test_bulk_create(self):
+        url = '/api/manage/credit/bulk_create/'
+        data = {
+            'year': SettingsService.get('year'),
+            'semester': 2
+        }
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(self.user3)
+        res = client.post(url, data=data, decode=True)
+        self.assertEqual(res.status_code, 201)
+
+        CreditDistribution.objects.first().delete()
+
+        res = client.post(url, data=data, decode=True)
+        self.assertEqual(res.status_code, 201)
+
+        self.assertEqual(CreditDistribution.objects.count(), 2)
+
+        data = {
+            'yea': 1110,
+            'semester': 2
+        }
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(self.user3)
+        res = client.post(url, data=data, decode=True)
+        self.assertEqual(res.status_code, 400)
 
 
 class SiteSettingsTest(TestCase):
