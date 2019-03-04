@@ -43,6 +43,10 @@ class Society(models.Model):
     password_changed = models.BooleanField(default=False)
     tags = models.ManyToManyField(SocietyTag, blank=True)
     avatar = models.ImageField(upload_to=avatar_storage_path, null=True, blank=True)
+    mentor = models.CharField(max_length=16, null=True, blank=True)
+    activity_time = models.CharField(max_length=32, null=True, blank=True)
+    activity_place = models.CharField(max_length=32, null=True, blank=True)
+    special_room = models.CharField(max_length=32, null=True, blank=True)
 
     class Meta:
         ordering = ['-established_time']
