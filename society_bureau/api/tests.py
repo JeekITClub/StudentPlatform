@@ -342,6 +342,13 @@ class CreditReceiversTests(TestCase):
         res = client.post(url, data=data, decode=True)
         self.assertEqual(res.status_code, 201)
 
+        CreditDistribution.objects.first().delete()
+
+        res = client.post(url, data=data, decode=True)
+        self.assertEqual(res.status_code, 201)
+
+        self.assertEqual(CreditDistribution.objects.count(), 2)
+
         data = {
             'yea': 1110,
             'semester': 2
