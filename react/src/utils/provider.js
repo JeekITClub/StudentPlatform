@@ -30,7 +30,11 @@ const Provider = {
 
     patch(...args) {
         return this.provider.patch(...args)
-    }
+    },
+
+    delete(...args) {
+        return this.provider.delete(...args)
+    },
 };
 
 export default Provider;

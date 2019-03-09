@@ -16,15 +16,20 @@ class CreditDistributionList extends React.Component {
     state = {
         setCreditModalVisible: false,
         setCredit: 1,
-        editing: {
-            id: 0,
-            index: 0
-        }
     };
 
-    renderCheckReceiversDetail = () => {
+    checkDetail = (id) => {
+        if(CreditStore.detail) {
+            return CreditStore.detail.fetch(id);
+        } else {
+            CreditStore.initDetail(id);
+        }
+        CreditStore.checkingDetail = true;
+    };
+
+    renderCheckReceiversDetail = (id) => {
         return (
-            <Button htmlType="button">
+            <Button htmlType="button" onClick={() => {this.checkDetail(id)}}>
                 查看详情
             </Button>
         )
@@ -58,7 +63,7 @@ class CreditDistributionList extends React.Component {
     };
 
     onPaginationChange = (pagination) => {
-        CreditStore.fetch(pagination.current, pagination.pageSize);
+        CreditStore.fetch({ pageNum: pagination.current, pageSize:pagination.pageSize });
     };
 
     render() {
@@ -114,6 +119,13 @@ class CreditDistributionList extends React.Component {
                     dataSource={CreditStore.data}
                     rowKey="id"
                 />
+                <Modal
+                    visible={CreditStore.checkingDetail}
+                    footer={null}
+                    onCancel={() => {CreditStore.checkingDetail = false}}
+                >
+                    {CreditStore.detail && CreditStore.detail.data && CreditStore.detail.data.year}
+                </Modal>
                 <Modal visible={this.state.setCreditModalVisible}
                        okText="更新！"
                        cancelText="算了吧"

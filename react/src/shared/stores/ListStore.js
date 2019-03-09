@@ -1,6 +1,7 @@
 import {observable, action} from 'mobx';
 import {notification} from "antd";
 
+import DetailStore from './DetailStore'
 import Provider from '../../utils/provider';
 
 class ListStore {
@@ -11,8 +12,11 @@ class ListStore {
     @observable count = 0;
     @observable pageSize = 10;
     @observable pageNum = 1;
+    @observable checkingDetail = false;
 
     url = '';
+
+    detail = null;
 
     @action fetch = ({ pageNum = 1, pageSize = 10, ...params }) => {
         this.loading = true;
@@ -37,13 +41,19 @@ class ListStore {
             })
     };
 
-    @action update = () => {
-
+    @action deleteByIndex = (index) => {
+        const id = this.data[index];
+        this.delete(id);
     };
 
-    @action delete = () => {
-
+    @action delete = (id) => {
+        return Provider.delete(`${url}${id}`)
     };
+
+    @action initDetail = (id) => {
+        console.log('init');
+        this.detail = new DetailStore(this.url, id)
+    }
 }
 
 export default ListStore;
