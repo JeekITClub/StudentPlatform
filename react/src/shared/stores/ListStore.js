@@ -51,7 +51,6 @@ class ListStore {
     };
 
     @action initDetail = (id) => {
-        console.log('init');
         this.detail = new DetailStore(this.url, id)
     }
 }

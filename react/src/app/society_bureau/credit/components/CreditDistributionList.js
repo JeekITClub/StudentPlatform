@@ -2,6 +2,7 @@ import React from 'react';
 import {Form, Table, Button, InputNumber, Icon, Tooltip, Modal, notification} from 'antd';
 import {observer} from 'mobx-react'
 
+import CreditReceiversTable from './CreditReceiversTable';
 import CreditStore from '../stores/CreditStore'
 import Provider from "../../../../utils/provider";
 import '../styles/credit.scss'
@@ -20,7 +21,7 @@ class CreditDistributionList extends React.Component {
 
     checkDetail = (id) => {
         if(CreditStore.detail) {
-            return CreditStore.detail.fetch(id);
+            CreditStore.detail.fetch({id});
         } else {
             CreditStore.initDetail(id);
         }
@@ -124,7 +125,9 @@ class CreditDistributionList extends React.Component {
                     footer={null}
                     onCancel={() => {CreditStore.checkingDetail = false}}
                 >
-                    {CreditStore.detail && CreditStore.detail.data && CreditStore.detail.data.year}
+                    {CreditStore.detail && CreditStore.detail.data && (
+                        <CreditReceiversTable data={CreditStore.detail.data.receivers}/>
+                    )}
                 </Modal>
                 <Modal visible={this.state.setCreditModalVisible}
                        okText="更新！"
