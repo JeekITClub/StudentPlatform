@@ -9,7 +9,6 @@ class DetailStore {
     constructor(url, id) {
         this.url = url;
         this.id = id;
-        console.log('hello');
         this.fetch({id})
     }
 
@@ -37,6 +36,7 @@ class DetailStore {
 
     @action delete = () => {
         this.loading = false;
+        this.id = null;
         return Provider.delete(`${url}${id}`)
     };
 
