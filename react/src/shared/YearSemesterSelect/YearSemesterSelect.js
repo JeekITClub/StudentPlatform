@@ -36,6 +36,7 @@ class YearSemesterSelect extends React.Component {
                     className="year-select"
                     onChange={this.props.yearOnChange}
                 >
+                    <Option value={null} key={null}>全选</Option>
                     {
                         this.state.yearOptions.map((option) => (
                             <Option value={option} key={option}>{option}学年</Option>
@@ -47,6 +48,7 @@ class YearSemesterSelect extends React.Component {
                     value={this.props.semester}
                     onChange={this.props.semesterOnChange}
                 >
+                    <Option value={null} key={null}>全选</Option>
                     <Option value="1" key="1">第一学期</Option>
                     <Option value="2" key="2">第二学期</Option>
                 </Select>
