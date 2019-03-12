@@ -26,7 +26,7 @@ class CreditContainer extends React.Component {
             pageNum: CreditStore.pageNum,
             pageSize: CreditStore.pageSize,
             year: CreditStore.year,
-            semester:CreditStore.semester
+            semester: CreditStore.semester
         })
     };
 
@@ -36,12 +36,22 @@ class CreditContainer extends React.Component {
                 <YearSemesterSelect
                     year={CreditStore.year}
                     semester={CreditStore.semester}
-                    yearOnChange={(value) => {CreditStore.year = value}}
-                    semesterOnChange={(value) => {CreditStore.semester = value}}
+                    yearOnChange={(value) => {
+                        CreditStore.year = value
+                    }}
+                    semesterOnChange={(value) => {
+                        CreditStore.semester = value
+                    }}
                     searchButtonOnClick={this.handleSearchButtonOnClick}
                 />
-                <Button onClick={() => this.setState({setAllModalVisible: true})}>
+                <Button
+                    onClick={() => this.setState({ setAllModalVisible: true })}
+                    htmlType="button"
+                >
                     一键全部设置获得学分人数
+                </Button>
+                <Button htmlType="button" style={{ marginLeft: '5px' }}>
+                    新建社团学分
                 </Button>
                 <CreditDistributionList/>
                 {

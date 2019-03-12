@@ -50,14 +50,18 @@ class YearSemesterSelect extends React.Component {
                     <Option value="1" key="1">第一学期</Option>
                     <Option value="2" key="2">第二学期</Option>
                 </Select>
-                <Button
-                    onClick={this.props.searchButtonOnClick}
-                    htmlType="button"
-                    className="search-button"
-                    type="primary"
-                >
-                    查询
-                </Button>
+                {
+                    this.props.searchButtonVisible && (
+                        <Button
+                            onClick={this.props.searchButtonOnClick}
+                            htmlType="button"
+                            className="search-button"
+                            type="primary"
+                        >
+                            查询
+                        </Button>
+                    )
+                }
             </div>
         )
     }
@@ -66,7 +70,12 @@ class YearSemesterSelect extends React.Component {
 YearSemesterSelect.propTypes = {
     yearOnChange: PropTypes.func,
     semesterOnChange: PropTypes.func,
+    searchButtonVisible: PropTypes.bool,
     searchButtonOnClick: PropTypes.func.isRequired
+};
+
+YearSemesterSelect.defaultProps = {
+    searchButtonVisible: true,
 };
 
 export default YearSemesterSelect;

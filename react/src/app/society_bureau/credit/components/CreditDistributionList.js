@@ -50,12 +50,10 @@ class CreditDistributionList extends React.Component {
             { credit: this.state.setCredit }
         )
             .then((res) => {
-                let data = this.state.data;
-                data[this.state.editing.index].credit = this.state.setCredit;
+                CreditStore.data[this.state.editing.index].credit = this.state.setCredit;
                 this.setState({
                     setCreditModalVisible: false,
-                    setCredit: 1,
-                    data: data
+                    setCredit: 1
                 });
             })
             .catch((err) => {
