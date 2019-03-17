@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 
 from society_bureau.models import SiteSettings
-from society_bureau.api.services import SettingsService, export_excel
+from society_bureau.api.services import SettingsService
 from society.models import Society
 from society.constants import SocietyStatus
 from society_bureau.constants import export_society_header
@@ -39,6 +39,7 @@ from utils.filters import (
     SemesterFilterBackend,
     StatusFilterBackend
 )
+from utils.staticmethods import export_excel
 
 
 class DashboardViewSet(viewsets.GenericViewSet):
