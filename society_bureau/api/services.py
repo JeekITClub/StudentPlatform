@@ -59,10 +59,10 @@ def export_excel(queryset, header, serializer_class=None):
         else:
             data = queryset.values(*fields)
 
-        for row in range(len(data)):
-            for col in range(len(fields)):
+        for row, item in enumerate(data):
+            for col, field in enumerate(fields):
                 # openpyxl 下标从1开始, row + 2因为第一行是表头
-                ws.cell(row=row + 2, column=col + 1, value=data[row][fields[col]])
+                ws.cell(row=row + 2, column=col + 1, value=item[field])
 
         tmp = NamedTemporaryFile()
         wb.save(tmp.name)
