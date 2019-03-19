@@ -73,7 +73,7 @@ YearSemesterSelect.propTypes = {
     yearOnChange: PropTypes.func,
     semesterOnChange: PropTypes.func,
     searchButtonVisible: PropTypes.bool,
-    searchButtonOnClick: PropTypes.func.isRequired
+    searchButtonOnClick: PropTypes.func
 };
 
 YearSemesterSelect.defaultProps = {
