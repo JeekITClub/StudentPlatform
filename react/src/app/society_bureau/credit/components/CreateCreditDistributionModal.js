@@ -2,19 +2,30 @@ import React from 'react';
 import * as PropTypes from 'prop-types'
 import {Modal, Form, InputNumber, Select} from 'antd';
 import YearSemesterSelect from "../../../../shared/YearSemesterSelect/YearSemesterSelect";
+import Provider from "../../../../utils/provider";
 
 const { Option } = Select;
 
 class CreateCreditDistributionModal extends React.Component {
+    componentDidMount() {
+        Provider.get('/api/society/')
+            .then((res) => {
+                this.setState({societies: res.data})
+            })
+            .catch((err) => {
+
+            })
+    }
+
     state = {
         year: null,
         semester: null,
+        societies: []
     };
-    
+
     render() {
         return (
             <Modal
-                // onOk={}
                 okText="提交"
                 cancelText="取消"
                 visible={this.props.visible}
@@ -22,7 +33,7 @@ class CreateCreditDistributionModal extends React.Component {
             >
                 <Form>
                     <Form.Item label="学年与学期">
-                        <YearSemesterSelect searchButtonVisible={false} />
+                        <YearSemesterSelect searchButtonVisible={false}/>
                     </Form.Item>
                     {!this.props.bulk && '社团选择'}
                 </Form>
