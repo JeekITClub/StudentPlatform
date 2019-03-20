@@ -7,7 +7,7 @@ class CreditSetAllModal extends Component {
     render() {
         return (
             <Modal
-                visible
+                visible={this.props.visible}
                 onCancel={this.props.onCancel}
                 onOk={this.props.onOk}
                 okText="一键设置！"
@@ -27,7 +27,10 @@ class CreditSetAllModal extends Component {
 }
 
 CreditSetAllModal.propTypes = {
-    visible: PropTypes.func,
+    visible: PropTypes.bool.isRequired,
+    credit: PropTypes.number.isRequired,
+    onChange: PropTypes.func,
+    onOK: PropTypes.func,
     onCancel: PropTypes.func
 };
 

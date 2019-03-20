@@ -14,14 +14,17 @@ class CreateCreditDistributionModal extends React.Component {
     render() {
         return (
             <Modal
-                onOk={}
+                // onOk={}
                 okText="提交"
-                onCancel="取消"
+                cancelText="取消"
+                visible={this.props.visible}
+                onCancel={this.props.onCancel}
             >
                 <Form>
                     <Form.Item label="学年与学期">
                         <YearSemesterSelect searchButtonVisible={false} />
                     </Form.Item>
+                    {!this.props.bulk}
                 </Form>
             </Modal>
         )
@@ -29,7 +32,13 @@ class CreateCreditDistributionModal extends React.Component {
 }
 
 CreateCreditDistributionModal.propTypes = {
+    visible: PropTypes.bool.isRequired,
     bulk: PropTypes.bool,
+    onCancel: PropTypes.func.isRequired
+};
+
+CreateCreditDistributionModal.defaultProps = {
+    bulk: false,
 };
 
 export default CreateCreditDistributionModal;
