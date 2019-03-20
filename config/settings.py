@@ -140,3 +140,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'utils.pagination.StandardPagination',
     'PAGE_SIZE': 10
 }
+
+GRAPHENE = {
+    'SCHEMA': 'graphqlapi.schema.schema'
+}
