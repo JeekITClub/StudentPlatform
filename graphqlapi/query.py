@@ -13,5 +13,3 @@ class Query(graphene.ObjectType):
 
     def resolve_students(self, info):
         return Student.objects.all()
-
-
