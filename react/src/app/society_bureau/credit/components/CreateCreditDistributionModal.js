@@ -24,7 +24,7 @@ class CreateCreditDistributionModal extends React.Component {
                     <Form.Item label="学年与学期">
                         <YearSemesterSelect searchButtonVisible={false} />
                     </Form.Item>
-                    {!this.props.bulk}
+                    {!this.props.bulk && '社团选择'}
                 </Form>
             </Modal>
         )

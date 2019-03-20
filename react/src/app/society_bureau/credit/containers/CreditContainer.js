@@ -15,6 +15,7 @@ class CreditContainer extends React.Component {
         setAllModalVisible: false,
         setAllCredit: 1,
         createModalVisible: false,
+        bulkCreateModalVisible: false,
         year: null,
         semester: null
     };
@@ -55,9 +56,16 @@ class CreditContainer extends React.Component {
                 <Button
                     htmlType="button"
                     style={{ marginLeft: '5px' }}
+                    onClick={() => this.setState({ bulkCreateModalVisible: true })}
+                >
+                    批量新建社团学分
+                </Button>
+                <Button
+                    htmlType="button"
+                    style={{ marginLeft: '5px' }}
                     onClick={() => this.setState({ createModalVisible: true })}
                 >
-                    新建社团学分
+                    新建单独社团学分
                 </Button>
                 <CreditDistributionList/>
                 <CreditSetAllModal
@@ -66,6 +74,13 @@ class CreditContainer extends React.Component {
                     onChange={(value) => this.setState({ setAllCredit: value })}
                     onCancel={() => this.setState({ setAllModalVisible: false })}
                     onOk={() => this.submitSetAllCredit()}
+                />
+                <CreateCreditDistributionModal
+                    visible={this.state.bulkCreateModalVisible}
+                    onCancel={() => {
+                        this.setState({ bulkCreateModalVisible: false })
+                    }}
+                    bulk
                 />
                 <CreateCreditDistributionModal
                     visible={this.state.createModalVisible}
