@@ -138,7 +138,7 @@ class SocietyManageViewSet(
         if exported_file:
             # tempfile在关掉之后自动清理，FileResponse自动会关
             # TODO: 文件名
-            return FileResponse(exported_file, as_attachment=True, filename='社团.xlsx')
+            return FileResponse(exported_file, as_attachment=True, filename='export.xlsx')
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
