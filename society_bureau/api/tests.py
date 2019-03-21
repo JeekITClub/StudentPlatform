@@ -217,6 +217,18 @@ class SocietyManageTests(TestCase):
         self.assertEqual(response.status_code, 204)
         self.assertIsNone(Society.objects.filter(pk=self.society2.pk).first())
 
+    def test_export_societies(self):
+        url = '/api/manage/society/export/'
+
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(self.user4)
+        response = client.post(url, decode=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEquals(
+            response.get('Content-Disposition'),
+            'attachment; filename="export.xlsx"'
+        )
+
 
 class CreditReceiversTests(TestCase):
     def setUp(self):

@@ -1,5 +1,6 @@
 import json
 from django.utils import timezone
+from django.http import FileResponse
 from rest_framework import viewsets, status, mixins, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -8,6 +9,7 @@ from society_bureau.models import SiteSettings
 from society_bureau.api.services import SettingsService
 from society.models import Society
 from society.constants import SocietyStatus
+from society_bureau.constants import export_society_header
 from society_manage.models import CreditDistribution
 from society.api.serializers import (
     SocietySerializer,
@@ -37,6 +39,7 @@ from utils.filters import (
     SemesterFilterBackend,
     StatusFilterBackend
 )
+from utils.staticmethods import export_excel
 
 
 class DashboardViewSet(viewsets.GenericViewSet):
@@ -128,6 +131,16 @@ class SocietyManageViewSet(
             credit_distribution.first().receivers.clear()
         return Response(status=status.HTTP_202_ACCEPTED)
 
+    @action(detail=False, methods=['post'])
+    def export(self, request):
+        societies = self.get_queryset().filter(status=SocietyStatus.ACTIVE)
+        exported_file = export_excel(societies, export_society_header)
+        if exported_file:
+            # tempfile在关掉之后自动清理，FileResponse自动会关
+            # TODO: 文件名
+            return FileResponse(exported_file, as_attachment=True, filename='export.xlsx')
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 class CreditManageViewSet(
     viewsets.GenericViewSet,
@@ -155,15 +168,15 @@ class CreditManageViewSet(
         if serializer.is_valid():
             for society in Society.objects.filter(status=SocietyStatus.ACTIVE):
                 if not CreditDistribution.objects.filter(
-                    semester=request.data['semester'],
-                    year=request.data['year'],
-                    society=society
+                        semester=request.data['semester'],
+                        year=request.data['year'],
+                        society=society
                 ).exists():
                     CreditDistribution.objects.create(
                         society=society,
                         semester=request.data['semester'],
                         year=request.data['year']
-                    )           
+                    )
             return Response(status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 

@@ -8,6 +8,8 @@ graphql-relay==0.4.5
 Pillow==5.4.1
 promise==2.2.1
 pytz==2018.9
+Pillow==5.4.1
+openpyxl==2.6.1
 Rx==1.6.1
 singledispatch==3.4.0.3
 six==1.12.0
