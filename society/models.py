@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from student.models import Student
+from society_bureau.models import SocietyBureau
 from society.constants import (
     member_confirm_status,
     society_type,
@@ -33,6 +34,7 @@ class Society(models.Model):
     president_grade = models.PositiveSmallIntegerField()
     president_class = models.PositiveSmallIntegerField(choices=class_choices)
     president_qq = models.CharField(max_length=32, blank=True)
+    president_phone = models.CharField(max_length=32, blank=True)
     achievements = models.TextField(blank=True)
     recruit = models.BooleanField(default=False)
     email = models.EmailField(blank=True)
@@ -47,6 +49,13 @@ class Society(models.Model):
     activity_time = models.CharField(max_length=32, null=True, blank=True)
     activity_place = models.CharField(max_length=32, null=True, blank=True)
     special_room = models.CharField(max_length=32, null=True, blank=True)
+    assistant = models.ForeignKey(
+        SocietyBureau,
+        on_delete=models.DO_NOTHING,
+        null=True,
+        blank=True,
+        related_name="responsible_societies"
+    )
 
     class Meta:
         ordering = ['-established_time']
