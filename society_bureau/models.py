@@ -7,6 +7,7 @@ class SocietyBureau(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='society_bureau')
     real_name = models.CharField(max_length=64)
     qq = models.CharField(max_length=32, blank=True)
+    phone = models.CharField(max_length=32, blank=True)
     email = models.EmailField(blank=True)
     password_changed = models.BooleanField(default=False)
 
