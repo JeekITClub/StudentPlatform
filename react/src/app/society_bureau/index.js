@@ -8,6 +8,8 @@ import AccountStore from '../../shared/stores/AccountStore';
 import NotAuthorized from "../../shared/NotAuthorized/NotAuthorized";
 
 import AdminLayout from '../../shared/AdminLayout/AdminLayout'
+import ApolloClient from "../../utils/ApolloClient";
+import {ApolloProvider} from "react-apollo";
 
 export default function SocietyBureau({ match }) {
     const siderMenu = [
@@ -42,14 +44,16 @@ export default function SocietyBureau({ match }) {
 
     return (
         AccountStore.is_society_bureau ?
-            <AdminLayout
-                drawMenuTitle="社团部管理"
-                baseUrl="/manage"
-                siderMenu={siderMenu}
-                breadcrumbNameMap={breadcrumbNameMap}
-                footer={<h1>footer</h1>}
-                router={<SBRouter match={match}/>}
-            />
+            <ApolloProvider client={ApolloClient}>
+                <AdminLayout
+                    drawMenuTitle="社团部管理"
+                    baseUrl="/manage"
+                    siderMenu={siderMenu}
+                    breadcrumbNameMap={breadcrumbNameMap}
+                    footer={<h1>footer</h1>}
+                    router={<SBRouter match={match}/>}
+                />
+            </ApolloProvider>
             : <NotAuthorized/>
     );
 }

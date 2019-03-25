@@ -1,30 +1,23 @@
 import React from 'react';
-import ApolloClient from '../../../../utils/ApolloClient';
-import {ApolloProvider} from "react-apollo";
 import gql from "graphql-tag";
+import {Query} from "react-apollo";
 
 class StudentTable extends React.Component {
-    componentDidMount() {
-        ApolloClient
-            .query({
-                query: gql`
-      {
-  students {
-    id
-  }
-}
-    `
-            })
-            .then(result => console.log(result));
-    }
-
     render() {
+        const query = gql`{students {id, name, classNum}}`;
         return (
-            <ApolloProvider client={ApolloClient}>
-                <div>
-                    <h2>My first Apollo app 🚀</h2>
-                </div>
-            </ApolloProvider>
+            <Query query={query}>
+                {({ loading, error, data }) => {
+                    if (loading) return <p>Loading...</p>;
+                    if (error) return <p>Error :(</p>;
+
+                    return data.students.map(({ id }) => (
+                        <div key={id}>
+                            <p>{id}</p>
+                        </div>
+                    ));
+                }}
+            </Query>
         )
     }
 }
