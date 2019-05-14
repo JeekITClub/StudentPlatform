@@ -16,7 +16,7 @@ module.exports = merge(config, {
         }),
         new HtmlWebPackPlugin({
             template: "./template.html",
-            filename: path.resolve(__dirname, '../templates/react/index.html')
+            alwaysWriteToDisk: true
         })
     ],
 });
