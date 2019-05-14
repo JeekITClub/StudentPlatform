@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --config webpack.prod.js",
+    "build:netlify": "webpack --config webpack.netlify.js ",
     "start": "node dev-server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "$(npm bin)/eslint -c ./.eslintrc.js ./src/"
