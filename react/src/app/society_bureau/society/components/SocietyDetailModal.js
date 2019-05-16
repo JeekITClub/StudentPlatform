@@ -57,11 +57,23 @@ class SocietyDetailModal extends React.Component {
                     this.state.loading
                         ? <Spin/> :
                         <Form layout="vertical">
+                            <InputGroup>
+                                <Col span={24}>
+                                    <Item label="负责干事">
+                                        <Input defaultValue={society.assistant}/>
+                                    </Item>
+                                </Col>
+                            </InputGroup>
                             <Divider>基本信息</Divider>
                             <InputGroup>
-                                <Col span={12}>
+                                <Col span={6}>
                                     <Item label="ID">
                                         <Input defaultValue={society.society_id}/>
+                                    </Item>
+                                </Col>
+                                <Col span={6}>
+                                    <Item label="类型">
+                                        <Input defaultValue={society.type}/>
                                     </Item>
                                 </Col>
                                 <Col span={12}>
@@ -84,18 +96,23 @@ class SocietyDetailModal extends React.Component {
                                     </Item>
                                 </Col>
                                 <Col span={12}>
-                                    <Item label="联系方式">
+                                    <Item label="QQ">
                                         <Input defaultValue={society.president_qq}/>
                                     </Item>
                                 </Col>
-                                <Col span={12}>
+                                <Col span={8}>
                                     <Item label="年级">
                                         <Input defaultValue={society.president_grade}/>
                                     </Item>
                                 </Col>
-                                <Col span={12}>
+                                <Col span={8}>
                                     <Item label="班级">
                                         <Input defaultValue={society.president_class}/>
+                                    </Item>
+                                </Col>
+                                <Col span={8}>
+                                    <Item label="手机">
+                                        <Input defaultValue={society.president_phone}/>
                                     </Item>
                                 </Col>
                             </InputGroup>
@@ -116,6 +133,29 @@ class SocietyDetailModal extends React.Component {
                             <Item label="成就">
                                 <TextArea defaultValue={society.achievements}/>
                             </Item>
+                            <Divider>活动信息</Divider>
+                            <InputGroup>
+                                <Col span={12}>
+                                    <Item label="指导老师">
+                                        <Input defaultValue={society.mentor}/>
+                                    </Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Item label="活动时间">
+                                        <Input defaultValue={society.activity_time}/>
+                                    </Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Item label="活动地点">
+                                        <Input defaultValue={society.activity_place}/>
+                                    </Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Item label="特殊教室">
+                                        <Input defaultValue={society.special_room}/>
+                                    </Item>
+                                </Col>
+                            </InputGroup>
                         </Form>
                 }
             </Modal>
