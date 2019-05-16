@@ -5,6 +5,8 @@ from student.models import Student
 
 
 class SocietySerializer(serializers.ModelSerializer):
+    assistant = serializers.StringRelatedField()
+
     class Meta:
         model = Society
         fields = '__all__'

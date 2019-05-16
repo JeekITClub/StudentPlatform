@@ -13,6 +13,9 @@ import PropTypes from 'prop-types';
 
 import Provider from '../../../../utils/provider'
 
+import {society_type} from '../../../../shared/constants';
+
+
 const {Item} = Form;
 const {TextArea} = Input;
 const InputGroup = Input.Group;
@@ -57,13 +60,6 @@ class SocietyDetailModal extends React.Component {
                     this.state.loading
                         ? <Spin/> :
                         <Form layout="vertical">
-                            <InputGroup>
-                                <Col span={24}>
-                                    <Item label="负责干事">
-                                        <Input defaultValue={society.assistant}/>
-                                    </Item>
-                                </Col>
-                            </InputGroup>
                             <Divider>基本信息</Divider>
                             <InputGroup>
                                 <Col span={6}>
@@ -73,7 +69,7 @@ class SocietyDetailModal extends React.Component {
                                 </Col>
                                 <Col span={6}>
                                     <Item label="类型">
-                                        <Input defaultValue={society.type}/>
+                                        <Input defaultValue={society_type[society.type]}/>
                                     </Item>
                                 </Col>
                                 <Col span={12}>
@@ -82,9 +78,18 @@ class SocietyDetailModal extends React.Component {
                                     </Item>
                                 </Col>
                             </InputGroup>
-                            <Item label="邮箱">
-                                <Input defaultValue={society.email}/>
-                            </Item>
+                            <InputGroup>
+                                <Col span={12}>
+                                    <Item label="社团邮箱">
+                                        <Input defaultValue={society.email}/>
+                                    </Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Item label="负责干事">
+                                        <Input defaultValue={society.assistant}/>
+                                    </Item>
+                                </Col>
+                            </InputGroup>
                             <Item label="介绍">
                                 <TextArea defaultValue={society.introduction}/>
                             </Item>
