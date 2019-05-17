@@ -47,7 +47,7 @@
     "progress-bar-webpack-plugin": "^1.11.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
-    "react-apollo": "^2.5.2",
+    "react-apollo": "^2.5.5",
     "react-dom": "^16.8.6",
     "react-hot-loader": "^4.6.3",
     "react-image-crop": "^6.0.18",
