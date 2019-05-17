@@ -13,6 +13,9 @@ import PropTypes from 'prop-types';
 
 import Provider from '../../../../utils/provider'
 
+import {society_type} from '../../../../shared/constants';
+
+
 const {Item} = Form;
 const {TextArea} = Input;
 const InputGroup = Input.Group;
@@ -59,9 +62,14 @@ class SocietyDetailModal extends React.Component {
                         <Form layout="vertical">
                             <Divider>基本信息</Divider>
                             <InputGroup>
-                                <Col span={12}>
+                                <Col span={6}>
                                     <Item label="ID">
                                         <Input defaultValue={society.society_id}/>
+                                    </Item>
+                                </Col>
+                                <Col span={6}>
+                                    <Item label="类型">
+                                        <Input defaultValue={society_type[society.type]}/>
                                     </Item>
                                 </Col>
                                 <Col span={12}>
@@ -70,9 +78,18 @@ class SocietyDetailModal extends React.Component {
                                     </Item>
                                 </Col>
                             </InputGroup>
-                            <Item label="邮箱">
-                                <Input defaultValue={society.email}/>
-                            </Item>
+                            <InputGroup>
+                                <Col span={12}>
+                                    <Item label="社团邮箱">
+                                        <Input defaultValue={society.email}/>
+                                    </Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Item label="负责干事">
+                                        <Input defaultValue={society.assistant}/>
+                                    </Item>
+                                </Col>
+                            </InputGroup>
                             <Item label="介绍">
                                 <TextArea defaultValue={society.introduction}/>
                             </Item>
@@ -84,18 +101,23 @@ class SocietyDetailModal extends React.Component {
                                     </Item>
                                 </Col>
                                 <Col span={12}>
-                                    <Item label="联系方式">
+                                    <Item label="QQ">
                                         <Input defaultValue={society.president_qq}/>
                                     </Item>
                                 </Col>
-                                <Col span={12}>
+                                <Col span={8}>
                                     <Item label="年级">
                                         <Input defaultValue={society.president_grade}/>
                                     </Item>
                                 </Col>
-                                <Col span={12}>
+                                <Col span={8}>
                                     <Item label="班级">
                                         <Input defaultValue={society.president_class}/>
+                                    </Item>
+                                </Col>
+                                <Col span={8}>
+                                    <Item label="手机">
+                                        <Input defaultValue={society.president_phone}/>
                                     </Item>
                                 </Col>
                             </InputGroup>
@@ -116,6 +138,29 @@ class SocietyDetailModal extends React.Component {
                             <Item label="成就">
                                 <TextArea defaultValue={society.achievements}/>
                             </Item>
+                            <Divider>活动信息</Divider>
+                            <InputGroup>
+                                <Col span={12}>
+                                    <Item label="指导老师">
+                                        <Input defaultValue={society.mentor}/>
+                                    </Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Item label="活动时间">
+                                        <Input defaultValue={society.activity_time}/>
+                                    </Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Item label="活动地点">
+                                        <Input defaultValue={society.activity_place}/>
+                                    </Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Item label="特殊教室">
+                                        <Input defaultValue={society.special_room}/>
+                                    </Item>
+                                </Col>
+                            </InputGroup>
                         </Form>
                 }
             </Modal>

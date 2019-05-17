@@ -1,5 +1,5 @@
 import React from 'react';
-import {Table, Tooltip, Button, notification} from 'antd';
+import {Table, Tooltip, Button, notification, Divider} from 'antd';
 
 import Provider from '../../../../utils/provider'
 import SocietyDetailModal from "./SocietyDetailModal";
@@ -9,7 +9,8 @@ class SocietyTable extends React.Component {
         societies: [],
         count: 0,
         editingSocietyId: 0,
-        modalVisible: false
+        inspectModalVisible: false,
+        modifyModalVisible: false
     };
 
     getSocieties = (pageNum, pageSize) => {
@@ -29,11 +30,15 @@ class SocietyTable extends React.Component {
     };
 
     handleInspectButtonClick = (row) => {
-        this.setState({modalVisible: true, editingSocietyId: row.id});
+        this.setState({inspectModalVisible: true, editingSocietyId: row.id});
+    };
+
+    handleModifyButtonClick = (row) => {
+        this.setState({modifyModalVisible: true, editingSocietyId: row.id});
     };
 
     handleCloseModal = () => {
-        this.setState({modalVisible: false})
+        this.setState({inspectModalVisible: false, modifyModalVisible: false})
     };
 
     renderPresidentTooltip = (president_name, index) => {
@@ -47,7 +52,11 @@ class SocietyTable extends React.Component {
 
     renderInspectButton = (index) => {
         return (
-            <Button type="primary" onClick={() => this.handleInspectButtonClick(index)} htmlType="button">查看</Button>
+            <span>
+              <a href="javascript:;" onClick={() => this.handleInspectButtonClick(index)}>详细</a>
+              <Divider type="vertical"/>
+              <a href="javascript:;" onClick={() => this.handleModifyButtonClick(index)}>修改</a>
+            </span>
         )
     };
 
@@ -78,7 +87,7 @@ class SocietyTable extends React.Component {
                 render: (text, _, index) => this.renderPresidentTooltip(text, index)
             },
             {
-                title: '查看',
+                title: '操作',
                 key: 'inspect',
                 render: (row) => this.renderInspectButton(row)
             }
@@ -95,7 +104,12 @@ class SocietyTable extends React.Component {
                        onChange={this.onPaginationChange}
                        rowKey="id"/>
                 {
-                    this.state.modalVisible &&
+                    this.state.inspectModalVisible &&
+                    <SocietyDetailModal societyId={this.state.editingSocietyId}
+                                        closeModal={() => this.handleCloseModal()}/>
+                }
+                {
+                    this.state.modifyModalVisible &&
                     <SocietyDetailModal societyId={this.state.editingSocietyId}
                                         closeModal={() => this.handleCloseModal()}/>
                 }
