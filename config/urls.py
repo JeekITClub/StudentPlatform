@@ -6,6 +6,7 @@ from config.views import react
 from config.router import router
 from config import settings
 from graphene_django.views import GraphQLView
+import notifications.urls
 
 urlpatterns = [
     path('', react),
@@ -15,4 +16,5 @@ urlpatterns = [
     re_path(r'^media/(?P<path>.*)$', serve, {
         'document_root': settings.MEDIA_ROOT,
     }),
+    path('notifications/', include(notifications.urls, namespace='notifications')),
 ]

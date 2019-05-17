@@ -21,6 +21,8 @@ from utils.filters import (
 )
 from society.constants import SocietyStatus
 from society_bureau.api.services import SettingsService
+import society.notifiers
+
 
 
 class SocietyViewSet(viewsets.GenericViewSet, RetrieveAPIView, ListAPIView):
