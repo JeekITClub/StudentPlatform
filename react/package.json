@@ -28,7 +28,7 @@
     "bootstrap": "^4.3.1",
     "cache-loader": "^2.0.1",
     "cross-env": "^5.2.0",
-    "css-loader": "^2.1.0",
+    "css-loader": "^3.0.0",
     "graphql-tag": "^2.10.1",
     "happypack": "^5.0.1",
     "html-loader": "^0.5.5",
