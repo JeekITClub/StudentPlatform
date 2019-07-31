@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, Table, Button, InputNumber, Icon, Tooltip, Modal, notification} from 'antd';
+import {Form, Table, Button, InputNumber, Icon, Tooltip, Modal, notification, Switch} from 'antd';
 import {observer} from 'mobx-react'
 
 import CreditReceiversTable from './CreditReceiversTable';
@@ -33,6 +33,12 @@ class CreditDistributionList extends React.Component {
             <Button htmlType="button" onClick={() => {this.checkDetail(id)}}>
                 查看详情
             </Button>
+        )
+    };
+
+    renderClosedSwitch = (closed) => {
+        return (
+            <Switch checked={closed} />
         )
     };
 
@@ -104,6 +110,11 @@ class CreditDistributionList extends React.Component {
                 title: '获得学分者',
                 key: 'receivers',
                 render: (record) => this.renderCheckReceiversDetail(record.id)
+            },
+            {
+                title: '是否可分配',
+                key: 'closed',
+                render: (record) => this.renderClosedSwitch(record.closed)
             }
         ];
 
