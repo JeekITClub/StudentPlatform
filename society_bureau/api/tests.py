@@ -371,6 +371,49 @@ class CreditReceiversTests(TestCase):
         res = client.post(url, data=data, decode=True)
         self.assertEqual(res.status_code, 400)
 
+    def test_bulk_close(self):
+        CreditDistribution.objects.create(
+            society=self.society1,
+            year=SettingsService.get('year'),
+            semester=SettingsService.get('semester')
+        )
+        CreditDistribution.objects.create(
+            society=self.society2,
+            year=SettingsService.get('year'),
+            semester=SettingsService.get('semester')
+        )
+        url = '/api/manage/credit/bulk_close/'
+        data = {
+            'year': SettingsService.get('year'),
+            'semester': SettingsService.get('semester')
+        }
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(self.user3)
+        res = client.post(url, data=data, decode=True)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(CreditDistribution.objects.filter(
+            year=SettingsService.get('year'),
+            semester=SettingsService.get('semester')
+        ).first().open, False)
+
+        data = {
+            'year': 1110,
+            'semester': 2
+        }
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(self.user3)
+        res = client.post(url, data=data, decode=True)
+        self.assertEqual(res.status_code, 404)
+
+        data = {
+            'yea': 1110,
+            'semestr': 2
+        }
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(self.user3)
+        res = client.post(url, data=data, decode=True)
+        self.assertEqual(res.status_code, 400)
+
 
 class SiteSettingsTest(TestCase):
     def setUp(self):

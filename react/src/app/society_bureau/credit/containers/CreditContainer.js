@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Tooltip} from 'antd';
+import {Button, Tooltip, Popconfirm} from 'antd';
 import {observer} from 'mobx-react'
 import CreditDistributionList from "../components/CreditDistributionList";
 import CreditSetAllModal from '../components/CreditSetAllModal'
@@ -30,6 +30,10 @@ class CreditContainer extends React.Component {
         })
     };
 
+    handleBulkCloseCreditDistribution = () => {
+        CreditStore.bulkCloseCD()
+    };
+
     render() {
         return (
             <>
@@ -44,13 +48,29 @@ class CreditContainer extends React.Component {
                     }}
                     searchButtonOnClick={this.handleSearchButtonOnClick}
                 />
-                <Tooltip title={(CreditStore.year && CreditStore.semester) ? "" : "未选择学年和学期时不可用"}
-                         placement="bottom"
+                <Tooltip
+                    title={(CreditStore.year && CreditStore.semester) ? "" : "未选择学年和学期时不可用"}
+                    placement="bottom"
                 >
                     <Button onClick={() => this.setState({ setAllModalVisible: true })}
                             disabled={!(CreditStore.year && CreditStore.semester)}>
                         一键全部设置获得学分人数
                     </Button>
+                </Tooltip>
+                <Tooltip
+                    title={(CreditStore.year && CreditStore.semester) ? "" : "未选择学年和学期时不可用"}
+                    placement="bottom"
+                >
+                    <Popconfirm title="确定？" okText="是" cancelText="否"
+                        onOK={() => this.handleBulkCloseCreditDistribution}
+                    >
+                        <Button
+                            style={{ 'marginLeft': '10px' }}
+                            disabled={!(CreditStore.year && CreditStore.semester)}
+                        >
+                            一键关闭社长分配学分通道
+                        </Button>
+                    </Popconfirm>
                 </Tooltip>
                 <CreditDistributionList/>
                 {
