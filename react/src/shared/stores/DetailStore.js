@@ -20,7 +20,7 @@ class DetailStore {
 
     @action fetch = ({ url = this.url, id }) => {
         this.loading = true;
-        Provider.get(`${url}${id}`)
+        Provider.get(`${url}${id}/`)
             .then((res) => {
                 this.id = id;
                 this.data = res.data;

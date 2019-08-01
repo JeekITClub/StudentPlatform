@@ -85,7 +85,7 @@ class CreditDistributionMiniSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CreditDistribution
-        fields = ('id', 'society', 'credit', 'year', 'semester', 'receivers_count', 'closed')
+        fields = ('id', 'society', 'credit', 'year', 'semester', 'receivers_count', 'opened')
         read_only_fields = ('society', 'year', 'semester')
 
 
@@ -129,6 +129,7 @@ class CreditDistributionManualCreateSerializer(serializers.Serializer):
 class CreditDistributionBulkCreateSerializer(serializers.Serializer):
     year = serializers.IntegerField()
     semester = serializers.IntegerField()
+
 
 class SiteSettingsRetrieveSerializer(serializers.Serializer):
     year = serializers.SerializerMethodField()

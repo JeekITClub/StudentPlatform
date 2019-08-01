@@ -1,6 +1,7 @@
 import React from 'react';
 import {Form, Table, Button, InputNumber, Icon, Tooltip, Modal, notification, Switch} from 'antd';
 import {observer} from 'mobx-react'
+import {toJS} from 'mobx';
 
 import CreditReceiversTable from './CreditReceiversTable';
 import CreditStore from '../stores/CreditStore'
@@ -20,8 +21,8 @@ class CreditDistributionList extends React.Component {
     };
 
     checkDetail = (id) => {
-        if(CreditStore.detail) {
-            CreditStore.detail.fetch({id});
+        if (CreditStore.detail) {
+            CreditStore.detail.fetch({ id });
         } else {
             CreditStore.initDetail(id);
         }
@@ -30,20 +31,41 @@ class CreditDistributionList extends React.Component {
 
     renderCheckReceiversDetail = (id) => {
         return (
-            <Button htmlType="button" onClick={() => {this.checkDetail(id)}}>
+            <Button htmlType="button" onClick={() => {
+                this.checkDetail(id)
+            }}>
                 查看详情
             </Button>
         )
     };
 
-    renderClosedSwitch = (closed) => {
+    renderClosedSwitch = (opened, id, index) => {
         return (
-            <Switch checked={closed} />
+            <Switch checked={opened} onChange={(checked) => this.handleUpdateClosed(checked, id, index)}/>
         )
     };
 
     showSetCreditModal = (id, index) => {
         this.setState({ setCreditModalVisible: true, editing: { id: id, index: index } });
+    };
+
+    handleUpdateClosed = (checked, id, index) => {
+        CreditStore.data[index].opened = checked;
+        Provider.patch(
+            `/api/manage/credit/${id}/`,
+            { opened: checked }
+        )
+            .then((res) => {
+                if (res.status === 200) {
+                    notification.success({
+                        message: '更新',
+                        description: '更新成功'
+                    })
+                }
+            })
+            .catch((err) => {
+                throw err
+            })
     };
 
     handleSetCreditChange = (value) => {
@@ -70,7 +92,7 @@ class CreditDistributionList extends React.Component {
     };
 
     onPaginationChange = (pagination) => {
-        CreditStore.fetch({ pageNum: pagination.current, pageSize:pagination.pageSize });
+        CreditStore.fetch({ pageNum: pagination.current, pageSize: pagination.pageSize });
     };
 
     render() {
@@ -112,9 +134,10 @@ class CreditDistributionList extends React.Component {
                 render: (record) => this.renderCheckReceiversDetail(record.id)
             },
             {
-                title: '是否可分配',
-                key: 'closed',
-                render: (record) => this.renderClosedSwitch(record.closed)
+                title: '社长可分配学分',
+                key: 'opened',
+                dataIndex: 'opened',
+                render: (opened, record, index) => this.renderClosedSwitch(opened, record.id, index)
             }
         ];
 
@@ -128,13 +151,15 @@ class CreditDistributionList extends React.Component {
                     }}
                     onChange={this.onPaginationChange}
                     columns={columns}
-                    dataSource={CreditStore.data}
+                    dataSource={toJS(CreditStore.data)}
                     rowKey="id"
                 />
                 <Modal
                     visible={CreditStore.checkingDetail}
                     footer={null}
-                    onCancel={() => {CreditStore.checkingDetail = false}}
+                    onCancel={() => {
+                        CreditStore.checkingDetail = false
+                    }}
                 >
                     {CreditStore.detail && CreditStore.detail.data && (
                         <CreditReceiversTable data={CreditStore.detail.data.receivers}/>

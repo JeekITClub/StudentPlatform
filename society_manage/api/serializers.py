@@ -48,7 +48,7 @@ class CreditDistributionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CreditDistribution
-        fields = ('credit', 'id', 'year', 'semester', 'receivers', 'available_receivers', 'closed')
+        fields = ('credit', 'id', 'year', 'semester', 'receivers', 'available_receivers', 'opened')
 
     def get_receivers(self, obj):
         return [receiver.id for receiver in obj.receivers.all()]
