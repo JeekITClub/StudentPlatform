@@ -18,6 +18,7 @@ class CreditDistributionList extends React.Component {
     state = {
         setCreditModalVisible: false,
         setCredit: 1,
+        editing: { id: 0, index: 0 }
     };
 
     checkDetail = (id) => {
@@ -46,7 +47,10 @@ class CreditDistributionList extends React.Component {
     };
 
     showSetCreditModal = (id, index) => {
-        this.setState({ setCreditModalVisible: true, editing: { id: id, index: index } });
+        this.setState({
+            setCreditModalVisible: true,
+            editing: { id: id, index: index }
+        });
     };
 
     handleUpdateClosed = (checked, id, index) => {
@@ -174,7 +178,7 @@ class CreditDistributionList extends React.Component {
                         <Form.Item label="分配学分人数上限">
                             <InputNumber
                                 min={1}
-                                value={this.state.setCredit}
+                                value={this.state.setCreditModalVisible ? toJS(CreditStore.data)[this.state.editing.index].credit : 1}
                                 onChange={(value) => this.handleSetCreditChange(value)}
                             />
                         </Form.Item>
