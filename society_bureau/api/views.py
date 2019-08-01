@@ -125,7 +125,7 @@ class SocietyManageViewSet(
             society=society,
             year=SettingsService.get('year'),
             semester=SettingsService.get('semester'),
-            closed=False
+            open=True
         )
         if credit_distribution.exists():
             credit_distribution.first().receivers.clear()

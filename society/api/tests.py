@@ -55,7 +55,7 @@ class SocietyTestCase(TestCase):
             society=self.society1,
             year=self.site_settings['year'],
             semester=self.site_settings['semester'],
-            closed=False,
+            open=True,
         )
         self.credit1.receivers.set([self.student])
 

@@ -68,7 +68,7 @@ class SocietyViewSet(viewsets.GenericViewSet, RetrieveAPIView, ListAPIView):
             society=society,
             year=year,
             semester=semester,
-            closed=False
+            open=True
         )
 
         society.members.remove(member)

@@ -172,7 +172,7 @@ class SocietyManageTests(TestCase):
             year=SettingsService.get('year'),
             semester=SettingsService.get('semester'),
             credit=10,
-            closed=False
+            open=True
         )
         student_user = self.createUser('student')
         student = self.createStudent(user=student_user)
@@ -328,11 +328,12 @@ class CreditReceiversTests(TestCase):
         cd = CreditDistribution.objects.create(
             society=self.society1,
             year=2017,
-            semester=1
+            semester=1,
+            open=False
         )
         url = '/api/manage/credit/{}/'.format(cd.pk)
         data = {
-            'closed': True,
+            'open': True,
             'credit': 10
         }
         client = APIClient(enforce_csrf_checks=True)
@@ -340,7 +341,7 @@ class CreditReceiversTests(TestCase):
         res = client.patch(url, data=data, decode=True)
         self.assertEqual(res.status_code, 200)
         cd.refresh_from_db()
-        self.assertEqual(cd.closed, True)
+        self.assertEqual(cd.open, True)
         self.assertEqual(cd.credit, 10)
 
     def test_bulk_create(self):
