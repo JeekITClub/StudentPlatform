@@ -347,7 +347,7 @@ class SocietyManageCreditTests(TestCase):
         res = client.patch(url, data=data, encode=True)
         self.assertEqual(res.status_code, 400)
 
-        society1_cd.opened = True
+        society1_cd.open = False
         society1_cd.save()
         data = {
             'receivers': [
