@@ -172,7 +172,7 @@ class SocietyManageTests(TestCase):
             year=SettingsService.get('year'),
             semester=SettingsService.get('semester'),
             credit=10,
-            open=False
+            open=True
         )
         student_user = self.createUser('student')
         student = self.createStudent(user=student_user)
