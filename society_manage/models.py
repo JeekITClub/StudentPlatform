@@ -10,7 +10,7 @@ class CreditDistribution(models.Model):
     year = models.PositiveSmallIntegerField()
     semester = models.PositiveSmallIntegerField()
     credit = models.PositiveSmallIntegerField(help_text='可获得学分的人数的最大值', default=1)
-    opened = models.BooleanField(default=True)
+    open = models.BooleanField(default=True)
 
     class Meta:
         unique_together = ("society", "year", "semester")

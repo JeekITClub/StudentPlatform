@@ -288,7 +288,7 @@ class SocietyManageCreditTests(TestCase):
         self.assertEqual(res.data['semester'], 1)
         self.assertEqual(len(res.data['available_receivers']), 2)
         self.assertEqual(res.data['available_receivers'][0]['name'], self.student1.name)
-        self.assertEqual(res.data['opened'], False)
+        self.assertEqual(res.data['open'], True)
 
         society1_cd.receivers.add(self.student1)
         society1_cd.refresh_from_db()

@@ -85,7 +85,7 @@ class CreditDistributionMiniSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CreditDistribution
-        fields = ('id', 'society', 'credit', 'year', 'semester', 'receivers_count', 'opened')
+        fields = ('id', 'society', 'credit', 'year', 'semester', 'receivers_count', 'open')
         read_only_fields = ('society', 'year', 'semester')
 
 

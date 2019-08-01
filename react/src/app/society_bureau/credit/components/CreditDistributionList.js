@@ -39,9 +39,9 @@ class CreditDistributionList extends React.Component {
         )
     };
 
-    renderClosedSwitch = (opened, id, index) => {
+    renderClosedSwitch = (open, id, index) => {
         return (
-            <Switch checked={opened} onChange={(checked) => this.handleUpdateClosed(checked, id, index)}/>
+            <Switch checked={open} onChange={(checked) => this.handleUpdateClosed(checked, id, index)}/>
         )
     };
 
@@ -50,7 +50,7 @@ class CreditDistributionList extends React.Component {
     };
 
     handleUpdateClosed = (checked, id, index) => {
-        CreditStore.data[index].opened = checked;
+        CreditStore.data[index].open = checked;
         Provider.patch(
             `/api/manage/credit/${id}/`,
             { opened: checked }
@@ -135,9 +135,9 @@ class CreditDistributionList extends React.Component {
             },
             {
                 title: '社长可分配学分',
-                key: 'opened',
-                dataIndex: 'opened',
-                render: (opened, record, index) => this.renderClosedSwitch(opened, record.id, index)
+                key: 'open',
+                dataIndex: 'open',
+                render: (open, record, index) => this.renderClosedSwitch(open, record.id, index)
             }
         ];
 
