@@ -1,7 +1,8 @@
 import React from 'react';
-import {Button, Tooltip, Popconfirm} from 'antd';
+import {Button, Tooltip, Popconfirm, Form, Divider} from 'antd';
 import {observer} from 'mobx-react'
 import CreditDistributionList from "../components/CreditDistributionList";
+import CreditDistributionCreateModal from '../components/CreditDistributionCreateModal';
 import CreditSetAllModal from '../components/CreditSetAllModal'
 import YearSemesterSelect from '../../../../shared/YearSemesterSelect'
 import CreditStore from '../stores/CreditStore'
@@ -12,9 +13,8 @@ import Provider from '../../../../utils/provider'
 class CreditContainer extends React.Component {
     state = {
         setAllModalVisible: false,
-        setAllCredit: 1,
-        year: null,
-        semester: null
+        createCDModalVisible: false,
+        setAllCredit: 1
     };
 
     submitSetAllCredit = () => {
@@ -34,9 +34,22 @@ class CreditContainer extends React.Component {
         CreditStore.bulkCloseCD()
     };
 
+    showCreateModal = () => {
+        this.setState({ createCDModalVisible: true })
+    };
+
     render() {
         return (
             <>
+                <Form layout="inline">
+                    <Form.Item>
+                        <Button onClick={() => this.showCreateModal()}>新建学分分配</Button>
+                    </Form.Item>
+                    <Form.Item>
+                        <Button>批量创建学分分配</Button>
+                    </Form.Item>
+                </Form>
+                <Divider/>
                 <YearSemesterSelect
                     year={CreditStore.year}
                     semester={CreditStore.semester}
@@ -62,7 +75,7 @@ class CreditContainer extends React.Component {
                     placement="bottom"
                 >
                     <Popconfirm title="确定？" okText="是" cancelText="否"
-                        onOK={() => this.handleBulkCloseCreditDistribution}
+                                onOK={() => this.handleBulkCloseCreditDistribution}
                     >
                         <Button
                             style={{ 'marginLeft': '10px' }}
@@ -82,6 +95,10 @@ class CreditContainer extends React.Component {
                         onOk={() => this.submitSetAllCredit()}
                     />
                 }
+                <CreditDistributionCreateModal
+                    visible={this.state.createCDModalVisible}
+                    onCancel={()=> this.setState({createCDModalVisible: false})}
+                />
             </>
         )
     }

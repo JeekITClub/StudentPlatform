@@ -11,7 +11,7 @@ class CreditStore extends ListStore {
     @action bulkCloseCD = () => {
         Provider.post(`${this.url}bulkClose`)
             .then((res) => {})
-            .catch((err) => throw err)
+            .catch((err) => {throw err})
     }
 
 }
