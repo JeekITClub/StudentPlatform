@@ -12,6 +12,10 @@ class CreditStore extends ListStore {
         Provider.post(`${this.url}bulkClose`)
             .then((res) => {})
             .catch((err) => {throw err})
+    };
+
+    @action fetchActiveSocieties = () => {
+        return Provider.get('/api/manage/society/all/')
     }
 
 }

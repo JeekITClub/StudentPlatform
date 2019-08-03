@@ -14,6 +14,7 @@ class CreditContainer extends React.Component {
     state = {
         setAllModalVisible: false,
         createCDModalVisible: false,
+        createCDBulk: false,
         setAllCredit: 1
     };
 
@@ -34,8 +35,8 @@ class CreditContainer extends React.Component {
         CreditStore.bulkCloseCD()
     };
 
-    showCreateModal = () => {
-        this.setState({ createCDModalVisible: true })
+    showCreateModal = (bulk) => {
+        this.setState({ createCDModalVisible: true, createCDBulk: bulk })
     };
 
     render() {
@@ -43,10 +44,10 @@ class CreditContainer extends React.Component {
             <>
                 <Form layout="inline">
                     <Form.Item>
-                        <Button onClick={() => this.showCreateModal()}>新建学分分配</Button>
+                        <Button onClick={() => this.showCreateModal(false)}>新建学分分配</Button>
                     </Form.Item>
                     <Form.Item>
-                        <Button>批量创建学分分配</Button>
+                        <Button onClick={() => this.showCreateModal(true)}>批量创建学分分配</Button>
                     </Form.Item>
                 </Form>
                 <Divider/>
@@ -96,6 +97,7 @@ class CreditContainer extends React.Component {
                     />
                 }
                 <CreditDistributionCreateModal
+                    bulk={this.state.createCDBulk}
                     visible={this.state.createCDModalVisible}
                     onCancel={()=> this.setState({createCDModalVisible: false})}
                 />

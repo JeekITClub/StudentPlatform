@@ -141,6 +141,12 @@ class SocietyManageViewSet(
             return FileResponse(exported_file, as_attachment=True, filename='export.xlsx')
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+    @action(detail=False, methods=['get'])
+    def all(self, request):
+        societies = self.get_queryset().filter(status=SocietyStatus.ACTIVE)
+        serializer = SocietyMiniSerializer(societies, many=True)
+        return Response(serializer.data)
+
 
 class CreditManageViewSet(
     viewsets.GenericViewSet,
