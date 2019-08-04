@@ -23,7 +23,7 @@ from society_bureau.api.serializers import (
     CreditDistributionBulkCreateSerializer,
     DashboardSerializer,
     SiteSettingsRetrieveSerializer,
-    SiteSettingsUpdateSerializer
+    YearSemesterSerializer
 )
 from utils.permissions import (
     IsSocietyBureau,
@@ -141,6 +141,12 @@ class SocietyManageViewSet(
             return FileResponse(exported_file, as_attachment=True, filename='export.xlsx')
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+    @action(detail=False, methods=['get'])
+    def all(self, request):
+        societies = self.get_queryset().filter(status=SocietyStatus.ACTIVE)
+        serializer = SocietyMiniSerializer(societies, many=True)
+        return Response(serializer.data)
+
 
 class CreditManageViewSet(
     viewsets.GenericViewSet,
@@ -180,6 +186,20 @@ class CreditManageViewSet(
             return Response(status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+    @action(detail=False, methods=['post'])
+    def bulk_close(self, request):
+        serializer = YearSemesterSerializer(data=request.data)
+        if serializer.is_valid():
+            queryset = CreditDistribution.objects.filter(
+                year=serializer.data['year'],
+                semester=serializer.data['semester']
+            )
+            if queryset.exists():
+                queryset.update(open=False)
+                return Response(status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 class SettingsViewSet(
     viewsets.GenericViewSet,
@@ -191,7 +211,7 @@ class SettingsViewSet(
     def get_serializer_class(self):
         if self.action == 'list':
             return SiteSettingsRetrieveSerializer
-        return SiteSettingsUpdateSerializer
+        return YearSemesterSerializer
 
     def get_queryset(self):
         default_settings = json.dumps({

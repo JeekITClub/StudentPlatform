@@ -23,7 +23,7 @@ class SocietyMiniSerializer(serializers.ModelSerializer):
             'type',
             'president_name',
             'president_class',
-            'president_grade'
+            'president_grade',
         )
 
 

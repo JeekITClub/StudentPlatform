@@ -24,7 +24,6 @@ from society_bureau.api.services import SettingsService
 import society.notifiers
 
 
-
 class SocietyViewSet(viewsets.GenericViewSet, RetrieveAPIView, ListAPIView):
     queryset = Society.objects.filter(status=SocietyStatus.ACTIVE)
     serializer_class = SocietySerializer

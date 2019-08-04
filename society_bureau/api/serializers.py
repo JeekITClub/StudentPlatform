@@ -145,7 +145,7 @@ class SiteSettingsRetrieveSerializer(serializers.Serializer):
         return SettingsService.get('semester')
 
 
-class SiteSettingsUpdateSerializer(serializers.Serializer):
+class YearSemesterSerializer(serializers.Serializer):
     year = serializers.IntegerField()
     semester = serializers.IntegerField()
 
