@@ -1,27 +1,20 @@
 $primary-color: #69BEF7;
 
 .generic-header {
-  display: block;
+  display: flex;
   width: 100%;
   padding-right: 20px;
   padding-left: 20px;
   margin-left: auto;
   margin-right: auto;
   background-color: $primary-color;
+  justify-content: space-between;
   .generic-header-brand {
     display: inline-block;
   }
   .generic-header-menu {
     display: inline-block;
   }
-}
-
-.pull-left {
-  float: left;
-}
-
-.pull-right {
-  float: right;
 }
 
 .ant-menu {

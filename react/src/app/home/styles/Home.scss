@@ -1,18 +1,11 @@
-.text {
-  font-size: 80px;
-  font-weight: bold;
-  line-height: 200px;
-  text-transform: uppercase;
-  position: relative;
-  background-color: #333;
-  color: #fefefe;
-  text-shadow: 0 1px 0 #c0c0c0, 0 2px 0 #b0b0b0, 0 3px 0 #a0a0a0, 0 4px 0 #909090, 0 5px 10px rgba(0, 0, 0, 0.6);
+.ant-carousel .slick-slide {
+  text-align: center;
+  height: 500px;
+  line-height: 500px;
+  background: #364d79;
+  overflow: hidden;
 }
 
-.landing-container {
-  min-height: 110vh;
-  background-image: url("../../../static/shape-bg.svg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position-y: bottom;
+.ant-carousel .slick-slide h3 {
+  color: #fff;
 }

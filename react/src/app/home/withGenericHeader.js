@@ -5,6 +5,7 @@ import {Col, Row} from "antd";
 
 import GenericHeader from "./components/GenericHeader";
 import Login from "./containers/Login";
+import Home from "./containers/Home";
 import WrappedChangePasswordForm from "../../shared/change_password/ChangePasswordForm";
 
 import {LoginRequiredRoute} from "../../shared/route";
@@ -34,6 +35,7 @@ export default function withGenericHeader({match}) {
             <Row className="mt-5" type="flex" justify="space-around">
                 <Col xs={22} sm={22} md={20} lg={20} xl={20} xxl={18}>
                     <Switch>
+                        <Route path={`${match.url}`} exact component={Home} />>
                         <Route path={`${match.url}society`} component={Society}/>
                         <Route path={`${match.url}activity`} component={Activity}/>
                         <Route path={`${match.url}login`} component={Login}/>
