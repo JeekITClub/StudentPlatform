@@ -3291,9 +3291,9 @@ eslint-plugin-jsx-a11y@^6.2.1:
     has "^1.0.3"
     jsx-ast-utils "^2.2.1"
 
-eslint-plugin-react@^7.12.4:
+eslint-plugin-react@^7.14.0:
   version "7.17.0"
-  resolved "https://registry.npm.taobao.org/eslint-plugin-react/download/eslint-plugin-react-7.17.0.tgz#a31b3e134b76046abe3cd278e7482bd35a1d12d7"
+  resolved "https://registry.npm.taobao.org/eslint-plugin-react/download/eslint-plugin-react-7.17.0.tgz?cache=0&sync_timestamp=1575012576365&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Feslint-plugin-react%2Fdownload%2Feslint-plugin-react-7.17.0.tgz#a31b3e134b76046abe3cd278e7482bd35a1d12d7"
   integrity sha1-oxs+E0t2BGq+PNJ450gr01odEtc=
   dependencies:
     array-includes "^3.0.3"
@@ -7451,6 +7451,13 @@ react-apollo@^3.1.3:
     "@apollo/react-hoc" "^3.1.3"
     "@apollo/react-hooks" "^3.1.3"
     "@apollo/react-ssr" "^3.1.3"
+    apollo-utilities "^1.3.0"
+    fast-json-stable-stringify "^2.0.0"
+    hoist-non-react-statics "^3.3.0"
+    lodash.isequal "^4.5.0"
+    prop-types "^15.7.2"
+    ts-invariant "^0.4.2"
+    tslib "^1.9.3"
 
 react-dom-factories@^1.0.0:
   version "1.0.2"
@@ -9321,9 +9328,9 @@ webpack-sources@^1.1.0, webpack-sources@^1.4.0, webpack-sources@^1.4.1:
     source-list-map "^2.0.0"
     source-map "~0.6.1"
 
-webpack@^4.29.0:
+webpack@^4.35.0:
   version "4.41.4"
-  resolved "https://registry.npm.taobao.org/webpack/download/webpack-4.41.4.tgz#4bec4125224bdf50efa8be6226c19047599cd034"
+  resolved "https://registry.npm.taobao.org/webpack/download/webpack-4.41.4.tgz?cache=0&sync_timestamp=1576740637595&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fwebpack%2Fdownload%2Fwebpack-4.41.4.tgz#4bec4125224bdf50efa8be6226c19047599cd034"
   integrity sha1-S+xBJSJL31DvqL5iJsGQR1mc0DQ=
   dependencies:
     "@webassemblyjs/ast" "1.8.5"
