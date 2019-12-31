@@ -1,4 +1,4 @@
-export const getCookie = (name) => {
+export const getCookie = (name: String) => {
   if (typeof document === 'undefined') {
     return null;
   }

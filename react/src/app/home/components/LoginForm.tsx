@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 import {Form, Icon, Input, Button, notification, Modal} from 'antd';
+import H from 'history';
 import Provider from '../../../utils/provider';
 import {withRouter} from "react-router-dom";
+import {match} from 'react-router';
 import PropTypes from "prop-types";
 import AccountStore from '../../../shared/stores/AccountStore';
+import { AxiosResponse } from 'axios';
+import { FormComponentProps } from 'antd/lib/form';
 
-@withRouter
-class LoginForm extends React.Component {
 
+interface LoginFormProps extends FormComponentProps {
+    match: match,
+    location: H.Location,
+    history: H.History,
+}
+
+class LoginForm extends React.Component<LoginFormProps, any> {
     redirectWithUserType = () => {
         if (AccountStore.is_student) {
             this.props.history.push('/')
@@ -18,14 +27,14 @@ class LoginForm extends React.Component {
         }
     };
 
-    handleSubmit = (e) => {
+    handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields((err: Error, values: {username: String, password: String}) => {
             if (!err) {
                 Provider.post('/api/account/login/', {
                     username: values.username,
                     password: values.password
-                }).then((res) => {
+                }).then((res: AxiosResponse) => {
                     if (res.status === 200) {
                         AccountStore.fetch().then(() => {
                             console.table(AccountStore.user);
@@ -49,7 +58,7 @@ class LoginForm extends React.Component {
                             }
                         });
                     }
-                }).catch((err) => {
+                }).catch((err: Error) => {
                     notification.error({
                         message: '登录失败',
                         description: '用户名或密码错误'
@@ -69,7 +78,7 @@ class LoginForm extends React.Component {
     render() {
         const {getFieldDecorator} = this.props.form;
         return (
-            <Form onSubmit={this.handleSubmit}>
+            <Form onSubmit={(e) => this.handleSubmit(e)}>
                 <Form.Item>
                     {getFieldDecorator('username', {
                         rules: [{required: true, message: '请输入用户名'}],
@@ -97,12 +106,6 @@ class LoginForm extends React.Component {
     }
 }
 
-LoginForm.propTypes = {
-    match: PropTypes.object,
-    location: PropTypes.object,
-    history: PropTypes.object
-};
+const WrappedLoginForm = Form.create<LoginFormProps>({name: 'student_login'})(LoginForm);
 
-const WrappedLoginForm = Form.create({name: 'student_login'})(LoginForm);
-
-export default WrappedLoginForm;
+export default withRouter(WrappedLoginForm);

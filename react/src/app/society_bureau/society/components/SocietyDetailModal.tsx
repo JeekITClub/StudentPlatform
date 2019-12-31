@@ -1,4 +1,5 @@
 import React from 'react';
+import axios, { AxiosResponse } from 'axios';
 import {
     Modal,
     Spin,
@@ -9,9 +10,8 @@ import {
     Switch,
     notification
 } from 'antd';
-import PropTypes from 'prop-types';
 
-import Provider from '../../../../utils/provider'
+import Provider from '../../../../utils/provider';
 
 import {society_type} from '../../../../shared/constants';
 
@@ -21,7 +21,12 @@ const {TextArea} = Input;
 const InputGroup = Input.Group;
 
 
-class SocietyDetailModal extends React.Component {
+interface SocietyDetailModelProps {
+    societyId: Number,
+    closeModal: Function
+}
+
+class SocietyDetailModal extends React.Component<SocietyDetailModelProps> {
     state = {
         loading: true,
         society: {}
@@ -29,11 +34,11 @@ class SocietyDetailModal extends React.Component {
 
     componentDidMount() {
         this.setState({loading: true});
-        Provider.get(`/api/manage/society/${this.props.societyId}/`)
-            .then((res) => {
+        new Provider().get(`/api/manage/society/${this.props.societyId}/`)
+            .then((res: AxiosResponse) => {
                 this.setState({loading: false, society: res.data});
             })
-            .catch((e) => {
+            .catch((e: Error) => {
                 this.setState({loading: false});
                 console.log(e);
                 notification.error({
@@ -176,9 +181,5 @@ class SocietyDetailModal extends React.Component {
         )
     }
 }
-
-SocietyDetailModal.propTypes = {
-    societyId: PropTypes.number
-};
 
 export default SocietyDetailModal;

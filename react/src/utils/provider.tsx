@@ -1,9 +1,9 @@
-import axios from 'axios';
+import axios, { AxiosResponse, AxiosInstance } from 'axios';
 import {computed} from 'mobx';
 import {getCookie} from './cookie';
 
-const Provider = {
-    @computed get provider() {
+const Provider: any = {
+    get provider(): AxiosInstance {
         return axios.create({
             withCredentials: true,
             headers: {
@@ -12,27 +12,27 @@ const Provider = {
         })
     },
 
-    getInstance() {
+    getInstance(): AxiosInstance {
         return this.provider
     },
 
-    request(...args) {
+    request(...args: any) {
         return this.provider.request(...args)
     },
 
-    post(...args) {
+    post(...args: any) {
         return this.provider.post(...args)
     },
 
-    get(...args) {
+    get(...args: any) {
         return this.provider.get(...args)
     },
 
-    patch(...args) {
+    patch(...args: any) {
         return this.provider.patch(...args)
     },
 
-    delete(...args) {
+    delete(...args: any) {
         return this.provider.delete(...args)
     },
 };

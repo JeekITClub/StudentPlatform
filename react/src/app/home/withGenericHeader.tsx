@@ -1,5 +1,6 @@
 import React from 'react';
 import {Route, Switch} from "react-router-dom";
+import {match} from 'react-router';
 import Loadable from "react-loadable";
 import {Col, Row} from "antd";
 
@@ -14,7 +15,7 @@ import NotFound from "../../shared/NotFound/NotFound";
 import './styles/SocietyHome.scss';
 
 const Society = Loadable({
-    loader: () => import(/* webpackChunkName: "society" */'../society/index.js'),
+    loader: () => import(/* webpackChunkName: "society" */'../society/index'),
     loading: Loading,
 });
 
@@ -28,7 +29,7 @@ const StudentPage = Loadable({
     loading: Loading,
 });
 
-export default function withGenericHeader({match}) {
+export default function withGenericHeader({match: match}) {
     return (
         <div className="society-home-container">
             <GenericHeader/>

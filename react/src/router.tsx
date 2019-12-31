@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from "react";
 import {Route, HashRouter, Switch} from 'react-router-dom';
 import Loadable from 'react-loadable';
 import Loading from './shared/Loading';
@@ -6,7 +6,7 @@ import {LoginRequiredRoute} from "./shared/route";
 import AccountStore from "./shared/stores/AccountStore";
 
 const Home = Loadable({
-    loader: () => import(/* webpackChunkName: "home" */'./app/home/index.js'),
+    loader: () => import(/* webpackChunkName: "home" */'./app/home/index'),
     loading: Loading,
 });
 
