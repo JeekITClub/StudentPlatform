@@ -5,7 +5,10 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        index: './src/index.js',
+        index: './src/index.tsx',
+    },
+    resolve: {
+        extensions: ['.ts', '.tsx', '.js']
     },
     module: {
         rules: [
@@ -67,6 +70,8 @@ module.exports = {
                 test: /\.(jpe?g|png|gif|eot|woff|woff2|svg|ttf)([\?]?.*)$/i,
                 use: ['cache-loader', 'url-loader'],
             },
+            { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
+            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
         ],
     },
     optimization: {
@@ -82,4 +87,8 @@ module.exports = {
             chunks: 'all'
         }
     },
+    // externals: {
+    //     "react": "React",
+    //     "react-dom": "ReactDOM"
+    // }
 };
