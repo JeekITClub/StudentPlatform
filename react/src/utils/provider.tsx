@@ -24,11 +24,11 @@ const Provider: any = {
         return this.provider.post(...args)
     },
 
-    get(...args: any) {
+    get(...args: any) :Promise<AxiosResponse> {
         return this.provider.get(...args)
     },
 
-    patch(...args: any) {
+    patch(...args: any) :Primise {
         return this.provider.patch(...args)
     },
 

@@ -11,17 +11,6 @@ import Provider from '../../../../utils/provider'
 
 @observer
 class CreditContainer extends React.Component {
-    state = {
-        setAllModalVisible: false,
-        createCDModalVisible: false,
-        createCDBulk: false,
-        setAllCredit: 1
-    };
-
-    submitSetAllCredit = () => {
-        Provider.post()
-    };
-
     handleSearchButtonOnClick = () => {
         CreditStore.fetch({
             pageNum: CreditStore.pageNum,
@@ -31,42 +20,30 @@ class CreditContainer extends React.Component {
         })
     };
 
-    handleBulkCloseCreditDistribution = () => {
-        CreditStore.bulkCloseCD()
-    };
-
-    showCreateModal = (bulk) => {
-        this.setState({ createCDModalVisible: true, createCDBulk: bulk })
-    };
-
     render() {
         return (
             <>
                 <Form layout="inline">
                     <Form.Item>
-                        <Button onClick={() => this.showCreateModal(false)}>新建学分分配</Button>
+                        <Button onClick={() => CreditStore.showCreateModal(false)}>新建学分分配</Button>
                     </Form.Item>
                     <Form.Item>
-                        <Button onClick={() => this.showCreateModal(true)}>批量创建学分分配</Button>
+                        <Button onClick={() => CreditStore.showCreateModal(true)}>批量创建学分分配</Button>
                     </Form.Item>
                 </Form>
                 <Divider/>
                 <YearSemesterSelect
                     year={CreditStore.year}
                     semester={CreditStore.semester}
-                    yearOnChange={(value) => {
-                        CreditStore.year = value
-                    }}
-                    semesterOnChange={(value) => {
-                        CreditStore.semester = value
-                    }}
+                    yearOnChange={(value: number) => CreditStore.year = value}
+                    semesterOnChange={(value: number) => CreditStore.semester = value}
                     searchButtonOnClick={this.handleSearchButtonOnClick}
                 />
                 <Tooltip
                     title={(CreditStore.year && CreditStore.semester) ? "" : "未选择学年和学期时不可用"}
                     placement="bottom"
                 >
-                    <Button onClick={() => this.setState({ setAllModalVisible: true })}
+                    <Button onClick={() => Creidt.setAllModalVisible = true}
                             disabled={!(CreditStore.year && CreditStore.semester)}>
                         一键全部设置获得学分人数
                     </Button>
@@ -76,7 +53,7 @@ class CreditContainer extends React.Component {
                     placement="bottom"
                 >
                     <Popconfirm title="确定？" okText="是" cancelText="否"
-                                onOK={() => this.handleBulkCloseCreditDistribution}
+                                onConfirm={CreditStore.handleBulkCloseCreditDistribution()}
                     >
                         <Button
                             style={{ 'marginLeft': '10px' }}
@@ -87,20 +64,8 @@ class CreditContainer extends React.Component {
                     </Popconfirm>
                 </Tooltip>
                 <CreditDistributionList/>
-                {
-                    this.state.setAllModalVisible &&
-                    <CreditSetAllModal
-                        credit={this.state.setAllCredit}
-                        onChange={(value) => this.setState({ setAllCredit: value })}
-                        onCancel={() => this.setState({ setAllModalVisible: false })}
-                        onOk={() => this.submitSetAllCredit()}
-                    />
-                }
-                <CreditDistributionCreateModal
-                    bulk={this.state.createCDBulk}
-                    visible={this.state.createCDModalVisible}
-                    onCancel={()=> this.setState({createCDModalVisible: false})}
-                />
+                <CreditSetAllModal />
+                <CreditDistributionCreateModal />
             </>
         )
     }

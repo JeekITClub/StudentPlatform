@@ -21,7 +21,7 @@ class CreditDistributionList extends React.Component {
         editing: { id: 0, index: 0 }
     };
 
-    checkDetail = (id) => {
+    checkDetail = (id: number) => {
         if (CreditStore.detail) {
             CreditStore.detail.fetch({ id });
         } else {
@@ -30,7 +30,7 @@ class CreditDistributionList extends React.Component {
         CreditStore.checkingDetail = true;
     };
 
-    renderCheckReceiversDetail = (id) => {
+    renderCheckReceiversDetail = (id: number) => {
         return (
             <Button htmlType="button" onClick={() => {
                 this.checkDetail(id)

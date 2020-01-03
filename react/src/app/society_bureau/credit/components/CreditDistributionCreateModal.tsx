@@ -1,26 +1,26 @@
 import React from 'react';
 import {Modal, Form, Select, InputNumber, Divider, Button} from 'antd';
-import * as PropTypes from 'prop-types';
 import CreditStore from "../stores/CreditStore";
+import {AxiosResponse} from 'axios';
 
 class CreditDistributionCreateModal extends React.Component {
     state = {
         societies: [],
         selectedSocietiesIds: []
-    };
+    }
 
     componentDidMount() {
         CreditStore.fetchActiveSocieties()
-            .then((res) => {
+            .then((res: AxiosResponse) => {
                 this.setState({ societies: res.data })
             })
-            .catch((err) => {
+            .catch((err: Error) => {
                 throw err
             })
     }
 
     handleSelectAll = () => {
-        console.log(this.state.selectedSocietiesIds);
+        // console.log(this.state.selectedSocietiesIds);
         this.setState({
             selectedSocietiesIds: this.state.societies.map((society) => {
                 return society.id
@@ -36,8 +36,8 @@ class CreditDistributionCreateModal extends React.Component {
         return (
             <Modal
                 title="创建学分分配"
-                visible={this.props.visible}
-                onCancel={this.props.onCancel}
+                visible={CreditStore.createCDModalVisible}
+                onCancel={() => this.props.onCancel}
             >
                 <Form>
                     <Form.Item label="学年">
@@ -54,12 +54,12 @@ class CreditDistributionCreateModal extends React.Component {
                         </Select>
                     </Form.Item>
                     {
-                        !this.props.bulk &&
+                        !CreditStore.createCDBulk &&
                         <Form.Item label="选择社团">
                             <Select
                                 mode="multiple"
                                 value={this.state.selectedSocietiesIds}
-                                onChange={(value) => {
+                                onChange={(value: number[]) => {
                                     this.setState({ selectedSocietiesIds: value })
                                 }}
                             >
@@ -70,7 +70,6 @@ class CreditDistributionCreateModal extends React.Component {
                                     ))
                                 }
                             </Select>
-
                         </Form.Item>
                     }
                 </Form>
@@ -78,11 +77,5 @@ class CreditDistributionCreateModal extends React.Component {
         )
     }
 }
-
-CreditDistributionCreateModal.propTypes = {
-    visible: PropTypes.bool,
-    onCancel: PropTypes.func,
-    bulk: PropTypes.bool,
-};
 
 export default CreditDistributionCreateModal;

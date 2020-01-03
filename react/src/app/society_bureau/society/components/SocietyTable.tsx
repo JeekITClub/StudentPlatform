@@ -16,7 +16,7 @@ interface Society {
 
 class SocietyTable extends React.Component {
     state = {
-        societies: null,
+        societies: [],
         count: 0,
         editingSocietyId: 0,
         inspectModalVisible: false,
