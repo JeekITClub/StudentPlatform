@@ -284,7 +284,7 @@ class SocietyManageCreditTests(TestCase):
         }
         res = client.get(url, data=params, encode=True)
         self.assertEqual(res.status_code, 200)
-        self.assertEqual(res.data['year'], 2019)
+        self.assertEqual(res.data['year'], timezone.datetime.now().year)
         self.assertEqual(res.data['semester'], 1)
         self.assertEqual(len(res.data['available_receivers']), 2)
         self.assertEqual(res.data['available_receivers'][0]['name'], self.student1.name)
