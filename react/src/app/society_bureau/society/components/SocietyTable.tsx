@@ -1,27 +1,37 @@
 import React from 'react';
 import {Table, Tooltip, Button, notification, Divider} from 'antd';
-
+import { ColumnProps } from 'antd/es/table';
+import { PaginationProps } from 'antd/es/pagination/Pagination';
 import Provider from '../../../../utils/provider'
 import SocietyDetailModal from "./SocietyDetailModal";
+import { AxiosResponse, AxiosError } from 'axios';
+
+interface Society {
+    id: number,
+    society_id: number,
+    president_name: string,
+    president_class: number
+}
+
 
 class SocietyTable extends React.Component {
     state = {
-        societies: [],
+        societies: null,
         count: 0,
         editingSocietyId: 0,
         inspectModalVisible: false,
         modifyModalVisible: false
     };
 
-    getSocieties = (pageNum, pageSize) => {
+    getSocieties = (pageNum: Number, pageSize: Number) => {
         Provider.get('/api/manage/society/', {
             params: {
                 page: pageNum,
                 page_size: pageSize
             }
-        }).then((res) => {
+        }).then((res: AxiosResponse) => {
             this.setState({societies: res.data['results'], count: res.data['count']});
-        }).catch((err) => {
+        }).catch((err: AxiosError) => {
             notification.error({
                 message: 'Oops...',
                 description: '获取社团列表失败了，请检查你的网络',
@@ -29,11 +39,11 @@ class SocietyTable extends React.Component {
         })
     };
 
-    handleInspectButtonClick = (row) => {
+    handleInspectButtonClick = (row: Society) => {
         this.setState({inspectModalVisible: true, editingSocietyId: row.id});
     };
 
-    handleModifyButtonClick = (row) => {
+    handleModifyButtonClick = (row: Society) => {
         this.setState({modifyModalVisible: true, editingSocietyId: row.id});
     };
 
@@ -41,7 +51,7 @@ class SocietyTable extends React.Component {
         this.setState({inspectModalVisible: false, modifyModalVisible: false})
     };
 
-    renderPresidentTooltip = (president_name, index) => {
+    renderPresidentTooltip = (president_name: string, index: number) => {
         const row = this.state.societies[index];
         return (
             <Tooltip title={`${row.president_grade}级 ${row.president_class}班 ${row.president_name}`}>
@@ -50,7 +60,7 @@ class SocietyTable extends React.Component {
         )
     };
 
-    renderInspectButton = (index) => {
+    renderInspectButton = (index: Society) => {
         return (
             <span>
               <a href="javascript:;" onClick={() => this.handleInspectButtonClick(index)}>详细</a>
@@ -60,7 +70,7 @@ class SocietyTable extends React.Component {
         )
     };
 
-    onPaginationChange = (pagination) => {
+    onPaginationChange = (pagination: PaginationProps) => {
         this.getSocieties(pagination.current, pagination.pageSize);
     };
 
@@ -69,7 +79,7 @@ class SocietyTable extends React.Component {
     }
 
     render() {
-        const columns = [
+        const columns: ColumnProps<Society>[] = [
             {
                 title: '社团ID',
                 dataIndex: 'society_id',
@@ -84,12 +94,12 @@ class SocietyTable extends React.Component {
                 title: '社长姓名',
                 dataIndex: 'president_name',
                 key: 'president_name',
-                render: (text, _, index) => this.renderPresidentTooltip(text, index)
+                render: (text: Society["president_name"], _: any, index: number) => this.renderPresidentTooltip(text, index)
             },
             {
                 title: '操作',
                 key: 'inspect',
-                render: (row) => this.renderInspectButton(row)
+                render: (row: any) => this.renderInspectButton(row)
             }
         ];
 
@@ -105,13 +115,16 @@ class SocietyTable extends React.Component {
                        rowKey="id"/>
                 {
                     this.state.inspectModalVisible &&
-                    <SocietyDetailModal societyId={this.state.editingSocietyId}
-                                        closeModal={() => this.handleCloseModal()}/>
+                    <SocietyDetailModal
+                    societyId={this.state.editingSocietyId}
+                    closeModal={() => this.handleCloseModal()}/>
                 }
                 {
                     this.state.modifyModalVisible &&
-                    <SocietyDetailModal societyId={this.state.editingSocietyId}
-                                        closeModal={() => this.handleCloseModal()}/>
+                    <SocietyDetailModal 
+                    societyId={this.state.editingSocietyId}
+                    closeModal={() => this.handleCloseModal()}
+                    />
                 }
             </div>
         )

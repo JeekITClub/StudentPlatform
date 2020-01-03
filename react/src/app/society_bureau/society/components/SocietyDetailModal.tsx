@@ -34,7 +34,7 @@ class SocietyDetailModal extends React.Component<SocietyDetailModelProps> {
 
     componentDidMount() {
         this.setState({loading: true});
-        new Provider().get(`/api/manage/society/${this.props.societyId}/`)
+        Provider.get(`/api/manage/society/${this.props.societyId}/`)
             .then((res: AxiosResponse) => {
                 this.setState({loading: false, society: res.data});
             })
@@ -171,7 +171,6 @@ class SocietyDetailModal extends React.Component<SocietyDetailModelProps> {
             </Modal>
         )
     };
-
 
     render() {
         return (

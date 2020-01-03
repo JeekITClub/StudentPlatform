@@ -4,9 +4,17 @@ import Loadable from 'react-loadable';
 import Loading from './shared/Loading';
 import {LoginRequiredRoute} from "./shared/route";
 import AccountStore from "./shared/stores/AccountStore";
+import StudentTable from "./app/society_bureau/students/components/StudentTable";
+import ApolloClient from './utils/ApolloClient';
+import {ApolloProvider} from "react-apollo";
 
 const Home = Loadable({
     loader: () => import(/* webpackChunkName: "home" */'./app/home/index'),
+    loading: Loading,
+});
+
+const newHome = Loadable({
+    loader: () => import(/* webpackChunkName: "home" */'./app/home/new_index'),
     loading: Loading,
 });
 
@@ -34,11 +42,14 @@ class AppRouter extends React.Component {
         return (
             <MyRouter>
                 <div style={{height: '100%'}}>
+                <ApolloProvider client={ApolloClient}>
                     <Switch>
                         <LoginRequiredRoute path="/manage" component={SocietyBureau}/>
                         <LoginRequiredRoute path="/admin_society" component={AdminSociety}/>
-                        <Route path="" component={Home}/>
+                        <Route path="/test" component={StudentTable} />
+                        <Route path="" component={newHome}/>
                     </Switch>
+                    </ApolloProvider>
                 </div>
             </MyRouter>
         );
