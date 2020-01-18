@@ -2,6 +2,7 @@ import {observable, action} from "mobx";
 import ListStore from '../../../../shared/stores/ListStore';
 import Provider from '../../../../utils/provider';
 import {AxiosResponse} from 'axios';
+import { ProvidedRequiredArguments } from "graphql/validation/rules/ProvidedRequiredArguments";
 
 class CreditStore extends ListStore {
     url = '/api/manage/credit/';
@@ -20,20 +21,26 @@ class CreditStore extends ListStore {
     };
 
     @action fetchActiveSocieties: any = () => {
-        Provider.get('/api/manage/society/all/')
+        return Provider.get('/api/manage/society/all/')
     }
 
     @action createCreditDistribution = () => {
+        Provider.post(`${this.url}`)
+            .then((res: AxiosResponse) => {})
+            .catch((err: Error) => {})
+    }
 
+    @action bulkCreateCreditDistribution = () => {
+        Provider.post('')
     }
 
     @action submitSetAllCredit = () => {
-
+        Provider.post('/api/manage/')
     }
 
     @action showCreateModal = (bulk: boolean) => {
         this.createCDModalVisible = true;
-        this. createCDBulk = bulk
+        this.createCDBulk = bulk
     }
 
     @action handleBulkCloseCreditDistribution: any = () => {

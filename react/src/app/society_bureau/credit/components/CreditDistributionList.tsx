@@ -21,6 +21,10 @@ class CreditDistributionList extends React.Component {
         editing: { id: 0, index: 0 }
     };
 
+    hello = (id: Number) : Number => {
+        return 2
+    }
+
     checkDetail = (id: number) => {
         if (CreditStore.detail) {
             CreditStore.detail.fetch({ id });

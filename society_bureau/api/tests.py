@@ -311,18 +311,18 @@ class CreditReceiversTests(TestCase):
         self.assertEqual(len(response.data['receivers']), 1)
         self.assertEqual(response.data['receivers'][0]['name'], self.student.name)
 
-    def test_create_credit_distribution(self):
-        url = '/api/manage/credit/'
+    def test_manual_create_credit_distribution(self):
+        url = '/api/manage/credit/manual_create/'
         data = {
-            'society_id': 401,
-            'credit': 5
+            'society_ids': [401],
+            'year': SettingsService.get('year'),
+            'semester': SettingsService.get('semester')
         }
 
         client = APIClient(enforce_csrf_checks=True)
         client.force_authenticate(self.user3)
         response = client.post(url, data=data, decode=True)
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.data['credit'], 5)
 
     def test_update_credit_distribution(self):
         cd = CreditDistribution.objects.create(

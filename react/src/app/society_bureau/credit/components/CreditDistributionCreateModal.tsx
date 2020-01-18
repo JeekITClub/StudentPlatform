@@ -2,11 +2,20 @@ import React from 'react';
 import {Modal, Form, Select, InputNumber, Divider, Button} from 'antd';
 import CreditStore from "../stores/CreditStore";
 import {AxiosResponse} from 'axios';
+import { observer } from 'mobx-react';
 
-class CreditDistributionCreateModal extends React.Component {
+type CDCreateaModalState =  {
+    year: number,
+    semester: number
+}
+
+@observer
+class CreditDistributionCreateModal extends React.Component<CDCreateaModalState> {
     state = {
         societies: [],
-        selectedSocietiesIds: []
+        selectedSocietiesIds: [],
+        year: 2019,
+        semester: 1
     }
 
     componentDidMount() {
@@ -37,18 +46,34 @@ class CreditDistributionCreateModal extends React.Component {
             <Modal
                 title="创建学分分配"
                 visible={CreditStore.createCDModalVisible}
-                onCancel={() => this.props.onCancel}
+                onOk={() => {
+                    if (CreditStore.createCDBulk) {
+                        CreditStore.bulkCreateCreditDistribution()
+                    } else {
+                        CreditStore.createCreditDistribution()
+                    }
+                }}
+                onCancel={() => CreditStore.createCDModalVisible = false}
             >
                 <Form>
                     <Form.Item label="学年">
-                        <InputNumber precision={0} min={2019} style={{ 'width': '100%' }}/>
+                        <InputNumber
+                            precision={0}
+                            min={2019}
+                            style={{ 'width': '100%' }}
+                            value={this.state.year}
+                            onChange={(value) => this.setState({year: value})}
+                        />
                     </Form.Item>
                     <Form.Item label="学期">
-                        <Select>
-                            <Select.Option value="1">
+                        <Select value={this.state.semester}
+                        onChange={(value: number) => {
+                            this.setState({semester: value})
+                        }}>
+                            <Select.Option value={1}>
                                 第一学期
                             </Select.Option>
-                            <Select.Option value="2">
+                            <Select.Option value={2}>
                                 第二学期
                             </Select.Option>
                         </Select>

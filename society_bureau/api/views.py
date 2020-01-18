@@ -150,7 +150,6 @@ class SocietyManageViewSet(
 
 class CreditManageViewSet(
     viewsets.GenericViewSet,
-    mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
     generics.UpdateAPIView,
     mixins.ListModelMixin,
@@ -161,8 +160,6 @@ class CreditManageViewSet(
     def get_serializer_class(self):
         if self.action == 'retrieve':
             return CreditDistributionSerializer
-        elif self.action == 'create':
-            return CreditDistributionManualCreateSerializer
         return CreditDistributionMiniSerializer
 
     def get_queryset(self):
@@ -199,6 +196,25 @@ class CreditManageViewSet(
                 return Response(status=status.HTTP_200_OK)
             return Response(status=status.HTTP_404_NOT_FOUND)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['post'])
+    def manual_create(self, request):
+        society_id_set = request.data.get('society_ids', None)
+        credit = request.data.get('credit')
+        for society_id in society_id_set:
+            serializer = CreditDistributionManualCreateSerializer(data={
+                society_id: society_id,
+                credit: credit
+            })
+            if serializer.is_valid():
+                serializer.save()
+            else:
+                return Response(
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        return Response(
+            status=status.HTTP_201_CREATED
+        )
 
 
 class SettingsViewSet(
