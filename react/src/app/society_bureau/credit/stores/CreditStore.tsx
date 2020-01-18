@@ -2,7 +2,6 @@ import {observable, action} from "mobx";
 import ListStore from '../../../../shared/stores/ListStore';
 import Provider from '../../../../utils/provider';
 import {AxiosResponse} from 'axios';
-import { ProvidedRequiredArguments } from "graphql/validation/rules/ProvidedRequiredArguments";
 
 class CreditStore extends ListStore {
     url = '/api/manage/credit/';
