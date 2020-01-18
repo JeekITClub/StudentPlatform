@@ -3,17 +3,19 @@ import {Modal, Form, Select, InputNumber, Divider, Button} from 'antd';
 import CreditStore from "../stores/CreditStore";
 import {AxiosResponse} from 'axios';
 import { observer } from 'mobx-react';
+import {Society} from '../../../../types';
 
-type CDCreateaModalState =  {
+type CDCreateModalState = {
+    societies: Society[] | null,
+    selectedSocietySocietyIdSet: Number[],
     year: number,
     semester: number
 }
 
-@observer
-class CreditDistributionCreateModal extends React.Component<CDCreateaModalState> {
+class CreditDistributionCreateModal extends React.Component<{}, CDCreateModalState> {
     state = {
-        societies: [],
-        selectedSocietiesIds: [],
+        societies: null,
+        selectedSocietySocietyIdSet: [],
         year: 2019,
         semester: 1
     }
@@ -29,16 +31,15 @@ class CreditDistributionCreateModal extends React.Component<CDCreateaModalState>
     }
 
     handleSelectAll = () => {
-        // console.log(this.state.selectedSocietiesIds);
         this.setState({
-            selectedSocietiesIds: this.state.societies.map((society) => {
-                return society.id
+            selectedSocietySocietyIdSet: this.state.societies.map((society) => {
+                return society.society_id
             })
         });
     };
 
     handleClear = () => {
-        this.setState({ selectedSocietiesIds: [] })
+        this.setState({ selectedSocietySocietyIdSet: [] })
     };
 
     render() {
@@ -50,7 +51,11 @@ class CreditDistributionCreateModal extends React.Component<CDCreateaModalState>
                     if (CreditStore.createCDBulk) {
                         CreditStore.bulkCreateCreditDistribution()
                     } else {
-                        CreditStore.createCreditDistribution()
+                        CreditStore.createCreditDistribution({
+                            year: this.state.year,
+                            semester: this.state.semester,
+                            society_id_set: this.state.selectedSocietySocietyIdSet
+                        })
                     }
                 }}
                 onCancel={() => CreditStore.createCDModalVisible = false}
@@ -83,15 +88,15 @@ class CreditDistributionCreateModal extends React.Component<CDCreateaModalState>
                         <Form.Item label="选择社团">
                             <Select
                                 mode="multiple"
-                                value={this.state.selectedSocietiesIds}
+                                value={this.state.selectedSocietySocietyIdSet}
                                 onChange={(value: number[]) => {
-                                    this.setState({ selectedSocietiesIds: value })
+                                    this.setState({ selectedSocietySocietyIdSet: value })
                                 }}
                             >
                                 {
-                                    this.state.societies.map((society) => (
-                                        <Select.Option value={society.id}
-                                                       key={society.id}>{society.id} - {society.name}</Select.Option>
+                                    this.state.societies &&this.state.societies.map((society) => (
+                                        <Select.Option value={society.society_id}
+                                                       key={society.society_id}>{society.society_id} - {society.name}</Select.Option>
                                     ))
                                 }
                             </Select>
@@ -103,4 +108,4 @@ class CreditDistributionCreateModal extends React.Component<CDCreateaModalState>
     }
 }
 
-export default CreditDistributionCreateModal;
+export default observer(CreditDistributionCreateModal);

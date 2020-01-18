@@ -199,15 +199,17 @@ class CreditManageViewSet(
 
     @action(detail=False, methods=['post'])
     def manual_create(self, request):
-        society_id_set = request.data.get('society_ids', None)
-        credit = request.data.get('credit')
+        society_id_set = request.data.getlist('society_id_set', None)
+        semester = request.data.get('semester')
+        year = request.data.get('year', None)
         for society_id in society_id_set:
             serializer = CreditDistributionManualCreateSerializer(data={
-                society_id: society_id,
-                credit: credit
+                'society_id': society_id,
+                'year': year,
+                'semester': semester
             })
             if serializer.is_valid():
-                serializer.save()
+                serializer.save()        
             else:
                 return Response(
                     status=status.HTTP_400_BAD_REQUEST

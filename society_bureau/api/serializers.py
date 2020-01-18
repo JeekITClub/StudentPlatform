@@ -98,10 +98,10 @@ class CreditDistributionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CreditDistributionManualCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model= CreditDistribution
-        fields = ('society_id', 'year', 'semester')
+class CreditDistributionManualCreateSerializer(serializers.Serializer):
+    society_id = serializers.IntegerField()
+    year = serializers.IntegerField()
+    semester = serializers.IntegerField()
 
     def validate_society_id(self, society_id):
         if Society.objects.filter(society_id=society_id).exists():
@@ -114,6 +114,13 @@ class CreditDistributionManualCreateSerializer(serializers.ModelSerializer):
         if credit < 0:
             raise serializers.ValidationError("Credit must be bigger than zero")
         return credit
+
+    def create(self, validated_data):
+        return CreditDistribution.objects.create(
+            year=validated_data['year'],
+            semester=validated_data['semester'],
+            society=Society.objects.get(society_id=validated_data['society_id'])
+        )
 
 
 class CreditDistributionBulkCreateSerializer(serializers.Serializer):

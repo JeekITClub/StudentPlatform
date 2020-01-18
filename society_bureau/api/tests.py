@@ -314,7 +314,7 @@ class CreditReceiversTests(TestCase):
     def test_manual_create_credit_distribution(self):
         url = '/api/manage/credit/manual_create/'
         data = {
-            'society_ids': [401],
+            'society_id_set': [self.society1.society_id, self.society2.society_id],
             'year': SettingsService.get('year'),
             'semester': SettingsService.get('semester')
         }
@@ -323,6 +323,12 @@ class CreditReceiversTests(TestCase):
         client.force_authenticate(self.user3)
         response = client.post(url, data=data, decode=True)
         self.assertEqual(response.status_code, 201)
+        cd_set = CreditDistribution.objects.filter(
+            year=SettingsService.get('year'),
+            semester=SettingsService.get('semester')
+        )
+        self.assertEqual(cd_set[0].society, self.society1)
+        self.assertEqual(cd_set[1].society, self.society2)
 
     def test_update_credit_distribution(self):
         cd = CreditDistribution.objects.create(

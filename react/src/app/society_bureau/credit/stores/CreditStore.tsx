@@ -24,8 +24,12 @@ class CreditStore extends ListStore {
         return Provider.get('/api/manage/society/all/')
     }
 
-    @action createCreditDistribution = () => {
-        Provider.post(`${this.url}`)
+    @action createCreditDistribution = ({year, semester, society_id_set}: {year: Number, semester: Number, society_id_set: Number[]}) => {
+        Provider.post(`${this.url}manual_create/`, {
+            year,
+            semester,
+            society_id_set
+        })
             .then((res: AxiosResponse) => {})
             .catch((err: Error) => {})
     }
