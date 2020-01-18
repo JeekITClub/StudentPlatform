@@ -100,10 +100,8 @@ class CreditDistributionSerializer(serializers.ModelSerializer):
 
 class CreditDistributionManualCreateSerializer(serializers.Serializer):
     society_id = serializers.IntegerField()
-    credit = serializers.IntegerField()
-
-    class Meta:
-        fields = ('society_id', 'credit')
+    year = serializers.IntegerField()
+    semester = serializers.IntegerField()
 
     def validate_society_id(self, society_id):
         if Society.objects.filter(society_id=society_id).exists():
@@ -119,10 +117,9 @@ class CreditDistributionManualCreateSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         return CreditDistribution.objects.create(
-            society=Society.objects.get(society_id=validated_data['society_id']),
-            credit=self.validated_data['credit'],
-            semester=SettingsService.get('semester'),
-            year=SettingsService.get('year')
+            year=validated_data['year'],
+            semester=validated_data['semester'],
+            society=Society.objects.get(society_id=validated_data['society_id'])
         )
 
 

@@ -5,7 +5,7 @@ import Loadable from "react-loadable";
 import {Col, Row} from "antd";
 
 import GenericHeader from "./components/GenericHeader";
-import Login from "./containers/Login";
+import Login from './containers/Login';
 import Home from "./containers/Home";
 import WrappedChangePasswordForm from "../../shared/change_password/ChangePasswordForm";
 

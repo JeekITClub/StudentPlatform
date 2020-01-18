@@ -40,7 +40,7 @@ class CreditDistributionList extends React.Component {
         )
     };
 
-    renderClosedSwitch = (open, id, index) => {
+    renderClosedSwitch = (open: boolean, id: number, index: number) => {
         return (
             <Switch checked={open} onChange={(checked) => this.handleUpdateClosed(checked, id, index)}/>
         )
