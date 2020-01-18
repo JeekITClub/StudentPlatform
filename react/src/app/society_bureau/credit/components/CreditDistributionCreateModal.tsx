@@ -7,7 +7,7 @@ import {Society} from '../../../../types';
 
 type CDCreateModalState = {
     societies: Society[] | null,
-    selectedSocietySocietyIdSet: Number[],
+    selectedSocietySocietyIdSet: number[],
     year: number,
     semester: number
 }
@@ -64,7 +64,6 @@ class CreditDistributionCreateModal extends React.Component<{}, CDCreateModalSta
                     <Form.Item label="学年">
                         <InputNumber
                             precision={0}
-                            min={2019}
                             style={{ 'width': '100%' }}
                             value={this.state.year}
                             onChange={(value) => this.setState({year: value})}
@@ -91,7 +90,6 @@ class CreditDistributionCreateModal extends React.Component<{}, CDCreateModalSta
                                 value={this.state.selectedSocietySocietyIdSet}
                                 onChange={(value: number[]) => {
                                     this.setState({ selectedSocietySocietyIdSet: value })
-                                }}
                             >
                                 {
                                     this.state.societies &&this.state.societies.map((society) => (

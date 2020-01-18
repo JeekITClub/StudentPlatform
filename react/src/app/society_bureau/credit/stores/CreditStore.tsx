@@ -1,7 +1,7 @@
 import {observable, action} from "mobx";
 import ListStore from '../../../../shared/stores/ListStore';
 import Provider from '../../../../utils/provider';
-import {AxiosResponse} from 'axios';
+import {AxiosResponse, AxiosError} from 'axios';
 
 class CreditStore extends ListStore {
     url = '/api/manage/credit/';
@@ -16,21 +16,21 @@ class CreditStore extends ListStore {
     @action bulkCloseCD : any = () => {
         Provider.post(`${this.url}bulkClose`)
             .then((res: AxiosResponse) => {})
-            .catch((err: Error) => {throw err})
+            .catch((err: AxiosError) => {throw err})
     };
 
     @action fetchActiveSocieties: any = () => {
         return Provider.get('/api/manage/society/all/')
     }
 
-    @action createCreditDistribution = ({year, semester, society_id_set}: {year: Number, semester: Number, society_id_set: Number[]}) => {
+    @action createCreditDistribution = ({year, semester, society_id_set}: {year: number, semester: number, society_id_set: number[]}) => {
         Provider.post(`${this.url}manual_create/`, {
             year,
             semester,
             society_id_set
         })
             .then((res: AxiosResponse) => {})
-            .catch((err: Error) => {})
+            .catch((err: AxiosError) => {})
     }
 
     @action bulkCreateCreditDistribution = () => {
