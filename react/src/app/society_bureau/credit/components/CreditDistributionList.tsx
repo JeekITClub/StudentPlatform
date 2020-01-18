@@ -21,10 +21,6 @@ class CreditDistributionList extends React.Component {
         editing: { id: 0, index: 0 }
     };
 
-    hello = (id: Number) : Number => {
-        return 2
-    }
-
     checkDetail = (id: number) => {
         if (CreditStore.detail) {
             CreditStore.detail.fetch({ id });
@@ -44,7 +40,7 @@ class CreditDistributionList extends React.Component {
         )
     };
 
-    renderClosedSwitch = (open, id, index) => {
+    renderClosedSwitch = (open: boolean, id: Number, index: Number) => {
         return (
             <Switch checked={open} onChange={(checked) => this.handleUpdateClosed(checked, id, index)}/>
         )
