@@ -88,11 +88,11 @@ class AdminLayout extends React.Component {
                         </Row>
                     </Col>
                 </Row>
-                <Row>
-                    <Col>
-                        {this.props.footer}
-                    </Col>
-                </Row>
+                {/*<Row>*/}
+                {/*    <Col>*/}
+                {/*        {this.props.footer}*/}
+                {/*    </Col>*/}
+                {/*</Row>*/}
             </div>
         )
     }
