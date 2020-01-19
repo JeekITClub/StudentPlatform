@@ -36,4 +36,4 @@ class AdminSocietyStore {
   }
 }
 
-export default new AdminSocietyStore;
+export default new AdminSocietyStore();
