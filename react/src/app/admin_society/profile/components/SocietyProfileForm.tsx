@@ -34,10 +34,6 @@ function hasErrors(fieldsError: any) {
 
 @observer
 class SocietyProfileForm extends Component<SocietyProfileProps, any> {
-  componentDidMount() {
-    this.props.form.validateFields();
-  }
-
   handleSubmit = (e: FormEvent): void => {
     e.preventDefault();
     this.props.form.validateFields((err: object, values: any) => {
@@ -60,7 +56,7 @@ class SocietyProfileForm extends Component<SocietyProfileProps, any> {
     const {getFieldDecorator, getFieldsError} = this.props.form;
 
     return (
-      <Spin spinning={AdminSocietyStore.loading}>
+      <Spin spinning={AdminSocietyStore.loading} tip="提交中...">
         <Form layout="vertical">
           <Divider>基本信息</Divider>
 
@@ -91,6 +87,7 @@ class SocietyProfileForm extends Component<SocietyProfileProps, any> {
               <Form.Item label="社团名称">
                 {getFieldDecorator('name', {
                   initialValue: AdminSocietyStore.society?.name,
+                  rules: [{required: true, message: '社团名称不可以为空'}]
                 })(<Input/>)}
               </Form.Item>
             </Col>
@@ -123,6 +120,7 @@ class SocietyProfileForm extends Component<SocietyProfileProps, any> {
               <Form.Item label="姓名">
                 {getFieldDecorator('president_name', {
                   initialValue: AdminSocietyStore.society?.president_name,
+                  rules: [{required: true, message: '社长姓名不可以为空'}]
                 })(<Input/>)}
               </Form.Item>
             </Col>
@@ -130,6 +128,7 @@ class SocietyProfileForm extends Component<SocietyProfileProps, any> {
               <Form.Item label="年级">
                 {getFieldDecorator('president_grade', {
                   initialValue: AdminSocietyStore.society?.president_grade,
+                  rules: [{required: true, message: '社长年级不可以为空'}]
                 })(
                   <InputNumber
                     min={1944}
@@ -144,6 +143,7 @@ class SocietyProfileForm extends Component<SocietyProfileProps, any> {
               <Form.Item label="班级">
                 {getFieldDecorator('president_class', {
                   initialValue: AdminSocietyStore.society?.president_class,
+                  rules: [{required: true, message: '社长班级不可以为空'}]
                 })(
                   <Select>
                     {this.renderGradeOptions()}
@@ -159,6 +159,7 @@ class SocietyProfileForm extends Component<SocietyProfileProps, any> {
               <Form.Item label="手机">
                 {getFieldDecorator('president_phone', {
                   initialValue: AdminSocietyStore.society?.president_phone,
+                  rules: [{required: true, message: '社长手机不可以为空'}]
                 })(<Input/>)}
               </Form.Item>
             </Col>
@@ -166,6 +167,7 @@ class SocietyProfileForm extends Component<SocietyProfileProps, any> {
               <Form.Item label="微信/QQ">
                 {getFieldDecorator('president_qq', {
                   initialValue: AdminSocietyStore.society?.president_qq,
+                  rules: [{required: true, message: '社长微信/QQ不可以为空'}]
                 })(<Input placeholder="或者其他联系方式"/>)}
               </Form.Item>
             </Col>
