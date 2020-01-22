@@ -159,6 +159,9 @@ class SocietyProfileViewSet(
             return UploadAvatarSerializer
         return SocietyProfileSerializer
 
+    # Override this method so that the object
+    # will always be the Society of the current user.
+    # Ignore any other query params.
     def get_object(self):
         # only get request user's object
         queryset = self.get_queryset()

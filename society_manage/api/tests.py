@@ -383,20 +383,58 @@ class SocietyProfileTests(TestCase):
     def test_retrieve_profile(self):
         url = '/api/society_manage/profile/'
         client = APIClient(enforce_csrf_checks=True)
-        client.force_authenticate(self.society_user1)
 
-        res = client.get(url, decode=True)
-        print(res.data['results'])
+        # without login
+        res = client.get(url)
+        self.assertEqual(res.status_code, 403)
+
+        # society not active
+        client.force_authenticate(self.society_user1)
+        res = client.get(url)
+        self.assertEqual(res.status_code, 403)
+
+        self.society1.status = SocietyStatus.ACTIVE
+        self.society1.save()
+        res = client.get(url)
+        self.assertEqual(res.status_code, 200)
+        print(res.data['id'], self.society1.pk)
+        print(res.data['society_id'], self.society1.society_id)
 
 
     def test_update_profile(self):
-        url = '/api/society_manage/profile/{}/'.format(self.society1)
+        url1 = '/api/society_manage/profile/{}/'.format(self.society1.pk)
+        url2 = '/api/society_manage/profile/{}/'.format(self.society2.pk)
+        client = APIClient(enforce_csrf_checks=True)
         data = {
             'name': 'test',
             'type': SocietyType.SCIENTIFIC,
             'status': SocietyStatus.ARCHIVED
         }
-        print(self.society1.status)
+
+        # without login
+        res = client.patch(url1, data=data)
+        self.assertEqual(res.status_code, 403)
+
+        # society not active
+        client.force_authenticate(self.society_user1)
+        self.assertEqual(res.status_code, 403)
+
+        self.society1.status = SocietyStatus.ACTIVE
+        self.society1.save()
+        self.society2.status = SocietyStatus.ACTIVE
+        self.society2.save()
+
+        # modify others' profile
+        res = client.patch(url2, data=data)
+        self.society2.refresh_from_db()
+        self.assertEqual(self.society2.name, 'jeek1')
+
+        res = client.patch(url1, data=data)
+        self.society1.refresh_from_db()
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(self.society1.name, 'test')
+        self.assertEqual(self.society1.type, SocietyType.HUMANISTIC)
+        self.assertEqual(self.society1.status, SocietyStatus.ACTIVE)
 
     def test_upload_avatar(self):
         url = '/api/society_manage/profile/upload_avatar/'
