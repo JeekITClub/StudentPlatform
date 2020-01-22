@@ -8,7 +8,8 @@ import {
   Divider,
   Tooltip,
   InputNumber,
-  Switch
+  Switch,
+  Spin
 } from 'antd';
 import {observer} from "mobx-react";
 import React, {Component, FormEvent} from "react";
@@ -59,7 +60,7 @@ class SocietyProfileForm extends Component<SocietyProfileProps, any> {
     const {getFieldDecorator, getFieldsError} = this.props.form;
 
     return (
-      <div>
+      <Spin spinning={AdminSocietyStore.loading}>
         <Form layout="vertical">
           <Divider>基本信息</Divider>
 
@@ -246,7 +247,7 @@ class SocietyProfileForm extends Component<SocietyProfileProps, any> {
             保存
           </Button>
         </div>
-      </div>
+      </Spin>
     );
   }
 }
