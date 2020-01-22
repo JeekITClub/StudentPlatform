@@ -7,6 +7,7 @@ from society.models import JoinSocietyRequest, ActivityRequest, Society
 from society_manage.models import CreditDistribution
 from society.constants import AVATAR_MAX_SIZE
 
+
 class JoinSocietyRequestSerializer(serializers.ModelSerializer):
     member = StudentMiniSerializer()
 
@@ -58,7 +59,17 @@ class SocietyProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Society
         fields = '__all__'
-        read_only_fields = ('id', 'society_id', 'avatar')
+        read_only_fields = (
+            'id',
+            'user',
+            'society_id',
+            'type',
+            'status',
+            'avatar',
+            'established_time',
+            'password_changed',
+            'assistant'
+        )
 
 
 class UploadAvatarSerializer(serializers.ModelSerializer):

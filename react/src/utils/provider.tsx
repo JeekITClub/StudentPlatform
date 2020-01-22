@@ -28,7 +28,7 @@ const Provider = {
         return this.provider.get(...args)
     },
 
-    patch(...args: any) :Primise {
+    patch(...args: any) :Promise<AxiosResponse> {
         return this.provider.patch(...args)
     },
 

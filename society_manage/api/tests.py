@@ -5,7 +5,7 @@ from rest_framework.test import APIClient
 from django.utils import timezone
 from testing.testcases import TestCase
 
-from society.constants import SocietyType, JoinSocietyRequestStatus, ActivityRequestStatus
+from society.constants import SocietyType, SocietyStatus, JoinSocietyRequestStatus, ActivityRequestStatus
 from society.models import JoinSocietyRequest, ActivityRequest
 from society_manage.models import CreditDistribution
 from society_bureau.api.services import SettingsService
@@ -360,15 +360,43 @@ class SocietyManageCreditTests(TestCase):
 
 class SocietyProfileTests(TestCase):
     def setUp(self):
-        self.society_user = self.createUser(
+        self.society_user1 = self.createUser(
             username='101'
         )
-        self.society = self.createSociety(
-            user=self.society_user,
+        self.society_user2 = self.createUser(
+            username='201'
+        )
+        self.society1 = self.createSociety(
+            user=self.society_user1,
             members=None,
             society_id=101,
             society_type=SocietyType.HUMANISTIC
         )
+
+        self.society2 = self.createSociety(
+            user=self.society_user2,
+            members=None,
+            society_id=201,
+            society_type=SocietyType.SELFRELIANCE
+        )
+
+    def test_retrieve_profile(self):
+        url = '/api/society_manage/profile/'
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(self.society_user1)
+
+        res = client.get(url, decode=True)
+        print(res.data['results'])
+
+
+    def test_update_profile(self):
+        url = '/api/society_manage/profile/{}/'.format(self.society1)
+        data = {
+            'name': 'test',
+            'type': SocietyType.SCIENTIFIC,
+            'status': SocietyStatus.ARCHIVED
+        }
+        print(self.society1.status)
 
     def test_upload_avatar(self):
         url = '/api/society_manage/profile/upload_avatar/'
@@ -387,14 +415,14 @@ class SocietyProfileTests(TestCase):
         }
 
         client = APIClient(enforce_csrf_checks=True)
-        client.force_authenticate(self.society_user)
+        client.force_authenticate(self.society_user1)
 
         res = client.post(url, data=data, decode=True)
         self.assertEqual(res.status_code, 202)
-        self.society.refresh_from_db()
+        self.society1.refresh_from_db()
 
         cropped_img = Image.open(cropped_file)
-        server_img = Image.open(self.society.avatar)
+        server_img = Image.open(self.society1.avatar)
         diff = ImageChops.difference(cropped_img, server_img)
 
         self.assertIsNone(diff.getbbox())

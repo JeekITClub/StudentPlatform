@@ -17,31 +17,13 @@ import {FormComponentProps} from "antd/es/form";
 import '../../styles/SocietyProfileForm.scss';
 
 import AdminSocietyStore from "../../stores/AdminSocietyStore";
+import {ISociety} from '../../../../types';
 
 
 const {Option} = Select;
 const {TextArea} = Input;
 
-interface SocietyProfileProps extends FormComponentProps {
-  society_id: number,
-  name: string,
-  introduction: string,
-  president_name: string,
-  president_grade: number,
-  president_class: number,
-  president_qq: string,
-  president_phone: string,
-  achievements: string,
-  recruit: boolean,
-  email: string,
-  type: number,
-  status: number,
-  recruit_qq_group: string,
-  mentor: string,
-  activity_time: string,
-  activity_place: string,
-  special_room: string,
-  assistant: string
+interface SocietyProfileProps extends ISociety, FormComponentProps {
 }
 
 function hasErrors(fieldsError: any) {
@@ -60,6 +42,7 @@ class SocietyProfileForm extends Component<SocietyProfileProps, any> {
     this.props.form.validateFields((err: object, values: any) => {
       if (!err) {
         console.log(values);
+        AdminSocietyStore.updateProfile(values);
       }
     });
   };

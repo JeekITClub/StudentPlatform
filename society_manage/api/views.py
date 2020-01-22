@@ -1,9 +1,10 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, response, status
 from rest_framework.decorators import action
 from rest_framework.generics import UpdateAPIView, ListAPIView
-from rest_framework.mixins import ListModelMixin, UpdateModelMixin
+from rest_framework.mixins import ListModelMixin, UpdateModelMixin, RetrieveModelMixin
 
-from utils.permissions import IsSociety, SocietyActivityEditable
+from utils.permissions import IsSociety, SocietyActivityEditable, SocietyIsActive
 from society.models import Society, JoinSocietyRequest, ActivityRequest
 from society_manage.api.serializers import (
     JoinSocietyRequestSerializer,
@@ -146,9 +147,9 @@ class SocietyCreditViewSet(
 class SocietyProfileViewSet(
     viewsets.GenericViewSet,
     ListModelMixin,
-    UpdateModelMixin
+    UpdateModelMixin,
 ):
-    permission_classes = (IsSociety,)
+    permission_classes = (IsSociety, SocietyIsActive,)
 
     def get_queryset(self):
         return Society.objects.filter(user=self.request.user)
@@ -158,21 +159,18 @@ class SocietyProfileViewSet(
             return UploadAvatarSerializer
         return SocietyProfileSerializer
 
-    # def list(self, request, *args, **kwargs):
-    #     instance = self.get_queryset().first()
-    #     if instance:
-    #         serializer = self.get_serializer(instance)
-    #         return response.Response(serializer.data)
-    #     return response.Response(status=status.HTTP_404_NOT_FOUND)
-    #
-    # def update(self, request, *args, **kwargs):
-    #     instance = self.get_queryset().first()
-    #     if instance:
-    #         serializer = self.get_serializer(instance, data=request.data)
-    #         serializer.is_valid(raise_exception=True)
-    #         self.perform_update(serializer)
-    #         return response.Response(serializer.data)
-    #     return response.Response(status=status.HTTP_404_NOT_FOUND)
+    def get_object(self):
+        # only get request user's object
+        queryset = self.get_queryset()
+        obj = get_object_or_404(queryset, user=self.request.user)
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+    def list(self, request, *args, **kwargs):
+        # return an object rather than a list (to make api brief)
+        obj = self.get_object()
+        serializer = self.get_serializer(obj)
+        return response.Response(serializer.data)
 
     @action(detail=False, methods=['post'])
     def upload_avatar(self, request):
