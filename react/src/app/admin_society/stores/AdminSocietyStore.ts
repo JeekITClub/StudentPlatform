@@ -1,9 +1,9 @@
 import {notification} from 'antd';
-import {observable, action, computed} from "mobx";
+import {action, computed, observable} from "mobx";
 
 import {ISociety} from '../../../types';
 import Provider from '../../../utils/provider';
-import {AxiosResponse} from "axios";
+import {AxiosError, AxiosResponse} from "axios";
 import {society_type} from "../../../shared/constants";
 
 class AdminSocietyStore {
@@ -22,13 +22,34 @@ class AdminSocietyStore {
     this.changeLoading();
     Provider.get('/api/society_manage/profile/')
       .then((response: AxiosResponse) => {
-        this.society = response.data.results[0];
+        this.society = response.data;
       })
       .catch(() => {
         notification.error({
           message: 'Oops...',
           description: '获取社团资料失败'
         })
+      })
+      .finally(() => {
+        this.changeLoading();
+      })
+  };
+
+  @action updateProfile = (data: ISociety): void => {
+    this.changeLoading();
+    Provider.patch(`/api/society_manage/profile/${this.society?.id}/`, data)
+      .then((response: AxiosResponse) => {
+        notification.success({
+          message: '成功',
+          description: '社团信息已更新'
+        });
+      })
+      .catch((error: AxiosError) => {
+        console.log(error);
+        notification.error({
+          message: 'Oops...',
+          description: '社团信息更新失败'
+        });
       })
       .finally(() => {
         this.changeLoading();

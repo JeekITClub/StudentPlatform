@@ -34,8 +34,8 @@ const SocietyBureau = Loadable({
 const MyRouter = HashRouter;
 
 class AppRouter extends React.Component {
-    componentWillMount() {
-        AccountStore.fetch()
+    componentDidMount() {
+        AccountStore.fetch();
     }
 
     render() {
