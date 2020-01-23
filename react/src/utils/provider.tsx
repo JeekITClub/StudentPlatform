@@ -2,7 +2,7 @@ import axios, { AxiosResponse, AxiosInstance } from 'axios';
 import {computed} from 'mobx';
 import {getCookie} from './cookie';
 
-const Provider: any = {
+const Provider = {
     get provider(): AxiosInstance {
         return axios.create({
             withCredentials: true,
@@ -28,7 +28,7 @@ const Provider: any = {
         return this.provider.get(...args)
     },
 
-    patch(...args: any) :Primise {
+    patch(...args: any) :Promise<AxiosResponse> {
         return this.provider.patch(...args)
     },
 

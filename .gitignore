@@ -9,4 +9,5 @@ static/
 templates/react/index.html
 *.DS_Store
 
-db.sqlite3
+db.splite3
+.vscode/

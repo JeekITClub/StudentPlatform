@@ -2,11 +2,22 @@ import React from 'react';
 import {Modal, Form, Select, InputNumber, Divider, Button} from 'antd';
 import CreditStore from "../stores/CreditStore";
 import {AxiosResponse} from 'axios';
+import { observer } from 'mobx-react';
+import {Society} from '../../../../types';
 
-class CreditDistributionCreateModal extends React.Component {
+type CDCreateModalState = {
+    societies: Society[] | null,
+    selectedSocietySocietyIdSet: number[],
+    year: number,
+    semester: number
+}
+
+class CreditDistributionCreateModal extends React.Component<{}, CDCreateModalState> {
     state = {
-        societies: [],
-        selectedSocietiesIds: []
+        societies: null,
+        selectedSocietySocietyIdSet: [],
+        year: 2019,
+        semester: 1
     }
 
     componentDidMount() {
@@ -20,16 +31,15 @@ class CreditDistributionCreateModal extends React.Component {
     }
 
     handleSelectAll = () => {
-        // console.log(this.state.selectedSocietiesIds);
         this.setState({
-            selectedSocietiesIds: this.state.societies.map((society) => {
-                return society.id
+            selectedSocietySocietyIdSet: this.state.societies.map((society) => {
+                return society.society_id
             })
         });
     };
 
     handleClear = () => {
-        this.setState({ selectedSocietiesIds: [] })
+        this.setState({ selectedSocietySocietyIdSet: [] })
     };
 
     render() {
@@ -37,18 +47,37 @@ class CreditDistributionCreateModal extends React.Component {
             <Modal
                 title="创建学分分配"
                 visible={CreditStore.createCDModalVisible}
-                onCancel={() => this.props.onCancel}
+                onOk={() => {
+                    if (CreditStore.createCDBulk) {
+                        CreditStore.bulkCreateCreditDistribution()
+                    } else {
+                        CreditStore.createCreditDistribution({
+                            year: this.state.year,
+                            semester: this.state.semester,
+                            society_id_set: this.state.selectedSocietySocietyIdSet
+                        })
+                    }
+                }}
+                onCancel={() => CreditStore.createCDModalVisible = false}
             >
                 <Form>
                     <Form.Item label="学年">
-                        <InputNumber precision={0} min={2019} style={{ 'width': '100%' }}/>
+                        <InputNumber
+                            precision={0}
+                            style={{ 'width': '100%' }}
+                            value={this.state.year}
+                            onChange={(value) => this.setState({year: value})}
+                        />
                     </Form.Item>
                     <Form.Item label="学期">
-                        <Select>
-                            <Select.Option value="1">
+                        <Select value={this.state.semester}
+                        onChange={(value: number) => {
+                            this.setState({semester: value})
+                        }}>
+                            <Select.Option value={1}>
                                 第一学期
                             </Select.Option>
-                            <Select.Option value="2">
+                            <Select.Option value={2}>
                                 第二学期
                             </Select.Option>
                         </Select>
@@ -58,15 +87,14 @@ class CreditDistributionCreateModal extends React.Component {
                         <Form.Item label="选择社团">
                             <Select
                                 mode="multiple"
-                                value={this.state.selectedSocietiesIds}
+                                value={this.state.selectedSocietySocietyIdSet}
                                 onChange={(value: number[]) => {
-                                    this.setState({ selectedSocietiesIds: value })
-                                }}
+                                    this.setState({ selectedSocietySocietyIdSet: value })
                             >
                                 {
-                                    this.state.societies.map((society) => (
-                                        <Select.Option value={society.id}
-                                                       key={society.id}>{society.id} - {society.name}</Select.Option>
+                                    this.state.societies &&this.state.societies.map((society) => (
+                                        <Select.Option value={society.society_id}
+                                                       key={society.society_id}>{society.society_id} - {society.name}</Select.Option>
                                     ))
                                 }
                             </Select>
@@ -78,4 +106,4 @@ class CreditDistributionCreateModal extends React.Component {
     }
 }
 
-export default CreditDistributionCreateModal;
+export default observer(CreditDistributionCreateModal);
