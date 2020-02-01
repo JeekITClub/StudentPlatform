@@ -98,6 +98,7 @@ class CreditDistributionSerializer(serializers.ModelSerializer):
         model = CreditDistribution
         fields = '__all__'
 
+
 class CreditDistributionManualCreateSerializer(serializers.Serializer):
     society_id = serializers.IntegerField()
     year = serializers.IntegerField()
