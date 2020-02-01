@@ -10,4 +10,4 @@ templates/react/index.html
 *.DS_Store
 
 .vscode/
-db.sqlite3
+*.sqlite3
