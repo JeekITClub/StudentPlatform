@@ -329,6 +329,11 @@ class CreditReceiversTests(TestCase):
         )
         self.assertEqual(cd_set[0].society, self.society1)
         self.assertEqual(cd_set[1].society, self.society2)
+        # test create again
+        # the response status code should be 400
+        # because of the unique together validator
+        response = client.post(url, data=data, decode=True)
+        self.assertEqual(response.status_code, 400)
 
     def test_update_credit_distribution(self):
         cd = CreditDistribution.objects.create(

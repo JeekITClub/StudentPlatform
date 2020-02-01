@@ -90,6 +90,7 @@ class CreditDistributionCreateModal extends React.Component<{}, CDCreateModalSta
                                 value={this.state.selectedSocietySocietyIdSet}
                                 onChange={(value: number[]) => {
                                     this.setState({ selectedSocietySocietyIdSet: value })
+                                }}
                             >
                                 {
                                     this.state.societies &&this.state.societies.map((society) => (

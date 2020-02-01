@@ -199,8 +199,8 @@ class CreditManageViewSet(
 
     @action(detail=False, methods=['post'])
     def manual_create(self, request):
-        society_id_set = request.data.getlist('society_id_set', None)
-        semester = request.data.get('semester')
+        society_id_set = request.data.get('society_id_set', None)
+        semester = request.data.get('semester', None)
         year = request.data.get('year', None)
         for society_id in society_id_set:
             serializer = CreditDistributionManualCreateSerializer(data={

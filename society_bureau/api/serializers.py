@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from datetime import datetime, timedelta
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
 from society.models import Society, ActivityRequest
 from society_bureau.api.services import SettingsService
@@ -97,11 +98,18 @@ class CreditDistributionSerializer(serializers.ModelSerializer):
         model = CreditDistribution
         fields = '__all__'
 
-
 class CreditDistributionManualCreateSerializer(serializers.Serializer):
     society_id = serializers.IntegerField()
     year = serializers.IntegerField()
     semester = serializers.IntegerField()
+
+    class Meta:
+        validators = [
+            UniqueTogetherValidator(
+                queryset=CreditDistribution.objects.all(),
+                fields=['society', 'year', 'semester']
+            )
+        ]
 
     def validate_society_id(self, society_id):
         if Society.objects.filter(society_id=society_id).exists():
