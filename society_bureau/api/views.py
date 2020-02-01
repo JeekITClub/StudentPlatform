@@ -212,6 +212,7 @@ class CreditManageViewSet(
                 serializer.save()        
             else:
                 return Response(
+                    data=serializer.errors,
                     status=status.HTTP_400_BAD_REQUEST
                 )
         return Response(

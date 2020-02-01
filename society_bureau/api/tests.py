@@ -6,6 +6,7 @@ from society_manage.models import CreditDistribution
 from society.models import Society
 from society_bureau.api.services import SettingsService
 
+import json
 
 class DashboardTests(TestCase):
     pass
@@ -314,14 +315,15 @@ class CreditReceiversTests(TestCase):
     def test_manual_create_credit_distribution(self):
         url = '/api/manage/credit/manual_create/'
         data = {
-            'society_id_set': [self.society1.society_id, self.society2.society_id],
+            'society_id_set': [401, 301],
             'year': SettingsService.get('year'),
             'semester': SettingsService.get('semester')
         }
 
         client = APIClient(enforce_csrf_checks=True)
         client.force_authenticate(self.user3)
-        response = client.post(url, data=data, decode=True)
+
+        response = client.post(url, data=json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 201)
         cd_set = CreditDistribution.objects.filter(
             year=SettingsService.get('year'),

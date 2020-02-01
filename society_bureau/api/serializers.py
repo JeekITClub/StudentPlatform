@@ -100,15 +100,17 @@ class CreditDistributionSerializer(serializers.ModelSerializer):
 
 
 class CreditDistributionManualCreateSerializer(serializers.Serializer):
-    society_id = serializers.IntegerField()
     year = serializers.IntegerField()
     semester = serializers.IntegerField()
+    society_id = serializers.IntegerField()
 
     class Meta:
+        model = CreditDistribution
+        fields = '__all__'
         validators = [
             UniqueTogetherValidator(
                 queryset=CreditDistribution.objects.all(),
-                fields=['society', 'year', 'semester']
+                fields=['year', 'semester', 'society_id']
             )
         ]
 
@@ -130,7 +132,6 @@ class CreditDistributionManualCreateSerializer(serializers.Serializer):
             semester=validated_data['semester'],
             society=Society.objects.get(society_id=validated_data['society_id'])
         )
-
 
 class CreditDistributionBulkCreateSerializer(serializers.Serializer):
     year = serializers.IntegerField()
