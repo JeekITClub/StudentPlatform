@@ -105,8 +105,6 @@ class CreditDistributionManualCreateSerializer(serializers.Serializer):
     society_id = serializers.IntegerField()
 
     class Meta:
-        model = CreditDistribution
-        fields = '__all__'
         validators = [
             UniqueTogetherValidator(
                 queryset=CreditDistribution.objects.all(),
