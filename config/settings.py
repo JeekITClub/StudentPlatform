@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'notifications',
     'rest_framework',
-    'graphene_django',
     'student.apps.StudentConfig',
     'society.apps.SocietyConfig',
     'society_bureau.apps.SocietyBureauConfig',
