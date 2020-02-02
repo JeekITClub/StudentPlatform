@@ -3,10 +3,9 @@ import {Modal, Form, Select, InputNumber, Divider, Button} from 'antd';
 import CreditStore from "../stores/CreditStore";
 import {AxiosResponse} from 'axios';
 import { observer } from 'mobx-react';
-import {Society} from '../../../../types';
+import { ISociety } from '../../../../types';
 
 type CDCreateModalState = {
-    societies: Society[] | null,
     selectedSocietySocietyIdSet: number[],
     year: number,
     semester: number
@@ -14,25 +13,19 @@ type CDCreateModalState = {
 
 class CreditDistributionCreateModal extends React.Component<{}, CDCreateModalState> {
     state = {
-        societies: null,
+        // @ts-ignore
         selectedSocietySocietyIdSet: [],
         year: 2019,
         semester: 1
-    }
+    };
 
     componentDidMount() {
         CreditStore.fetchActiveSocieties()
-            .then((res: AxiosResponse) => {
-                this.setState({ societies: res.data })
-            })
-            .catch((err: Error) => {
-                throw err
-            })
     }
 
     handleSelectAll = () => {
         this.setState({
-            selectedSocietySocietyIdSet: this.state.societies.map((society) => {
+            selectedSocietySocietyIdSet: CreditStore.activeSocieties.map((society: ISociety) => {
                 return society.society_id
             })
         });
@@ -58,7 +51,9 @@ class CreditDistributionCreateModal extends React.Component<{}, CDCreateModalSta
                         })
                     }
                 }}
-                onCancel={() => CreditStore.createCDModalVisible = false}
+                onCancel={() => {
+                    CreditStore.createCDModalVisible = false
+                }}
             >
                 <Form>
                     <Form.Item label="学年">
@@ -70,10 +65,12 @@ class CreditDistributionCreateModal extends React.Component<{}, CDCreateModalSta
                         />
                     </Form.Item>
                     <Form.Item label="学期">
-                        <Select value={this.state.semester}
-                        onChange={(value: number) => {
-                            this.setState({semester: value})
-                        }}>
+                        <Select
+                            value={this.state.semester}
+                            onChange={(value: number) => {
+                                this.setState({semester: value})
+                            }}
+                        >
                             <Select.Option value={1}>
                                 第一学期
                             </Select.Option>
@@ -88,14 +85,21 @@ class CreditDistributionCreateModal extends React.Component<{}, CDCreateModalSta
                             <Select
                                 mode="multiple"
                                 value={this.state.selectedSocietySocietyIdSet}
-                                onChange={(value: number[]) => {
-                                    this.setState({ selectedSocietySocietyIdSet: value })
+                                // onChange={(value: number[]) => {
+                                //     this.setState({selectedSocietySocietyIdSet: value})
+                                // }}
                             >
                                 {
-                                    this.state.societies &&this.state.societies.map((society) => (
-                                        <Select.Option value={society.society_id}
-                                                       key={society.society_id}>{society.society_id} - {society.name}</Select.Option>
-                                    ))
+                                    CreditStore.activeSocieties.map((society: ISociety) => {
+                                        return (
+                                            <Select.Option
+                                                value={society.society_id}
+                                                key={society.society_id}
+                                            >
+                                                {society.society_id} - {society.name}
+                                            </Select.Option>
+                                        )
+                                    })
                                 }
                             </Select>
                         </Form.Item>

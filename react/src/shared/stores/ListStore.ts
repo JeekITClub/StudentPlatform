@@ -41,13 +41,13 @@ class ListStore {
             })
     };
 
-    @action deleteByIndex = (index) => {
+    @action deleteByIndex = (index: number) => {
         const id = this.data[index];
         this.delete(id);
     };
 
-    @action delete = (id) => {
-        return Provider.delete(`${url}${id}`)
+    @action delete = (id: number) => {
+        return Provider.delete(`${this.url}${id}`)
     };
 
     @action initDetail = (id) => {
