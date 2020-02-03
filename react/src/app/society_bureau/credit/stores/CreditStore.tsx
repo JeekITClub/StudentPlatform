@@ -35,13 +35,15 @@ class CreditStore extends ListStore {
             })
     };
 
-    @action createCreditDistribution = ({year, semester, society_id_set}: {year: number, semester: number, society_id_set: number[]}) => {
+    @action createCreditDistribution = ({year, semester, credit, society_id_set} : {year: number, semester: number, credit: number, society_id_set: number[]}) => {
         Provider.post(`${this.url}manual_create/`, {
             year,
             semester,
+            credit,
             society_id_set
         })
             .then((res: AxiosResponse) => {
+                this.createCDModalVisible = false;
                 notification.success({
                     message: '成功'
                 })

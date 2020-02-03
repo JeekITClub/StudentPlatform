@@ -203,11 +203,13 @@ class CreditManageViewSet(
         society_id_set = request.data.get('society_id_set', None)
         semester = request.data.get('semester', None)
         year = request.data.get('year', None)
+        credit = request.data.get('credit', 1)
         for society_id in society_id_set:
             serializer = CreditDistributionManualCreateSerializer(data={
                 'society_id': society_id,
                 'year': year,
-                'semester': semester
+                'semester': semester,
+                'credit': credit
             })
             if serializer.is_valid():
                 serializer.save()        

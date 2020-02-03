@@ -8,7 +8,8 @@ import { ISociety } from '../../../../types';
 type CDCreateModalState = {
     selectedSocietySocietyIdSet: number[],
     year: number,
-    semester: number
+    semester: number,
+    credit: number
 }
 
 class CreditDistributionCreateModal extends React.Component<{}, CDCreateModalState> {
@@ -16,24 +17,13 @@ class CreditDistributionCreateModal extends React.Component<{}, CDCreateModalSta
         // @ts-ignore
         selectedSocietySocietyIdSet: [],
         year: 2019,
-        semester: 1
+        semester: 1,
+        credit: 1
     };
 
     componentDidMount() {
         CreditStore.fetchActiveSocieties()
     }
-
-    handleSelectAll = () => {
-        this.setState({
-            selectedSocietySocietyIdSet: CreditStore.activeSocieties.map((society: ISociety) => {
-                return society.society_id
-            })
-        });
-    };
-
-    handleClear = () => {
-        this.setState({ selectedSocietySocietyIdSet: [] })
-    };
 
     render() {
         return (
@@ -47,6 +37,7 @@ class CreditDistributionCreateModal extends React.Component<{}, CDCreateModalSta
                         CreditStore.createCreditDistribution({
                             year: this.state.year,
                             semester: this.state.semester,
+                            credit: this.state.credit,
                             society_id_set: this.state.selectedSocietySocietyIdSet
                         })
                     }
@@ -78,6 +69,15 @@ class CreditDistributionCreateModal extends React.Component<{}, CDCreateModalSta
                                 第二学期
                             </Select.Option>
                         </Select>
+                    </Form.Item>
+                    <Form.Item label="各社团可分配学分人数数量">
+                        <InputNumber
+                            precision={0}
+                            min={0}
+                            style={{ 'width': '100%' }}
+                            value={this.state.credit}
+                            onChange={(value: number) => this.setState({credit: value})}
+                        />
                     </Form.Item>
                     {
                         !CreditStore.createCDBulk &&
