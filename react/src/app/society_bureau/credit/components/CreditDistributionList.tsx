@@ -20,7 +20,7 @@ class CreditDistributionList extends React.Component {
 
     checkDetail = (id: number) => {
         if (CreditStore.detail) {
-            CreditStore.detail.fetch({ id });
+            CreditStore.detail.fetch({ id: id });
         } else {
             CreditStore.initDetail(id);
         }
@@ -45,7 +45,6 @@ class CreditDistributionList extends React.Component {
 
     showSetCreditModal = (id: number, index: number) => {
         CreditStore.updateCreditModalVisible = true;
-        console.log(index);
         CreditStore.editing = {
             id,
             index

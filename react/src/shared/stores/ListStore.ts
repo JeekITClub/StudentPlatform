@@ -16,11 +16,11 @@ class ListStore {
 
     url = '';
 
-    detail = null;
+    detail : DetailStore = null;
 
     @action fetch = ({ pageNum = 1, pageSize = 10, ...params }) => {
         this.loading = true;
-        return Provider.get(this.url, {
+        Provider.get(this.url, {
             params: {
                 page: pageNum,
                 page_size: pageSize,
