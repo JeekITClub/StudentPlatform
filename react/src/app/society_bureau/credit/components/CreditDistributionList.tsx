@@ -82,7 +82,7 @@ class CreditDistributionList extends React.Component {
             { credit: this.state.setCredit }
         )
             .then((res) => {
-                let data = this.state.data;
+                let data = CreditStore.data;
                 data[this.state.editing.index].credit = this.state.setCredit;
                 this.setState({
                     setCreditModalVisible: false,
@@ -138,10 +138,24 @@ class CreditDistributionList extends React.Component {
                 render: (record) => this.renderCheckReceiversDetail(record.id)
             },
             {
-                title: '社长可分配学分',
+                title: '社长是否可分配学分',
                 key: 'open',
                 dataIndex: 'open',
                 render: (open, record, index) => this.renderClosedSwitch(open, record.id, index)
+            },
+            {
+                title: '操作',
+                key: 'operation',
+                render: (_: any, record: any, index: number) => {
+                    return (
+                        <Button
+                            type="danger"
+                            onClick={() => CreditStore.delete(record.id)}
+                        >
+                            删除
+                        </Button>
+                    )
+                }
             }
         ];
 

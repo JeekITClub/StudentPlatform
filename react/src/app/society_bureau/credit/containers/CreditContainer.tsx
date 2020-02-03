@@ -43,7 +43,7 @@ class CreditContainer extends React.Component {
                     title={(CreditStore.year && CreditStore.semester) ? "" : "未选择学年和学期时不可用"}
                     placement="bottom"
                 >
-                    <Button onClick={() => Creidt.setAllModalVisible = true}
+                    <Button onClick={() => CreditStore.setAllModalVisible = true}
                             disabled={!(CreditStore.year && CreditStore.semester)}>
                         一键全部设置获得学分人数
                     </Button>
@@ -53,7 +53,7 @@ class CreditContainer extends React.Component {
                     placement="bottom"
                 >
                     <Popconfirm title="确定？" okText="是" cancelText="否"
-                                onConfirm={CreditStore.handleBulkCloseCreditDistribution()}
+                                onConfirm={() => CreditStore.handleBulkCloseCreditDistribution()}
                     >
                         <Button
                             style={{ 'marginLeft': '10px' }}

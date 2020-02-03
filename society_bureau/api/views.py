@@ -153,6 +153,7 @@ class CreditManageViewSet(
     mixins.RetrieveModelMixin,
     generics.UpdateAPIView,
     mixins.ListModelMixin,
+    mixins.DestroyModelMixin
 ):
     permission_classes = (IsSocietyBureau,)
     filter_backends = [YearFilterBackend, SemesterFilterBackend]

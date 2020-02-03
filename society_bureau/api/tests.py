@@ -427,6 +427,20 @@ class CreditReceiversTests(TestCase):
         res = client.post(url, data=data, decode=True)
         self.assertEqual(res.status_code, 400)
 
+    def test_destroy(self):
+        credit_distribution = CreditDistribution.objects.create(
+            society=self.society1,
+            year=2020,
+            semester=1,
+        )
+
+        url = '/api/manage/credit/{}/'.format(credit_distribution.pk)
+
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_authenticate(self.user3)
+        response = client.delete(url, decode=True)
+        self.assertEqual(response.status_code, 204)
+
 
 class SiteSettingsTest(TestCase):
     def setUp(self):
