@@ -27,4 +27,21 @@ interface ISociety {
   assistant?: string
 }
 
-export {ISociety};
+interface ICreditDistribution {
+  id?: number
+  year: number,
+  semester: number,
+  credit: number,
+  open: boolean,
+  society: ISociety,
+  receivers: IStudent[]
+}
+
+interface IStudent {
+  id: number,
+  name: string,
+  grade: number,
+  class_num: number
+}
+
+export {ISociety, ICreditDistribution, IStudent};

@@ -1,4 +1,4 @@
-import {observable, action} from "mobx";
+import {observable, action, computed} from "mobx";
 import ListStore from '../../../../shared/stores/ListStore';
 import Provider from '../../../../utils/provider';
 import {AxiosResponse, AxiosError} from 'axios';
@@ -11,10 +11,25 @@ class CreditStore extends ListStore {
     @observable activeSocieties: ISociety[] = [];
     @observable year: number = null;
     @observable semester: number = null;
+    // updateCreditModal 用于调整单个CD的credit值
+    @observable updateCreditModalVisible: boolean = false;
     @observable setAllModalVisible: boolean = false;
     @observable createCDModalVisible: boolean = false;
     @observable createCDBulk: boolean = false;
     @observable setAllCredit: number = 1;
+
+    @observable editing: {
+        id: number,
+        index: number
+    } = {
+        id: 1,
+        index: 1
+    };
+
+    @computed get defaultCreditValue () {
+        return this.data[this.editing.index] ? this.data[this.editing.index].credit : 1
+    }
+
 
     @action bulkCloseCD = () : void => {
         Provider.post(`${this.url}bulkClose`)
@@ -70,6 +85,22 @@ class CreditStore extends ListStore {
 
     @action handleBulkCloseCreditDistribution = () : void => {
 
+    };
+
+    @action updateSingleCDCredit = (cd_id: number, updatedCredit: number) : void => {
+        Provider.patch(`${this.url}${cd_id}/`, {
+            credit: updatedCredit
+        })
+            .then((res: AxiosResponse) => {
+                notification.success({
+                    message: '更新成功'
+                })
+            })
+            .catch((err: AxiosError) => {
+                notification.error({
+                    message: '错误'
+                })
+            })
     }
 
 }

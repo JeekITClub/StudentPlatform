@@ -7,7 +7,7 @@ import Provider from '../../utils/provider';
 class ListStore {
     @observable loading = true;
 
-    @observable data = [];
+    @observable data : any[] = [];
 
     @observable count = 0;
     @observable pageSize = 10;
@@ -50,7 +50,7 @@ class ListStore {
         return Provider.delete(`${this.url}${id}`)
     };
 
-    @action initDetail = (id) => {
+    @action initDetail = (id: number) => {
         this.detail = new DetailStore(this.url, id)
     }
 }

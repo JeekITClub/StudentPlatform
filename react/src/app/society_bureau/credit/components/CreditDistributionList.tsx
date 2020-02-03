@@ -4,22 +4,19 @@ import {observer} from 'mobx-react'
 import {toJS} from 'mobx';
 
 import CreditReceiversTable from './CreditReceiversTable';
+import CreditDistributionUpdateCreditModal from './CreditDistributionUpdateCreditModal';
 import CreditStore from '../stores/CreditStore'
 import Provider from "../../../../utils/provider";
 import '../styles/credit.scss'
+import {PaginationConfig} from 'antd/lib/pagination/Pagination'
+
+import {ICreditDistribution} from "../../../../types";
 
 
-@observer
 class CreditDistributionList extends React.Component {
     componentDidMount() {
         CreditStore.fetch({})
     }
-
-    state = {
-        setCreditModalVisible: false,
-        setCredit: 1,
-        editing: { id: 0, index: 0 }
-    };
 
     checkDetail = (id: number) => {
         if (CreditStore.detail) {
@@ -46,14 +43,17 @@ class CreditDistributionList extends React.Component {
         )
     };
 
-    showSetCreditModal = (id, index) => {
-        this.setState({
-            setCreditModalVisible: true,
-            editing: { id: id, index: index }
-        });
+    showSetCreditModal = (id: number, index: number) => {
+        CreditStore.updateCreditModalVisible = true;
+        console.log(index);
+        CreditStore.editing = {
+            id,
+            index
+        };
+        console.log(CreditStore.defaultCreditValue)
     };
 
-    handleUpdateClosed = (checked, id, index) => {
+    handleUpdateClosed = (checked: boolean, id: number, index: number) => {
         CreditStore.data[index].open = checked;
         Provider.patch(
             `/api/manage/credit/${id}/`,
@@ -72,35 +72,22 @@ class CreditDistributionList extends React.Component {
             })
     };
 
-    handleSetCreditChange = (value) => {
-        this.setState({ setCredit: value })
-    };
-
-    updateCredit = () => {
-        Provider.patch(
-            `/api/manage/credit/${this.state.editing.id}/`,
-            { credit: this.state.setCredit }
-        )
-            .then((res) => {
-                let data = CreditStore.data;
-                data[this.state.editing.index].credit = this.state.setCredit;
-                this.setState({
-                    setCreditModalVisible: false,
-                    setCredit: 1,
-                    data: data
-                });
-            })
-            .catch((err) => {
-                throw err
-            })
-    };
-
-    onPaginationChange = (pagination) => {
+    onPaginationChange = (pagination: PaginationConfig) => {
         CreditStore.fetch({ pageNum: pagination.current, pageSize: pagination.pageSize });
     };
 
     render() {
         const columns = [
+            {
+                title: '学年',
+                key: 'year',
+                dataIndex: 'year'
+            },
+            {
+                title: '学期',
+                key: 'semester',
+                dataIndex: 'semester'
+            },
             {
                 title: '社团ID',
                 key: 'society_id',
@@ -115,7 +102,7 @@ class CreditDistributionList extends React.Component {
                 title: '可获得学分的成员人数最大值',
                 key: 'credit',
                 dataIndex: 'credit',
-                render: (credit, record, index) => {
+                render: (credit: number, record: ICreditDistribution, index: number) => {
                     return (
                         <div>
                             {credit}
@@ -135,18 +122,22 @@ class CreditDistributionList extends React.Component {
             {
                 title: '获得学分者',
                 key: 'receivers',
-                render: (record) => this.renderCheckReceiversDetail(record.id)
+                render: (record: ICreditDistribution) => this.renderCheckReceiversDetail(record.id)
             },
             {
                 title: '社长是否可分配学分',
                 key: 'open',
                 dataIndex: 'open',
-                render: (open, record, index) => this.renderClosedSwitch(open, record.id, index)
+                render: (
+                    open: boolean,
+                    record: ICreditDistribution,
+                    index: number
+                ) => this.renderClosedSwitch(open, record.id, index)
             },
             {
                 title: '操作',
                 key: 'operation',
-                render: (_: any, record: any, index: number) => {
+                render: (_: any, record: ICreditDistribution, index: number) => {
                     return (
                         <Button
                             type="danger"
@@ -165,7 +156,7 @@ class CreditDistributionList extends React.Component {
                     className="mt-2"
                     pagination={{
                         showSizeChanger: true,
-                        total: this.state.count
+                        total: CreditStore.count
                     }}
                     onChange={this.onPaginationChange}
                     columns={columns}
@@ -183,24 +174,10 @@ class CreditDistributionList extends React.Component {
                         <CreditReceiversTable data={CreditStore.detail.data.receivers}/>
                     )}
                 </Modal>
-                <Modal visible={this.state.setCreditModalVisible}
-                       okText="更新！"
-                       cancelText="算了吧"
-                       onCancel={() => this.setState({ setCreditModalVisible: false })}
-                       onOk={() => this.updateCredit()}>
-                    <Form>
-                        <Form.Item label="分配学分人数上限">
-                            <InputNumber
-                                min={1}
-                                value={this.state.setCreditModalVisible ? toJS(CreditStore.data)[this.state.editing.index].credit : 1}
-                                onChange={(value) => this.handleSetCreditChange(value)}
-                            />
-                        </Form.Item>
-                    </Form>
-                </Modal>
+                <CreditDistributionUpdateCreditModal />
             </div>
         )
     }
 }
 
-export default CreditDistributionList;
+export default observer(CreditDistributionList);
