@@ -1,9 +1,11 @@
 .admin-layout-top {
-  height: 100vh;
+  min-height: 100vh;
+  position: relative;
 }
 
 .admin-layout-sider {
-  height: 100vh;
+  position: absolute;
+  height: 100%;
   background-color: #001529;
   .admin-layout-brand {
     text-align: center;
@@ -16,6 +18,7 @@
 }
 
 .admin-layout-main {
+  float: right;
   .admin-layout-header {
     padding-left: 2%;
     padding-top: 1vh;
