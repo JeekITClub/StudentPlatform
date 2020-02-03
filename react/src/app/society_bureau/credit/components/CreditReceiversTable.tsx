@@ -1,8 +1,14 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
 import {Table} from 'antd';
+import {IStudent} from "../../../../types";
 
-class CreditReceiversTable extends React.Component {
+
+interface CreditReceiversTableProps {
+    data: IStudent[]
+}
+
+class CreditReceiversTable extends React.Component<CreditReceiversTableProps, any> {
     render() {
         const columns = [{
             title: '届数',
@@ -28,9 +34,5 @@ class CreditReceiversTable extends React.Component {
         )
     }
 }
-
-CreditReceiversTable.propTypes = {
-    data: PropTypes.array
-};
 
 export default CreditReceiversTable;
