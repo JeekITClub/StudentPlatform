@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import UniqueConstraint
 
 from society.models import Society, Student
 from society_bureau.api.services import SettingsService
@@ -13,7 +14,9 @@ class CreditDistribution(models.Model):
     open = models.BooleanField(default=True)
 
     class Meta:
-        unique_together = ("society", "year", "semester")
+        constraints = [
+            UniqueConstraint(fields=['society', 'year', 'semester'], name='unique_credit_distribution') 
+        ]
 
     def __str__(self):
         return self.society.name
