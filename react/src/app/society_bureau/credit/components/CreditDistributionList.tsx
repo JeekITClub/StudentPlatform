@@ -139,7 +139,7 @@ class CreditDistributionList extends React.Component {
                     return (
                         <Button
                             type="danger"
-                            onClick={() => CreditStore.delete(record.id)}
+                            onClick={() => CreditStore.delete(record.id, index)}
                         >
                             删除
                         </Button>
@@ -158,7 +158,7 @@ class CreditDistributionList extends React.Component {
                     }}
                     onChange={this.onPaginationChange}
                     columns={columns}
-                    dataSource={toJS(CreditStore.data)}
+                    dataSource={CreditStore.data}
                     rowKey="id"
                 />
                 <Modal

@@ -27,7 +27,10 @@ class CreditStore extends ListStore {
     };
 
     @computed get defaultCreditValue () {
-        return this.data[this.editing.index] ? this.data[this.editing.index].credit : 1
+        if (this.data && this.data.length > 1) {
+            return this.data[this.editing.index].credit
+        }
+        return 0
     }
 
 
