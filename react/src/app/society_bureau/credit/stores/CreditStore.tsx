@@ -3,6 +3,7 @@ import ListStore from '../../../../shared/stores/ListStore';
 import Provider from '../../../../utils/provider';
 import {AxiosResponse, AxiosError} from 'axios';
 import {ISociety} from "../../../../types";
+import {notification} from 'antd';
 
 class CreditStore extends ListStore {
     url = '/api/manage/credit/';
@@ -26,7 +27,12 @@ class CreditStore extends ListStore {
             .then((res: AxiosResponse) => {
                 this.activeSocieties = res.data;
             })
-            .catch((err: AxiosError) => {throw err})
+            .catch((err: AxiosError) => {
+                notification.error({
+                    message: '错误',
+                    description: '获取社团列表失败'
+                })
+            })
     };
 
     @action createCreditDistribution = ({year, semester, society_id_set}: {year: number, semester: number, society_id_set: number[]}) => {
@@ -35,9 +41,17 @@ class CreditStore extends ListStore {
             semester,
             society_id_set
         })
-            .then((res: AxiosResponse) => {})
-            .catch((err: AxiosError) => {})
-    }
+            .then((res: AxiosResponse) => {
+                notification.success({
+                    message: '成功'
+                })
+            })
+            .catch((err: AxiosError) => {
+                notification.error({
+                    message: '错误'
+                })
+            })
+    };
 
     @action bulkCreateCreditDistribution = () => {
         Provider.post('')

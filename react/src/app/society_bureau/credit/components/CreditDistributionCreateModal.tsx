@@ -85,9 +85,9 @@ class CreditDistributionCreateModal extends React.Component<{}, CDCreateModalSta
                             <Select
                                 mode="multiple"
                                 value={this.state.selectedSocietySocietyIdSet}
-                                // onChange={(value: number[]) => {
-                                //     this.setState({selectedSocietySocietyIdSet: value})
-                                // }}
+                                onChange={(value: number[]) => {
+                                    this.setState({selectedSocietySocietyIdSet: value})
+                                }}
                             >
                                 {
                                     CreditStore.activeSocieties.map((society: ISociety) => {
