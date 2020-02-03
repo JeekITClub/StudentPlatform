@@ -2,7 +2,7 @@ import React from 'react';
 import {Form, Table, Button, InputNumber, Icon, Tooltip, Modal, notification, Switch} from 'antd';
 import {observer} from 'mobx-react'
 import {toJS} from 'mobx';
-
+import { AxiosResponse, AxiosError } from 'axios';
 import CreditReceiversTable from './CreditReceiversTable';
 import CreditDistributionUpdateCreditModal from './CreditDistributionUpdateCreditModal';
 import CreditStore from '../stores/CreditStore'
@@ -58,7 +58,7 @@ class CreditDistributionList extends React.Component {
             `/api/manage/credit/${id}/`,
             { opened: checked }
         )
-            .then((res) => {
+            .then((res: AxiosResponse) => {
                 if (res.status === 200) {
                     notification.success({
                         message: '更新',
@@ -66,7 +66,7 @@ class CreditDistributionList extends React.Component {
                     })
                 }
             })
-            .catch((err) => {
+            .catch((err: AxiosError) => {
                 throw err
             })
     };
