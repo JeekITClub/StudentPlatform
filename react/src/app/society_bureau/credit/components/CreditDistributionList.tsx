@@ -50,7 +50,6 @@ class CreditDistributionList extends React.Component {
             id,
             index
         };
-        console.log(CreditStore.defaultCreditValue)
     };
 
     handleUpdateClosed = (checked: boolean, id: number, index: number) => {
