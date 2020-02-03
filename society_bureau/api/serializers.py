@@ -100,9 +100,10 @@ class CreditDistributionSerializer(serializers.ModelSerializer):
 
 
 class CreditDistributionManualCreateSerializer(serializers.Serializer):
-    year = serializers.IntegerField()
-    semester = serializers.IntegerField()
-    society_id = serializers.IntegerField()
+    year = serializers.IntegerField(required=True)
+    semester = serializers.IntegerField(required=True)
+    society_id = serializers.IntegerField(required=True)
+    credit = serializers.IntegerField()
 
     class Meta:
         validators = [
@@ -126,10 +127,12 @@ class CreditDistributionManualCreateSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         return CreditDistribution.objects.create(
+            credit=validated_data['credit'],
             year=validated_data['year'],
             semester=validated_data['semester'],
             society=Society.objects.get(society_id=validated_data['society_id'])
         )
+
 
 class CreditDistributionBulkCreateSerializer(serializers.Serializer):
     year = serializers.IntegerField()

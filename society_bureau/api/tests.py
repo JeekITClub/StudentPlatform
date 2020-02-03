@@ -317,7 +317,8 @@ class CreditReceiversTests(TestCase):
         data = {
             'society_id_set': [401, 301],
             'year': SettingsService.get('year'),
-            'semester': SettingsService.get('semester')
+            'semester': SettingsService.get('semester'),
+            'credit': 20
         }
 
         client = APIClient(enforce_csrf_checks=True)
@@ -331,6 +332,7 @@ class CreditReceiversTests(TestCase):
         )
         self.assertEqual(cd_set[0].society, self.society1)
         self.assertEqual(cd_set[1].society, self.society2)
+        self.assertEqual(cd_set[0].credit, 20)
         # test create again
         # the response status code should be 400
         # because of the unique together validator
