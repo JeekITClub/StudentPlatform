@@ -58,7 +58,7 @@ export default function AdminSociety({match}) {
                 baseUrl="/admin_society"
                 siderMenu={siderMenu}
                 breadcrumbNameMap={breadcrumbNameMap}
-                footer={<h1>hello</h1>}
+                footer={<h1>Footer</h1>}
                 router={<AdminSocietyRouter match={match}/>}
             />
             : <NotAuthorized/>

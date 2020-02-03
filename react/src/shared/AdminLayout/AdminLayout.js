@@ -38,7 +38,7 @@ class AdminLayout extends React.Component {
 
     render() {
         return (
-            <div>
+            <>
                 <DrawerMenu
                     title={this.props.drawMenuTitle}
                     className="admin-layout-drawer-menu"
@@ -93,7 +93,7 @@ class AdminLayout extends React.Component {
                         {this.props.footer}
                     </Col>
                 </Row>
-            </div>
+            </>
         )
     }
 }
