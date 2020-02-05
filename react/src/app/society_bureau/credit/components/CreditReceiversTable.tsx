@@ -3,7 +3,6 @@ import * as PropTypes from 'prop-types';
 import {Table} from 'antd';
 import {IStudent} from "../../../../types";
 
-
 interface CreditReceiversTableProps {
     data: IStudent[]
 }

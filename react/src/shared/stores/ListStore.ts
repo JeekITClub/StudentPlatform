@@ -1,8 +1,11 @@
 import {observable, action} from 'mobx';
 import {notification} from "antd";
+import {AxiosResponse, AxiosError} from 'axios';
+import {toJS} from 'mobx';
 
 import DetailStore from './DetailStore'
 import Provider from '../../utils/provider';
+import * as _ from 'lodash';
 
 class ListStore {
     @observable loading = true;
@@ -16,11 +19,11 @@ class ListStore {
 
     url = '';
 
-    detail = null;
+    detail : DetailStore = null;
 
     @action fetch = ({ pageNum = 1, pageSize = 10, ...params }) => {
         this.loading = true;
-        return Provider.get(this.url, {
+        Provider.get(this.url, {
             params: {
                 page: pageNum,
                 page_size: pageSize,
@@ -43,11 +46,27 @@ class ListStore {
 
     @action deleteByIndex = (index: number) => {
         const id = this.data[index];
-        this.delete(id);
+        this.delete(id, index);
     };
 
-    @action delete = (id: number) => {
-        return Provider.delete(`${this.url}${id}`)
+    @action delete = (id: number, index: number) => {
+        Provider.delete(`${this.url}${id}/`)
+            .then((res: AxiosResponse) => {
+                notification.success({
+                    message: '成功',
+                    description: '删除成功'
+                });
+                this.data = _.dropWhile(this.data, (object) => {
+                    return object.id == id
+                });
+                console.log(toJS(this.data))
+            })
+            .catch((err: AxiosError) => {
+                notification.error({
+                    message: '失败',
+                    description: '删除失败'
+                })
+            })
     };
 
     @action initDetail = (id: number) => {
