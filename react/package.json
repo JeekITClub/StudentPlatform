@@ -78,7 +78,7 @@
   "devDependencies": {
     "@types/react-loadable": "^5.5.3",
     "babel-plugin-relay": "^8.0.0",
-    "chalk": "^3.0.0",
+    "chalk": "^4.0.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-plugin-import": "^2.16.0",
