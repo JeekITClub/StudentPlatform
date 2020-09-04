@@ -8,6 +8,7 @@ member_confirm_status = (
 )
 
 society_type = (
+    (0, '未定'),
     (1, '自立精神'),
     (2, '共生意识'),
     (3, '科学态度'),

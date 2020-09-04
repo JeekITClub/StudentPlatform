@@ -1,11 +1,17 @@
 from rest_framework import serializers
 
-from society.models import Society, JoinSocietyRequest
+from society.models import Society, JoinSocietyRequest, SocietyTag
 from student.models import Student
 
+class SocietyTagSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SocietyTag
+        fields = '__all__'
 
 class SocietySerializer(serializers.ModelSerializer):
     assistant = serializers.StringRelatedField()
+    tags = SocietyTagSerializer(many=True)
 
     class Meta:
         model = Society
@@ -21,9 +27,7 @@ class SocietyMiniSerializer(serializers.ModelSerializer):
             'name',
             'status',
             'type',
-            'president_name',
-            'president_class',
-            'president_grade',
+            'avatar'
         )
 
 

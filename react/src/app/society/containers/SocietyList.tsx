@@ -12,75 +12,75 @@ import '../styles/SocietyList.scss'
 
 @observer
 class SocietyList extends React.Component {
-    componentDidMount() {
-        SocietyStore.fetch()
+  componentDidMount() {
+    SocietyStore.fetch()
+  }
+
+  renderCardList = () => {
+    if (SocietyStore.societies.length !== 0) {
+      return (
+        <Row gutter={16}>
+          {
+            SocietyStore.societies.map((society) => {
+              return (
+                <Col lg={6} xs={12} key={society.id}>
+                  <SocietyCard
+                    society={society}
+                  />
+                </Col>
+              )
+            })
+          }
+        </Row>
+      )
     }
+    return <Empty description="社团们不见了"/>
+  };
 
-    renderCardList = () => {
-        if (SocietyStore.societies.length !== 0) {
-            return (
-                <Row gutter={16}>
-                    {
-                        SocietyStore.societies.map((society) => {
-                            return (
-                                <Col lg={6} xs={12} key={society.society_id}>
-                                    <SocietyCard
-                                        society={society}
-                                    />
-                                </Col>
-                            )
-                        })
-                    }
-                </Row>
-            )
-        }
-        return <Empty description="社团们不见了"/>
-    };
+  renderListItem = item => (
+    <List.Item
+      key={item.id}>
+      <List.Item.Meta
+        avatar={<Avatar
+          shape="square"
+          size={72}
+          icon="user"
+          // src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+        />}
+        title={<Link to={`/society/${item.id}/`}>{item.name}</Link>}
+        // description={<TagContainer tags={item.tags}/>}
+      />
+    </List.Item>
+  );
 
-    renderListItem = item => (
-        <List.Item
-            key={item.society_id}>
-            <List.Item.Meta
-                avatar={<Avatar
-                    shape="square"
-                    size={72}
-                    icon="user"
-                    // src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                />}
-                title={<Link to={`/society/${item.society_id}/`}>{item.name}</Link>}
-                // description={<TagContainer tags={item.tags}/>}
+  renderHeader = () => {
+    return <SocietySearch/>
+  };
+
+  render() {
+    return (
+      <div className="society-list-container">
+        <Row className="society-list-header" gutter={16}>
+          <Col lg={6} md={12} sm={24}>
+            {this.renderHeader()}
+          </Col>
+        </Row>
+        <Row>
+          <Col xxl={24} xl={24} lg={24} md={24} sm={0} xs={0} className="society-list-body">
+            {SocietyStore.loading ? <Spin/> : this.renderCardList()}
+          </Col>
+          <Col xxl={0} xl={0} lg={0} md={0} sm={24} xs={24} className="society-list-body">
+            <List
+              bordered={true}
+              itemLayout="vertical"
+              dataSource={SocietyStore.societies}
+              renderItem={this.renderListItem}
             />
-        </List.Item>
-    );
-
-    renderHeader = () => {
-        return <SocietySearch/>
-    };
-
-    render() {
-        return (
-            <div className="society-list-container">
-                <Row className="society-list-header" gutter={16}>
-                    <Col lg={6} md={12} sm={24}>
-                        {this.renderHeader()}
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xxl={24} xl={24} lg={24} md={24} sm={0} xs={0} className="society-list-body">
-                        {SocietyStore.loading ? <Spin/>: this.renderCardList()}
-                    </Col>
-                    <Col xxl={0} xl={0} lg={0} md={0} sm={24} xs={24} className="society-list-body">
-                        <List
-                            bordered={true}
-                            itemLayout="vertical"
-                            dataSource={SocietyStore.societies}
-                            renderItem={this.renderListItem}
-                        />
-                    </Col>
-                </Row>
-            </div>
-        )
-    }
+          </Col>
+        </Row>
+      </div>
+    )
+  }
 }
 
 export default SocietyList;

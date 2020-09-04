@@ -11,3 +11,4 @@ templates/react/index.html
 
 .vscode/
 *.sqlite3
+media/
