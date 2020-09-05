@@ -5,7 +5,7 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 
-module.exports = merge(config, {
+module.exports = merge.merge(config, {
     mode: "development",
     devServer: {
         headers: {

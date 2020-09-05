@@ -40,8 +40,11 @@ module.exports = {
                         loader: 'css-loader'
                     },
                     {
-                        loader: 'less-loader', options: {
-                            javascriptEnabled: true // allow inline javascript
+                        loader: 'less-loader', 
+                        options: {
+                            lessOptions: {
+                                javascriptEnabled: true
+                              }
                         }
                     }]
             },
