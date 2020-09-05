@@ -5,3 +5,5 @@
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/JeekStudio/StudentPlatform.svg)](https://greenkeeper.io/)
 
+## Contribution
+Please use yarn as package manager
