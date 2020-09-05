@@ -17,7 +17,7 @@ class SocietyDetailContainer extends React.Component {
 
   renderTags = () => {
     if (SocietyStore.society.tags) {
-      return SocietyStore.society.tags.map((tag) => <Tag color={tag.color}>{tag.content}</Tag>);
+      return SocietyStore.society.tags.map((tag, index) => <Tag color={tag.color} key={index}>{tag.content}</Tag>);
     }
     return null;
   };

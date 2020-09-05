@@ -15,10 +15,11 @@ class AvatarUploader extends React.Component {
     uploading: false,
     imgUrl: '',
     crop: {
+      unit: '%',
       x: 0,
       y: 0,
       aspect: 1,
-      width: 90
+      width: 50
     },
     modalVisible: false,
     confirmLoading: false
@@ -53,7 +54,7 @@ class AvatarUploader extends React.Component {
     this.setState({ confirmLoading: true });
     let data = new FormData();
     data.append('avatar', this.state.file);
-    data.append('crop', JSON.stringify(this.state.pixelCrop));
+    data.append('crop', JSON.stringify(this.state.crop));
     Provider.post('/api/society_manage/profile/upload_avatar/', data, config)
       .then((res) => {
         this.setState({
@@ -74,11 +75,8 @@ class AvatarUploader extends React.Component {
   };
 
   // For the crop component to sync with state
-  onCropChange = (crop, pixelCrop) => {
-    this.setState({
-      crop,
-      pixelCrop
-    });
+  onCropChange = (pixelCrop, crop) => {
+    this.setState({ crop });
   };
 
   cancelUpload = () => {
