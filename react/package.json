@@ -50,7 +50,7 @@
     "mobx": "^5.10.1",
     "mobx-react": "^6.1.1",
     "mockjs": "^1.0.1-beta3",
-    "node-sass": "^4.11.0",
+    "node-sass": "^4.13.1",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "postcss-loader": "^3.0.0",
     "progress-bar-webpack-plugin": "^2.0.0",
