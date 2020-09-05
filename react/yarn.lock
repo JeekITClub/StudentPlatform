@@ -1452,10 +1452,10 @@ ansi-styles@^4.1.0:
     "@types/color-name" "^1.1.1"
     color-convert "^2.0.1"
 
-antd@3.26.8:
-  version "3.26.8"
-  resolved "https://registry.npm.taobao.org/antd/download/antd-3.26.8.tgz#e40982c5cdb6c5c2c5f037ead27889b5f71e4ea3"
-  integrity sha1-5AmCxc22xcLF8Dfq0niJtfceTqM=
+antd@3.26.18:
+  version "3.26.18"
+  resolved "https://registry.npm.taobao.org/antd/download/antd-3.26.18.tgz#541e26a6865dd20e5d192027c45599b963146e67"
+  integrity sha1-VB4mpoZd0g5dGSAnxFWZuWMUbmc=
   dependencies:
     "@ant-design/create-react-context" "^0.2.4"
     "@ant-design/icons" "~2.1.1"
