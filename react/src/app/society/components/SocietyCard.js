@@ -14,9 +14,9 @@ class SocietyCard extends React.Component {
         src: "https://picsum.photos/300/?random"
     };
 
-    renderCover = () => {
+    renderCover = (avatar) => {
         return (
-            <img alt="cover" src={this.state.src}/>
+            <img alt="暂无封面" src={avatar && avatar.replace('3000', '8000') || this.state.src}/>
         )
     };
 
@@ -25,10 +25,10 @@ class SocietyCard extends React.Component {
         const society = this.props.society;
         return (
             <div className="society-card">
-                <Link to={`/society/${society.society_id}/`}>
+                <Link to={`/society/${society.id}/`}>
                     <Card
                         loading={this.state.loading}
-                        cover={this.renderCover(this.state.src)}
+                        cover={this.renderCover(society.avatar)}
                         hoverable>
                         <Meta title={society.name}/>
                         {/*<div className="society-card-tag-container">*/}

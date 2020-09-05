@@ -442,10 +442,10 @@ class SocietyProfileTests(TestCase):
         original_file = open(os.path.join(TEST_FILE_PATH, 'jeek.jpeg'), 'rb')
         cropped_file = open(os.path.join(TEST_FILE_PATH, 'cropped.jpeg'), 'rb')
         crop = {
-            'x': 100,
-            'y': 100,
-            'width': 200,
-            'height': 200
+            'x': 25,
+            'y': 25,
+            'width': 50,
+            'height': 50
         }
         data = {
             'avatar': original_file,

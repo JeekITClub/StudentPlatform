@@ -38,11 +38,11 @@ class AppRouter extends React.Component {
     render() {
         return (
             <MyRouter>
-                <div style={{height: '100%'}}>
+                <div style={{height: '100%', background: '#f0f2f5'}}>
                     <Switch>
                         <LoginRequiredRoute path="/manage" component={SocietyBureau}/>
                         <LoginRequiredRoute path="/admin_society" component={AdminSociety}/>
-                        <Route path="" component={newHome}/>
+                        <Route path="" component={Home}/>
                     </Switch>
                 </div>
             </MyRouter>

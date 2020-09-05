@@ -9,7 +9,7 @@ import './styles/index.scss';
 export default function Society({match}) {
     return (
         <Row className="society-main-container" type="flex" justify="space-around">
-            <Col xs={22} sm={22} md={20} lg={20} xl={20} xxl={18}>
+            <Col>
                 <Switch>
                     <Route path={`${match.url}/:id`} component={SocietyDetailContainer}/>
                     <Route path={`${match.url}`} exact component={SocietyList}/>

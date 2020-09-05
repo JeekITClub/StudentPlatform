@@ -82,6 +82,7 @@ class UploadAvatarSerializer(serializers.ModelSerializer):
         avatar = data['avatar']
         # sometimes frontend will send 'undefined'
         try:
+            # crop is represented in percentage (%)
             crop = json.loads(self.context['request'].data.get('crop', None))
         except Exception as e:
             raise serializers.ValidationError("invalid crop object format")
@@ -93,7 +94,12 @@ class UploadAvatarSerializer(serializers.ModelSerializer):
 
         try:
             image = Image.open(avatar)
-            region = image.crop((crop['x'], crop['y'], crop['x'] + crop['width'], crop['y'] + crop['height']))
+            region = image.crop((
+                crop['x'] * image.width / 100,
+                crop['y'] * image.height / 100,
+                (crop['x'] + crop['width']) * image.width / 100,
+                (crop['y'] + crop['height']) * image.height / 100
+            ))
             data['avatar'].seek(0, 0)
             region.save(data['avatar'])
         except Exception as e:

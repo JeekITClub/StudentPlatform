@@ -33,8 +33,8 @@ export default function withGenericHeader({match: match}) {
     return (
         <div className="society-home-container">
             <GenericHeader/>
-            <Row className="mt-5" type="flex" justify="space-around">
-                <Col xs={22} sm={22} md={20} lg={20} xl={20} xxl={18}>
+            <Row type="flex" justify="space-around">
+                <Col>
                     <Switch>
                         <Route path={`${match.url}`} exact component={Home} />>
                         <Route path={`${match.url}society`} component={Society}/>
