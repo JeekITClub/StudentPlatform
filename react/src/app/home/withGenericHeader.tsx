@@ -33,19 +33,17 @@ export default function withGenericHeader({match: match}) {
     return (
         <div className="society-home-container">
             <GenericHeader/>
-            <Row type="flex" justify="space-around">
-                <Col>
-                    <Switch>
-                        <Route path={`${match.url}`} exact component={Home} />>
-                        <Route path={`${match.url}society`} component={Society}/>
-                        <Route path={`${match.url}activity`} component={Activity}/>
-                        <Route path={`${match.url}login`} component={Login}/>
-                        <LoginRequiredRoute path={`${match.url}password`} component={WrappedChangePasswordForm}/>
-                        <LoginRequiredRoute path={`${match.url}student`} component={StudentPage}/>
-                        <Route component={NotFound}/>
-                    </Switch>
-                </Col>
-            </Row>
+            <>
+                <Switch>
+                    <Route path={`${match.url}`} exact component={Home}/>
+                    <Route path={`${match.url}society`} component={Society}/>
+                    <Route path={`${match.url}activity`} component={Activity}/>
+                    <Route path={`${match.url}login`} component={Login}/>
+                    <LoginRequiredRoute path={`${match.url}password`} component={WrappedChangePasswordForm}/>
+                    <LoginRequiredRoute path={`${match.url}student`} component={StudentPage}/>
+                    <Route component={NotFound}/>
+                </Switch>
+            </>
         </div>
 
     )

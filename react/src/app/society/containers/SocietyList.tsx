@@ -19,7 +19,7 @@ class SocietyList extends React.Component {
   renderCardList = () => {
     if (SocietyStore.societies.length !== 0) {
       return (
-        <Row gutter={16}>
+        <Row gutter={16} type="flex" justify="start">
           {
             SocietyStore.societies.map((society) => {
               return (
@@ -37,35 +37,26 @@ class SocietyList extends React.Component {
     return <Empty description="社团们不见了"/>
   };
 
-  renderListItem = item => (
+  renderListItem = (item) => (
     <List.Item
       key={item.id}>
       <List.Item.Meta
-        avatar={<Avatar
-          shape="square"
-          size={72}
-          icon="user"
-          // src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-        />}
+        avatar={<img alt="暂无封面"/>}
         title={<Link to={`/society/${item.id}/`}>{item.name}</Link>}
         // description={<TagContainer tags={item.tags}/>}
       />
     </List.Item>
   );
 
-  renderHeader = () => {
-    return <SocietySearch/>
-  };
-
   render() {
     return (
-      <div className="society-list-container">
-        <Row className="society-list-header" gutter={16}>
-          <Col lg={6} md={12} sm={24}>
-            {this.renderHeader()}
+      <>
+        <Row type="flex" justify="space-around">
+          <Col xxl={8} xl={8} lg={16} md={16} sm={24} xs={24}>
+            <SocietySearch/>
           </Col>
         </Row>
-        <Row>
+        <Row type="flex" className="society-list-container">
           <Col xxl={24} xl={24} lg={24} md={24} sm={0} xs={0} className="society-list-body">
             {SocietyStore.loading ? <Spin/> : this.renderCardList()}
           </Col>
@@ -78,7 +69,7 @@ class SocietyList extends React.Component {
             />
           </Col>
         </Row>
-      </div>
+      </>
     )
   }
 }
