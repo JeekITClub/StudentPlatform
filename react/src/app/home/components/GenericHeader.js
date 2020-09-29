@@ -25,9 +25,6 @@ class GenericHeader extends React.Component {
                 <Menu.Item>
                     <Link to={'/society'} className="generic-header-link">社团</Link>
                 </Menu.Item>
-                <Menu.Item>
-                    <Link to={'/activity'} className="generic-header-link">活动</Link>
-                </Menu.Item>
             </Menu>
         )
     };

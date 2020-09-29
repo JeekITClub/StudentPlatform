@@ -11,12 +11,11 @@ import '../styles/SocietyCard.scss'
 class SocietyCard extends React.Component {
     state = {
         loading: false,
-        src: "https://picsum.photos/300/?random"
     };
 
     renderCover = (avatar) => {
         return (
-            <img alt="暂无封面" src={avatar && avatar.replace('3000', '8000') || this.state.src}/>
+            <img alt="暂无封面" src={avatar && avatar.replace('3000', '8000')} height="400px" width="400px" />
         )
     };
 
@@ -31,9 +30,6 @@ class SocietyCard extends React.Component {
                         cover={this.renderCover(society.avatar)}
                         hoverable>
                         <Meta title={society.name}/>
-                        {/*<div className="society-card-tag-container">*/}
-                            {/*<TagContainer tags={society.tags}/>*/}
-                        {/*</div>*/}
                     </Card>
                 </Link>
             </div>
