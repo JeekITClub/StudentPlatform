@@ -1,7 +1,7 @@
 import {observable, computed, action} from "mobx";
 
 import Provider from '../../utils/provider'
-import { AxiosResponse } from "axios";
+import {AxiosResponse} from "axios";
 
 class AccountStore {
     @observable loading: boolean = false;
@@ -32,7 +32,7 @@ class AccountStore {
     }
 
     @action fetch = () => {
-        this.loading =  true;
+        this.loading = true;
         return Provider.get('/api/account/user/')
             .then((res: AxiosResponse) => {
                 if (res.status === 200) {
@@ -45,6 +45,15 @@ class AccountStore {
                 this.loading = false;
                 throw e
             })
+    }
+
+    @action logout = () => {
+        return Provider.post("/api/account/logout/").then((response: AxiosResponse) => {
+            if (response.status === 200) {
+                this.authenticated = false;
+                this.user = null;
+            }
+        })
     }
 }
 

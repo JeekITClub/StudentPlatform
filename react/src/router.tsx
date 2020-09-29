@@ -4,6 +4,7 @@ import Loadable from 'react-loadable';
 import Loading from './shared/Loading';
 import {LoginRequiredRoute} from "./shared/route";
 import AccountStore from "./shared/stores/AccountStore";
+import Logout from "./shared/LogOut/logout";
 
 const Home = Loadable({
     loader: () => import(/* webpackChunkName: "home" */'./app/home/index'),
@@ -42,6 +43,7 @@ class AppRouter extends React.Component {
                     <Switch>
                         <LoginRequiredRoute path="/manage" component={SocietyBureau}/>
                         <LoginRequiredRoute path="/admin_society" component={AdminSociety}/>
+                        <LoginRequiredRoute path="/logout" component={Logout} />
                         <Route path="" component={Home}/>
                     </Switch>
                 </div>
